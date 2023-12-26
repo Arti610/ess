@@ -1,21 +1,10 @@
-/* eslint-disable prettier/prettier */
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import { View} from 'react-native';
-import Login from './src/pages/login/Login';
+import React from 'react'
+import Login from './src/pages/login/Login.jsx'
 
 const App = () => {
   return (
-    <View>
-      <Login/>
-    </View>
-  );
+    <Login/>
+  )
 }
 
-export default App;
+export default App

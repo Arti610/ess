@@ -1,76 +1,52 @@
-/* eslint-disable prettier/prettier */
-
-import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {globalStyles} from '../../../style';
+import React, { useState } from 'react'
+import { TouchableOpacity, Text, TextInput, View } from 'react-native'
+import { styles } from '../../../style'
+import {loginStyles} from './Login.js'
 
 const Login = () => {
+  const [isChecked, setChecked] = useState(false);
+
+  const toggleCheckbox = () => {
+    setChecked(!isChecked);
+  };
+  
+  const handlePress = () => {
+
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.logincontainer}>
-        <View style={styles.loginContent}>
-          <Text style={styles.loginContentTitle}>Login</Text>
-          <Text style={styles.loginContentDesc}>
-            Welcome back! Please enter your details.
-          </Text>
+      <View style={loginStyles.logincontainer}>
+        <View style={loginStyles.loginHeader}>
+          <Text style={styles.textHeading}>Login</Text>
+          <Text style={styles.textDesc}>Welcome back !  Please enter your details.</Text>
+        </View>      
+        <View style={loginStyles.loginBody}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.lable}>Email</Text>
+          <TextInput style={styles.textInput} placeholder='example@gmail.com'/>
         </View>
-        <View style={styles.loginInputs}>
-            <Text>Email</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Type here to translate!"
-            />
+        <View style={styles.inputContainer}>
+          <Text style={styles.lable}>Password</Text>
+          <TextInput style={styles.textInput} placeholder='••••••••'/>
         </View>
-        <View style={styles.loginbuttons}></View>
+        <View style={styles.inputContainer}>
+          {/* <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
+            <View style={[styles.checkbox, isChecked && styles.checked]} />
+            <Text style={styles.lable}>Remember for 30 days</Text>
+          </TouchableOpacity> */}
+            <Text style={styles.navigateText}>Forgot Password</Text>
+        </View>
+
+        </View>      
+        <View style={loginStyles.loginFooter}>
+          <TouchableOpacity style={styles.primaryButton} onPress={handlePress}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+        </View>      
       </View>
     </View>
-  );
-};
+  )
+}
 
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logincontainer: {
-    width: '90%',
-    height: '80%',
-  },
-  loginContent: {
-    flex: 1,
-  },
-  loginInputs: {
-    // Add any other styles for the container here
-  },
-  textInput: {
-    borderWidth: 1, 
-    borderColor: 'black', 
-    borderRadius: 5, 
-    padding: 10, 
-   },
-  loginContentTitle: {
-    color: '#101828',
-    fontSize: 24,
-    fontweight: 'bold',
-    lineHeight: 32,
-  },
-  loginContentDesc: {
-    color: '#475467',
-    fontSize: 16,
-    fontweight: 'bold',
-    lineHeight: 32,
-  },
-  loginInputs: {
-    flex: 5,
-  },
-
-  loginbuttons: {
-    flex: 1,
-    backgroundColor: 'pink',
-  },
-});
-
-export default Login;
+export default Login
