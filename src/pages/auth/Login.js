@@ -4,19 +4,24 @@ export const loginStyles = StyleSheet.create({
   logincontainer: {
     width: '90%',
     height: '70%',
+    justifyContent: 'space-around',
   },
+
   loginHeader: {
-    flex: 1,
     marginBottom: 40,
   },
 
-  loginBody: {
-    flex: 5,
-    marginBottom: 40,
-  },
+  loginBody: {},
 
   loginFooter: {
-    flex: 1,
+    marginTop: 40,
+  },
+
+  resetCard: {
+    paddingHorizontal: 20,
+    gap: 20,
+    alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'justify',
   },
 });

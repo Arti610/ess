@@ -40,7 +40,6 @@ export const styles = StyleSheet.create({
     color: '#475467',
     fontSize: 16,
     fontWeight: '400',
-    lineHeight: 32,
   },
   navigateText: {
     color: '#0E81B9',
@@ -64,19 +63,5 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    width: 18,
-    height: 18,
-    borderWidth: 2,
-    borderColor: '#000',
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  checked: {
-    backgroundColor: '#000',
-  },
+  errorText: {color: 'red', fontSize: 10},
 });
