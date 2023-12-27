@@ -11,7 +11,9 @@ export const loginStyles = StyleSheet.create({
     marginBottom: 40,
   },
 
-  loginBody: {},
+  loginBody: {
+    marginBottom: 30,
+  },
 
   loginFooter: {
     marginTop: 40,

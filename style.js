@@ -63,5 +63,5 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  errorText: {color: 'red', fontSize: 10},
+  errorText: {color: 'red', fontSize: 14},
 });
