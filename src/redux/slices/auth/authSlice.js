@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createSlice} from '@reduxjs/toolkit';
 
 const authSlice = createSlice({
@@ -10,12 +11,10 @@ const authSlice = createSlice({
   },
   reducers: {
     loginStart: state => {
-      console.log('Reducer: loginStart');
       state.isLoading = true;
       state.error = false;
     },
     loginSuccess: (state, action) => {
-      console.log('Reducer: loginSuccess');
       state.isLoading = false;
       state.error = false;
       state.isAuthenticated = true;
@@ -23,7 +22,6 @@ const authSlice = createSlice({
       setCurrentUserData(action.payload);
     },
     loginFailure: state => {
-      console.log('Reducer: loginFailure', state.error);
       state.isLoading = false;
       state.error = true;
       state.isAuthenticated = false;

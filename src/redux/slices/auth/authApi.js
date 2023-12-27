@@ -1,4 +1,4 @@
-import apiService from '../../../../config/apiService';
+import apiService from '../../../config/apiService.js';
 
 export default {
   forgetPassword: payload => apiService.post(`generate_otp`, payload),

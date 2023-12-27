@@ -10,14 +10,14 @@ import {styles} from '../../../style';
 import {loginStyles} from './Login.js';
 import {Formik} from 'formik';
 import {LoginSchema} from '../../utils/validationSchema.js';
-import authApi from '../../redux/slices/auth/login/authApi.js';
 import {useDispatch} from 'react-redux';
 import {
   loginStart,
   loginSuccess,
   loginFailure,
-} from '../../redux/slices/auth/login/authSlice.js';
+} from '../../redux/slices/auth/authSlice.js';
 import Toast from 'react-native-toast-message';
+import authApi from '../../redux/slices/auth/authApi.js';
 
 const Login = props => {
   const dispatch = useDispatch();
