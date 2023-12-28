@@ -15,9 +15,9 @@ const StackNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-        <Stack.Screen name="OTP" component={OtpVerification} />
-        <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name="Forgot Password" component={ForgetPassword} />
+        <Stack.Screen name="OTP Verification" component={OtpVerification} />
+        <Stack.Screen name="Reset Password" component={ResetPassword} />
         <Stack.Screen name="Confirmation" component={Confirmation} />
         <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>

@@ -10,7 +10,7 @@ import {styles} from '../../../style';
 import {loginStyles} from './Login.js';
 import {Formik} from 'formik';
 import {LoginSchema} from '../../utils/validationSchema.js';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   loginStart,
   loginSuccess,
@@ -21,18 +21,15 @@ import authApi from '../../redux/slices/auth/authApi.js';
 
 const Login = props => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
 
+  const {isLoading} = useSelector(state => state.auth);
   const handleLogin = async values => {
     try {
-      setIsLoading(true);
       dispatch(loginStart());
-
       const res = await authApi.Login(values);
-
       if (res.status === 200) {
         dispatch(loginSuccess(res.data));
-        setIsLoading(false);
+
         props.navigation.navigate('Home');
         Toast.show({
           type: 'success',
@@ -43,10 +40,8 @@ const Login = props => {
           autoHide: true,
         });
       } else {
-        setIsError(res.data.message);
         dispatch(loginFailure());
       }
-
       return res;
     } catch (error) {
       Toast.show({
@@ -59,7 +54,6 @@ const Login = props => {
       });
       dispatch(loginFailure());
     }
-    setIsLoading(false);
   };
 
   return (
@@ -79,7 +73,7 @@ const Login = props => {
               </View>
               <View style={loginStyles.loginBody}>
                 <View style={styles.inputContainer}>
-                  <Text style={styles.lable}>Email:</Text>
+                  <Text style={styles.lable}>Email</Text>
                   <TextInput
                     style={styles.textInput}
                     onChangeText={handleChange('email')}
@@ -90,7 +84,7 @@ const Login = props => {
                   <Text style={styles.errorText}>{errors.email}</Text>
                 </View>
                 <View style={styles.inputContainer}>
-                  <Text style={styles.lable}>Password:</Text>
+                  <Text style={styles.lable}>Password</Text>
                   <TextInput
                     style={styles.textInput}
                     onChangeText={handleChange('password')}
@@ -100,6 +94,15 @@ const Login = props => {
                     secureTextEntry
                   />
                   <Text style={styles.errorText}>{errors.password}</Text>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text
+                    style={styles.navigateText}
+                    onPress={() =>
+                      props.navigation.navigate('Forgot Password')
+                    }>
+                    Forgot Password
+                  </Text>
                 </View>
               </View>
               {isLoading ? (
