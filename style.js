@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'pink',
   },
   inputContainer: {
     paddingBottom: 30,
@@ -29,6 +30,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     background: '#FFF',
     boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+    position: 'relative',
   },
   textHeading: {
     color: '#101828',

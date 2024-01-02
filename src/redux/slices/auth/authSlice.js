@@ -7,7 +7,6 @@ const authSlice = createSlice({
     currentUser: null,
     isLoading: false,
     error: false,
-    isAuthenticated: false,
   },
   reducers: {
     loginStart: state => {
@@ -17,14 +16,35 @@ const authSlice = createSlice({
     loginSuccess: (state, action) => {
       state.isLoading = false;
       state.error = false;
-      state.isAuthenticated = true;
       state.currentUser = action.payload;
       setCurrentUserData(action.payload);
+      setAuthentication(true);
     },
     loginFailure: state => {
       state.isLoading = false;
       state.error = true;
-      state.isAuthenticated = false;
+    },
+    logoutStart: state => {
+      state.isLoading = true;
+      state.error = false;
+    },
+    logoutSuccess: async state => {
+      state.isLoading = false;
+      state.error = false;
+      setAuthentication(false);
+      // Clear AsyncStorage data related to the user
+      try {
+        await AsyncStorage.removeItem('currentUser');
+        await AsyncStorage.removeItem('userEmail');
+        await AsyncStorage.removeItem('userEmail');
+        console.log('AsyncStorage data cleared successfully');
+      } catch (error) {
+        console.log('Error clearing AsyncStorage data:', error);
+      }
+    },
+    logoutFailure: state => {
+      state.isLoading = false;
+      state.error = true;
     },
     forgetPasswordStart: state => {
       state.isLoading = true;
@@ -33,7 +53,6 @@ const authSlice = createSlice({
     forgetPasswordSuccess: (state, action) => {
       state.isLoading = false;
       state.error = false;
-      console.log('action.payload', action.payload);
       setCurrentUserEmail(action.payload);
     },
     forgetPasswordFailure: state => {
@@ -53,17 +72,14 @@ const authSlice = createSlice({
       state.error = true;
     },
     resetPasswordStart: state => {
-      console.log('gorget start');
       state.isLoading = true;
       state.error = false;
     },
     resetPasswordSuccess: state => {
-      console.log('gorget success');
       state.isLoading = false;
       state.error = false;
     },
     resetPasswordFailure: state => {
-      console.log('gorget fail');
       state.isLoading = false;
       state.error = true;
     },
@@ -90,11 +106,27 @@ const setCurrentUserEmail = async userEmail => {
     console.log('User email is not set in AsyncStorage');
   }
 };
+// set current authentication in asyncstorage
+const setAuthentication = async isAuthenticated => {
+  console.log('isAuthenticated====>on slice', isAuthenticated);
+  try {
+    await AsyncStorage.setItem(
+      'isAuthenticated',
+      JSON.stringify(isAuthenticated),
+    );
+    console.log('Authentication set in AsyncStorage successfully');
+  } catch (error) {
+    console.log('Authentication is not set in AsyncStorage');
+  }
+};
 
 export const {
   loginStart,
   loginSuccess,
   loginFailure,
+  logoutStart,
+  logoutSuccess,
+  logoutFailure,
   forgetPasswordStart,
   forgetPasswordSuccess,
   forgetPasswordFailure,

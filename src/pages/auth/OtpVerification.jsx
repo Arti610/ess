@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ActivityIndicator,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -67,7 +68,7 @@ const OtpVerification = props => {
   };
 
   return (
-    <>
+    <ScrollView>
       <View style={styles.container}>
         <Formik
           initialValues={{otp: ''}}
@@ -116,7 +117,7 @@ const OtpVerification = props => {
         </Formik>
       </View>
       <Toast ref={ref => Toast.setRef(ref)} />
-    </>
+    </ScrollView>
   );
 };
 

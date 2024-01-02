@@ -2,12 +2,12 @@ import React from 'react';
 import {Provider} from 'react-redux';
 
 import store from './src/redux/store.js';
-import StackNavigator from './src/navigation/StackNavigator.js';
+import Navigator from './src/navigation/Navigator.js';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <StackNavigator />
+      <Navigator />
     </Provider>
   );
 };

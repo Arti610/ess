@@ -5,6 +5,7 @@ import {
   TextInput,
   View,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {styles} from '../../../style';
 import {loginStyles} from './Login.js';
@@ -21,15 +22,17 @@ import authApi from '../../redux/slices/auth/authApi.js';
 
 const Login = props => {
   const dispatch = useDispatch();
-
   const {isLoading} = useSelector(state => state.auth);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
   const handleLogin = async values => {
     try {
       dispatch(loginStart());
       const res = await authApi.Login(values);
-      if (res.status === 200) {
-        dispatch(loginSuccess(res.data));
+      console.log('res', res.status);
 
+      if (res.status == 200) {
+        dispatch(loginSuccess(res.data));
         props.navigation.navigate('Home');
         Toast.show({
           type: 'success',
@@ -57,7 +60,7 @@ const Login = props => {
   };
 
   return (
-    <>
+    <ScrollView>
       <View style={styles.container}>
         <Formik
           initialValues={{email: '', password: ''}}
@@ -91,8 +94,13 @@ const Login = props => {
                     onBlur={handleBlur('password')}
                     value={values.password}
                     placeholder="••••••••"
-                    secureTextEntry
+                    secureTextEntry={isPasswordHidden}
                   />
+                  <TouchableOpacity
+                    style={{position: 'absolute', top: 40, right: 8}}
+                    onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
+                    <Text>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
+                  </TouchableOpacity>
                   <Text style={styles.errorText}>{errors.password}</Text>
                 </View>
                 <View style={styles.inputContainer}>
@@ -105,21 +113,23 @@ const Login = props => {
                   </Text>
                 </View>
               </View>
-              {isLoading ? (
-                <ActivityIndicator size={'large'} />
-              ) : (
-                <TouchableOpacity
-                  style={styles.primaryButton}
-                  onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-              )}
+              <View style={loginStyles.loginFooter}>
+                {isLoading ? (
+                  <ActivityIndicator size={'large'} />
+                ) : (
+                  <TouchableOpacity
+                    style={styles.primaryButton}
+                    onPress={handleSubmit}>
+                    <Text style={styles.buttonText}>Login</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           )}
         </Formik>
       </View>
       <Toast ref={ref => Toast.setRef(ref)} />
-    </>
+    </ScrollView>
   );
 };
 
