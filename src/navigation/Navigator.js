@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserProfile from '../utils/userProfile.jsx';
+import HeaderTitle from '../utils/headerTitle.jsx';
 import Login from '../pages/auth/Login.jsx';
 import Home from '../pages/home/Home.jsx';
 import ForgetPassword from '../pages/auth/ForgetPassword.jsx';
 import OtpVerification from '../pages/auth/OtpVerification.jsx';
 import ResetPassword from '../pages/auth/ResetPassword.jsx';
 import Confirmation from '../pages/auth/Confirmation.jsx';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import UserProfile from '../utils/userProfile.jsx';
-import HeaderTitle from '../utils/headerTitle.jsx';
-import Profile from '../pages/user/Profile.jsx';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import AddBranch from '../pages/home/Branch/AddBranch.jsx';
+import TavNavigator from './TavNavigator.js';
+import StackNavigator from './StackNavigator.js';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,7 +29,6 @@ const Navigator = () => {
         );
 
         if (isAuthenticatedString) {
-          // Parse the JSON string to get the boolean value
           const isAuthenticated = JSON.parse(isAuthenticatedString);
           setIsAuthenticated(isAuthenticated);
         }
@@ -41,8 +42,11 @@ const Navigator = () => {
 
   return (
     <NavigationContainer>
-      {!isAuthenticated ? (
-        <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        {!isAuthenticated ? (
           <>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Forgot Password" component={ForgetPassword} />
@@ -50,31 +54,18 @@ const Navigator = () => {
             <Stack.Screen name="Reset Password" component={ResetPassword} />
             <Stack.Screen name="Confirmation" component={Confirmation} />
           </>
-        </Stack.Navigator>
-      ) : (
-        <>
-          <Tab.Navigator>
-            <Tab.Screen
+        ) : (
+          <>
+            <Stack.Screen
               name="Home"
-              component={Home}
-              options={{
-                headerLeft: () => <HeaderTitle />,
-                headerRight: () => <UserProfile />,
-                headerTitle: () => null,
+              component={StackNavigator}
+              screenOptions={{
+                headerShown: false,
               }}
             />
-            <Tab.Screen
-              name="Profile"
-              component={Profile}
-              options={{
-                headerLeft: () => <HeaderTitle />,
-                headerRight: () => <UserProfile />,
-                headerTitle: () => null,
-              }}
-            />
-          </Tab.Navigator>
-        </>
-      )}
+          </>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

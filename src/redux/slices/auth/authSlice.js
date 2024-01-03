@@ -108,7 +108,6 @@ const setCurrentUserEmail = async userEmail => {
 };
 // set current authentication in asyncstorage
 const setAuthentication = async isAuthenticated => {
-  console.log('isAuthenticated====>on slice', isAuthenticated);
   try {
     await AsyncStorage.setItem(
       'isAuthenticated',

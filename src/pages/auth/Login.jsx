@@ -19,9 +19,12 @@ import {
 } from '../../redux/slices/auth/authSlice.js';
 import Toast from 'react-native-toast-message';
 import authApi from '../../redux/slices/auth/authApi.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
-const Login = props => {
+const Login = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {isLoading} = useSelector(state => state.auth);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
@@ -29,11 +32,11 @@ const Login = props => {
     try {
       dispatch(loginStart());
       const res = await authApi.Login(values);
-      console.log('res', res.status);
 
-      if (res.status == 200) {
+      if (res.status === 200) {
+        navigation.navigate('Home');
+        await AsyncStorage.setItem('token', res.data.token);
         dispatch(loginSuccess(res.data));
-        props.navigation.navigate('Home');
         Toast.show({
           type: 'success',
           position: 'top',
@@ -47,6 +50,7 @@ const Login = props => {
       }
       return res;
     } catch (error) {
+      console.log('error', error);
       Toast.show({
         type: 'error',
         position: 'top',
