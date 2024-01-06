@@ -1,6 +1,12 @@
 // styles.js or theme.js
-
 import {StyleSheet} from 'react-native';
+
+// colors.js
+export const primaryColor = '#00073d';
+export const secondaryColor = '#2ecc71';
+export const textColor = '#344054';
+// Add more colors as needed
+
 
 export const styles = StyleSheet.create({
   container: {
@@ -19,7 +25,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   lable: {
-    color: '#344054',
+    color: textColor,
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '500',
@@ -31,6 +37,17 @@ export const styles = StyleSheet.create({
     borderColor: '#D0D5DD',
     borderRadius: 5,
     padding: 10,
+    borderRadius: 8,
+    background: '#FFF',
+    boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+    position: 'relative',
+  },
+  dropdown: {
+    borderWidth: 1,
+    borderColor: '#D0D5DD',
+    borderRadius: 5,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
     borderRadius: 8,
     background: '#FFF',
     boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
@@ -48,7 +65,7 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
   },
   navigateText: {
-    color: '#0E81B9',
+    color: primaryColor,
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -57,10 +74,10 @@ export const styles = StyleSheet.create({
   primaryButton: {
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#0E81B9',
+    borderColor: primaryColor,
     borderRadius: 8,
     paddingVertical: 10,
-    backgroundColor: '#0E81B9',
+    backgroundColor: primaryColor
   },
   buttonText: {
     boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
@@ -68,6 +85,30 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
+  dropdownArea:{
+    width:"100%",
+    height: 300,
+    borderWidth: 1,
+    borderColor: '#D0D5DD',
+    borderRadius: 10,
+    padding: 10,
+    borderRadius: 8,
+    background: '#FFF',
+    marginTop: 5,
+    boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+    position: 'relative',
+  },
+  dropDownContent:{
+    width:"100%",
+    height: 50,
+    borderBottomWidth: 1,
+    borderColor: '#D0D5DD',
+    borderRadius: 10,
+    padding: 10,
+    borderRadius: 8,
+    background: '#FFF',
+    marginTop: 5,
 
+  },
   errorText: {color: 'red', fontSize: 14},
 });

@@ -11,3 +11,15 @@ export const getAllBranch = async dispatch => {
     dispatch(branchFailure());
   }
 };
+
+
+export const createBranch = async (dispatch, payload)=>{
+  try {
+    dispatch(branchStart())
+    const res = await apiService.post('create_branch', payload)
+    dispatch(branchSuccess())
+    return res
+  } catch (error) {
+    dispatch(branchFailure())
+  }
+}

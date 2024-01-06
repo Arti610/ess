@@ -18,7 +18,7 @@ const validator = {
   phone_number: Yup.number().required('Please Enter Your Phone Number'),
   address: Yup.string().max(500).required('Please Enter Your Address'),
   gender: Yup.string().required('Please Select Your Gender'),
-  country: Yup.string().required('Please Select Your Country'),
+  country: Yup.number().required('Please Select Your Country'),
   city: Yup.string().required('Please Select Your City'),
   profile_image: Yup.mixed()
     .required('Please upload a profile image')
@@ -79,5 +79,5 @@ export const addBranch = Yup.object({
   name: validator.name,
   city: validator.city,
   address: validator.address,
-  image: validator.profile_image,
+  // image: validator.profile_image,
 });

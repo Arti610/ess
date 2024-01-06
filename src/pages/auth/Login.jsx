@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -7,11 +7,11 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
-import {styles} from '../../../style';
-import {loginStyles} from './Login.js';
-import {Formik} from 'formik';
-import {LoginSchema} from '../../utils/validationSchema.js';
-import {useDispatch, useSelector} from 'react-redux';
+import { styles } from '../../../style';
+import { loginStyles } from './Login.js';
+import { Formik } from 'formik';
+import { LoginSchema } from '../../utils/validationSchema.js';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   loginStart,
   loginSuccess,
@@ -20,12 +20,12 @@ import {
 import Toast from 'react-native-toast-message';
 import authApi from '../../redux/slices/auth/authApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {isLoading} = useSelector(state => state.auth);
+  const { isLoading } = useSelector(state => state.auth);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const handleLogin = async values => {
@@ -50,7 +50,6 @@ const Login = () => {
       }
       return res;
     } catch (error) {
-      console.log('error', error);
       Toast.show({
         type: 'error',
         position: 'top',
@@ -67,10 +66,10 @@ const Login = () => {
     <ScrollView>
       <View style={styles.container}>
         <Formik
-          initialValues={{email: '', password: ''}}
+          initialValues={{ email: '', password: '' }}
           validationSchema={LoginSchema}
           onSubmit={values => handleLogin(values)}>
-          {({handleChange, handleBlur, handleSubmit, values, errors}) => (
+          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
             <View style={loginStyles.logincontainer}>
               <View style={loginStyles.loginHeader}>
                 <Text style={styles.textHeading}>Login</Text>
@@ -88,7 +87,7 @@ const Login = () => {
                     value={values.email}
                     placeholder="example@gmail.com"
                   />
-                  <Text style={styles.errorText}>{errors.email}</Text>
+                  {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.lable}>Password</Text>
@@ -101,17 +100,17 @@ const Login = () => {
                     secureTextEntry={isPasswordHidden}
                   />
                   <TouchableOpacity
-                    style={{position: 'absolute', top: 40, right: 8}}
+                    style={{ position: 'absolute', top: 40, right: 8 }}
                     onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
                     <Text>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
                   </TouchableOpacity>
-                  <Text style={styles.errorText}>{errors.password}</Text>
+                  {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
                 </View>
                 <View style={styles.inputContainer}>
                   <Text
                     style={styles.navigateText}
                     onPress={() =>
-                      props.navigation.navigate('Forgot Password')
+                      navigation.navigate('Forgot Password')
                     }>
                     Forgot Password
                   </Text>
