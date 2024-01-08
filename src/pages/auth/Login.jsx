@@ -22,7 +22,7 @@ import authApi from '../../redux/slices/auth/authApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-const Login = () => {
+const Login = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { isLoading } = useSelector(state => state.auth);
@@ -34,9 +34,9 @@ const Login = () => {
       const res = await authApi.Login(values);
 
       if (res.status === 200) {
-        navigation.navigate('Home');
         await AsyncStorage.setItem('token', res.data.token);
         dispatch(loginSuccess(res.data));
+        navigation.navigate("Base");
         Toast.show({
           type: 'success',
           position: 'top',
@@ -45,8 +45,6 @@ const Login = () => {
           visibilityTime: 4000,
           autoHide: true,
         });
-      } else {
-        dispatch(loginFailure());
       }
       return res;
     } catch (error) {
@@ -63,76 +61,79 @@ const Login = () => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Formik
-          initialValues={{ email: '', password: '' }}
-          validationSchema={LoginSchema}
-          onSubmit={values => handleLogin(values)}>
-          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-            <View style={loginStyles.logincontainer}>
-              <View style={loginStyles.loginHeader}>
-                <Text style={styles.textHeading}>Login</Text>
-                <Text style={styles.textDesc}>
-                  Welcome back ! Please enter your details.
-                </Text>
-              </View>
-              <View style={loginStyles.loginBody}>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.lable}>Email</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    placeholder="example@gmail.com"
-                  />
-                  {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.lable}>Password</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                    placeholder="••••••••"
-                    secureTextEntry={isPasswordHidden}
-                  />
-                  <TouchableOpacity
-                    style={{ position: 'absolute', top: 40, right: 8 }}
-                    onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
-                    <Text>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
-                  </TouchableOpacity>
-                  {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text
-                    style={styles.navigateText}
-                    onPress={() =>
-                      navigation.navigate('Forgot Password')
-                    }>
-                    Forgot Password
+    <>
+      <ScrollView>
+        <View style={styles.container}>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            validationSchema={LoginSchema}
+            onSubmit={values => handleLogin(values)}>
+            {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+              <View style={loginStyles.logincontainer}>
+                <View style={loginStyles.loginHeader}>
+                  <Text style={styles.textHeading}>Login</Text>
+                  <Text style={styles.textDesc}>
+                    Welcome back ! Please enter your details.
                   </Text>
                 </View>
+                <View style={loginStyles.loginBody}>
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.lable}>Email</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange('email')}
+                      onBlur={handleBlur('email')}
+                      value={values.email}
+                      placeholder="example@gmail.com"
+                    />
+                    {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.lable}>Password</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      onChangeText={handleChange('password')}
+                      onBlur={handleBlur('password')}
+                      value={values.password}
+                      placeholder="••••••••"
+                      secureTextEntry={isPasswordHidden}
+                    />
+                    <TouchableOpacity
+                      style={{ position: 'absolute', top: 40, right: 8 }}
+                      onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
+                      <Text>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
+                    </TouchableOpacity>
+                    {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <Text
+                      style={styles.navigateText}
+                      onPress={() =>
+                        navigation.navigate('Forgot Password')
+                      }>
+                      Forgot Password
+                    </Text>
+                  </View>
+                </View>
+                <View style={loginStyles.loginFooter}>
+                  {isLoading ? (
+                    <ActivityIndicator size={'large'} />
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.primaryButton}
+                      onPress={handleSubmit}>
+                      <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
-              <View style={loginStyles.loginFooter}>
-                {isLoading ? (
-                  <ActivityIndicator size={'large'} />
-                ) : (
-                  <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleSubmit}>
-                    <Text style={styles.buttonText}>Login</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          )}
-        </Formik>
-      </View>
-      <Toast ref={ref => Toast.setRef(ref)} />
-    </ScrollView>
+            )}
+          </Formik>
+        </View>
+
+      </ScrollView>
+     <Toast />
+    </>
   );
 };
 

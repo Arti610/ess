@@ -26,7 +26,7 @@ const Confirmation = props => {
           </View>
         </View>
       </View>
-      <Toast ref={ref => Toast.setRef(ref)} />
+      <Toast />
     </>
   );
 };

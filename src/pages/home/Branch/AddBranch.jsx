@@ -20,9 +20,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { branchFailure } from '../../../redux/slices/branch/branchSlice';
 import { createBranch } from '../../../redux/slices/branch/branchApi';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useNavigation } from '@react-navigation/native';
 
 const AddBranch = () => {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
   const [data, setData] = useState(null)
   const [image, setImage] = useState(null)
   const [cvalues, setcValues] = useState({
@@ -37,6 +39,7 @@ const AddBranch = () => {
       path: 'images'
     }
   };
+
   const { isLoading } = useSelector((state) => state.branch)
 
   const initialState = {
@@ -61,32 +64,51 @@ const AddBranch = () => {
     });
   };
 
+
   const handlePress = async (values) => {
-    const payload = {
-      country: cvalues? cvalues : null,
-      name: values.name ? values.name : null,
-      city: values.city ? values.city : null,
-      image: image && image.assets.length > 0 ? image.assets[0].uri : null,
-      address: values.address ? values.address : null,
-    };
-
-    console.log('Payload:', payload);
-
     try {
-      const res = await createBranch(dispatch, payload)
-      console.log('res', res);
+    
+
+      let form_data = new FormData();
+        form_data.append('image', {
+          name: image.assets[0].fileName ? image.assets[0].fileName : "",
+          type: image.assets[0].type ? image.assets[0].type : "",
+          uri: image.assets[0].uri ? image.assets[0].uri : "",
+        });
+        form_data.append("country", cvalues ? cvalues : "")
+        form_data.append("name", values.name ? values.name : "")
+        form_data.append("city",values.city ? values.city : "")
+        form_data.append("address",values.address ? values.address : "",)
+ 
+      const res = await createBranch(dispatch, form_data);   
+  
       if (res.status === 200) {
-        console.log('branch created successfully');
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          text1: 'Branch created successfully',
+          visibilityTime: 4000,
+          autoHide: true,
+        });
+
       }
     } catch (error) {
-      dispatch(branchFailure())
+      dispatch(branchFailure());
+  
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Something went wrong during branch creation',
+        visibilityTime: 4000,
+        autoHide: true,
+      });
     }
   };
-
+  
   const func = (text) => {
-
     setcValues(text)
   }
+
   useEffect(() => {
     const fetchCountry = async () => {
       try {
@@ -110,10 +132,10 @@ const AddBranch = () => {
       <View style={styles.container}>
         <Formik
           initialValues={initialState}
-          // validationSchema={addBranch}
           onSubmit={values => handlePress(values)}>
           {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
             <View style={styles.formContainer}>
+
               <View style={loginStyles.loginHeader}>
                 <Text style={styles.textHeading}>Add Branch</Text>
                 <Text style={styles.textDesc}>
@@ -180,15 +202,13 @@ const AddBranch = () => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                  {/* <Text style={styles.lable}>Image</Text> */}
-
-                  <Button title="Choose Image" onPress={handleChooseImage} />
+ 
                   {image && 
                     image.assets.map((item, i) => (
                       <TouchableOpacity
-                        key={i}
-                        style={{ height: 80, width: 80, borderRadius: 50, borderWidth: 5, borderColor: 'gray' }}
-                        onPress={() => handleChooseImage(item.uri)}
+                      key={i}
+                      style={{ height: 80, width: 80, borderRadius: 50, borderWidth: 5, borderColor: 'gray' }}
+                      onPress={() => handleChooseImage(item.uri)}
                       >
                         <Image
                           source={{ uri: item.uri }}
@@ -197,8 +217,11 @@ const AddBranch = () => {
                        </TouchableOpacity>
                     ))
                   }
+                  {/* <Button title="Choose Image" onPress={handleChooseImage} style={{display: 'none'}}/> */}
+                  <TouchableOpacity  onPress={handleChooseImage} style={styles.uploadUI}><Text>upload images</Text></TouchableOpacity>
                 </View>
               </View>
+
               <View style={styles.loginFooter}>
                 {isLoading ? (
                   <ActivityIndicator size={'large'} />
@@ -210,11 +233,12 @@ const AddBranch = () => {
                   </TouchableOpacity>
                 )}
               </View>
+
             </View>
           )}
         </Formik>
       </View>
-      <Toast ref={ref => Toast.setRef(ref)} />
+      <Toast/>
     </ScrollView>
 
   );

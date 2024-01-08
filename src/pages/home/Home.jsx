@@ -4,11 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BranchCard from '../../utils/BranchCard';
 import {styles} from '../../../style';
 import {useNavigation} from '@react-navigation/native';
+import TavNavigator from '../../navigation/TavNavigator';
 
 const Home = () => {
   const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useState(null);
-  // console.log('currentUser', currentUser);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -34,7 +35,9 @@ const Home = () => {
             <Text>Add</Text>
           </TouchableOpacity>
         </View>
+        
       </ScrollView>
+     
     </>
   );
 };

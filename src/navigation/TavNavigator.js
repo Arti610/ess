@@ -5,20 +5,13 @@ import HeaderTitle from '../utils/headerTitle.jsx';
 import Profile from '../pages/user/Profile.jsx';
 import Home from '../pages/home/Home.jsx';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { View,Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const TavNavigator = () => {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerLeft: () => <HeaderTitle />,
-        headerRight: () => <UserProfile />,
-        headerTitle: () => null,
-      }}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
-    </Tab.Navigator>
-  );
+   <></>
+  )
 };
 
 export default TavNavigator;

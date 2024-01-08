@@ -10,17 +10,20 @@ const authSlice = createSlice({
   },
   reducers: {
     loginStart: state => {
+      console.log('login start');
       state.isLoading = true;
       state.error = false;
     },
     loginSuccess: (state, action) => {
+      console.log('login success');
       state.isLoading = false;
       state.error = false;
       state.currentUser = action.payload;
       setCurrentUserData(action.payload);
-      setAuthentication(true);
+      // setAuthentication(true);
     },
     loginFailure: state => {
+      console.log('login failed');
       state.isLoading = false;
       state.error = true;
     },
@@ -31,7 +34,7 @@ const authSlice = createSlice({
     logoutSuccess: async state => {
       state.isLoading = false;
       state.error = false;
-      setAuthentication(false);
+      // setAuthentication(false);
       // Clear AsyncStorage data related to the user
       try {
         await AsyncStorage.removeItem('currentUser');
@@ -107,17 +110,17 @@ const setCurrentUserEmail = async userEmail => {
   }
 };
 // set current authentication in asyncstorage
-const setAuthentication = async isAuthenticated => {
-  try {
-    await AsyncStorage.setItem(
-      'isAuthenticated',
-      JSON.stringify(isAuthenticated),
-    );
-    console.log('Authentication set in AsyncStorage successfully');
-  } catch (error) {
-    console.log('Authentication is not set in AsyncStorage');
-  }
-};
+// const setAuthentication = async isAuthenticated => {
+//   try {
+//     await AsyncStorage.setItem(
+//       'isAuthenticated',
+//       JSON.stringify(isAuthenticated),
+//     );
+//     console.log('Authentication set in AsyncStorage successfully');
+//   } catch (error) {
+//     console.log('Authentication is not set in AsyncStorage');
+//   }
+// };
 
 export const {
   loginStart,
