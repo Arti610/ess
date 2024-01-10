@@ -8,7 +8,7 @@ const Dropdown = (props) => {
     const [selectCountry, setSelectCountry] = useState('select country');
     const [isClicked, setIsClicked] = useState(false);
 
-    const onSearch = async(txt) => {
+    const onSearch = async (txt) => {
         if (txt !== '') {
             try {
                 const searchText = await value.filter((item) => {
@@ -23,11 +23,10 @@ const Dropdown = (props) => {
         }
     };
 
-    const handleSelect=(id)=>{
-            setSelectCountry(id);
-            props.handleDD(id)
-            setIsClicked(false);
-        
+    const handleSelect = (item) => {
+        setSelectCountry(item.name);
+        props.handleDD(item)
+        setIsClicked(false);
     }
 
     useEffect(() => {
@@ -51,8 +50,8 @@ const Dropdown = (props) => {
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={styles.dropDownContent}
-                                onPress={()=>handleSelect(item.id)}
-                                
+                                onPress={() => handleSelect(item)}
+
                             >
                                 <Text>{item.name}</Text>
                             </TouchableOpacity>

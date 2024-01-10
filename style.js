@@ -39,16 +39,15 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     backgroundColor: '#FFF',
-
     position: 'relative',
   },
   dropdown: {
     borderWidth: 1,
-    borderColor: '#D0D5DD',
     borderRadius: 5,
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 8,
+    borderColor: '#D0D5DD',
     backgroundColor: '#FFF',
     boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
     position: 'relative',

@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { getAllBranch } from '../redux/slices/branch/branchApi';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { getAllBranch, getBranchById } from '../redux/slices/branch/branchApi';
 import { useDispatch, useSelector } from 'react-redux';
 import apiService from '../config/apiService';
 import { styles } from '../../style';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Replace 'FontAwesome' with the desired icon set
 import API_CONFIG from '../config/apiConfig';
+import Menus from './Menus';
 
 
 const BranchCard = () => {
   const dispatch = useDispatch();
-  const { branchData } = useSelector(state => state.branch);
+  const [branchModalOpen, setBranchModalOpen] = useState({});
+  const [branchId, setBranchId] = useState({});
+  const { branchData } = useSelector((state) => state.branch);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,11 +22,23 @@ const BranchCard = () => {
     fetchData();
   }, [dispatch]);
 
+  const hanldeNavigateWithId =(id)=>{
+  setBranchModalOpen(false)
+  }
+
+  const handleBranchId = (id) => {
+    setBranchId(id)
+    setBranchModalOpen((prev) => ({
+      ...prev,
+      [id]: !prev[id] || !branchModalOpen,
+    }));
+  };
   return (
     <>
       {branchData
         ? branchData.map(item => (
-          <View style={cardStyles.card} key={item.id}>
+          <TouchableOpacity style={cardStyles.card} key={item.id} onPress={()=>hanldeNavigateWithId(item.id)}>
+
             <View style={cardStyles.image}>
              
               {item?.image ? (
@@ -39,16 +54,20 @@ const BranchCard = () => {
               )}
             </View>
 
-
             <View style={cardStyles.content}>
               <Text style={styles.textSubHeading}>{item?.name ? item?.name : null}</Text>
               <Text style={styles.textSubDesc}>{item?.company?.city ? item?.company?.city : null}</Text>
               <Text style={styles.textSubDesc}>{item?.company?.address ? item?.company?.address : null}</Text>
             </View>
-            <View style={cardStyles.burger}>
-              <Icon name="rocket" size={30} color="#900" />
+
+            <View style={cardStyles.burger} >
+             <TouchableOpacity onPress={()=> handleBranchId(item.id)}  >
+                <Icon name="rocket" size={30} color="#900" />
+                {branchModalOpen[item.id] ? <Menus id={branchId} getEdit={getBranchById} path ='AddBranch'/> : null}
+             </TouchableOpacity>
             </View>
-          </View>
+            
+          </TouchableOpacity>
         ))
         : []}
     </>
@@ -69,6 +88,7 @@ const cardStyles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#FFF',
     boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+    position: 'relative'
   },
 
   content: {
