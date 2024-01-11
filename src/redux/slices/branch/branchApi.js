@@ -90,15 +90,14 @@ export const updateBrnach = async (id, dispatch, formData, navigation) => {
       Toast.show({
         type: 'error',
         position: 'top',
-        text1: 'Something went wrong during branch updation ============>',
+        text1: 'Something went wrong during branch updation',
         visibilityTime: 4000,
         autoHide: true,
       });
     }
     return res
   } catch (error) {
-    console.log('error=================>', error);
-    Toast.show({
+       Toast.show({
       type: 'error',
       position: 'top',
       text1: 'Something went wrong during branch updation',

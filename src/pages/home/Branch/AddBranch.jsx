@@ -11,6 +11,7 @@ import { createBranch,  updateBrnach } from '../../../redux/slices/branch/branch
 import API_CONFIG from '../../../config/apiConfig';
 import { styles } from '../../../../style';
 import { loginStyles } from '../../auth/Login';
+import { addBranch } from '../../../utils/validationSchema';
 
 const AddBranch = () => {
   const dispatch = useDispatch();
@@ -87,7 +88,7 @@ const AddBranch = () => {
       await recivedId ? updateBrnach(recivedId, dispatch, form_data, navigation) : createBranch(dispatch, form_data, navigation);
 
     } catch (error) {  
-      console.log('Error occured duting branch creation or updation : ', error);
+      console.log('Error occured during branch creation or updation : ', error);
     }
   };
 
@@ -109,12 +110,14 @@ const AddBranch = () => {
 
     fetchCountry();
   }, []);
+
   return (
     
     <>
         <View style={styles.container}>
           <Formik
             initialValues={recivedId ? { ...branchDataById } : initialState}
+            // validationSchema={addBranch}
             onSubmit={values => handlePress(values)}>
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
               <View style={styles.formContainer}>
@@ -239,6 +242,7 @@ const AddBranch = () => {
 
                   )}
                 </View>
+
               </View>
             )}
           </Formik>
