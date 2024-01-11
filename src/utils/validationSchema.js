@@ -12,14 +12,14 @@ const validator = {
     .required('Confirm Password')
     .oneOf([Yup.ref('password'), null], 'Password did not match'),
   otp: Yup.number().positive().integer().required('Please Enter otp'),
-  name: Yup.string().required('Please Enter Name'),
+  name: Yup.string().required('Please Enter Your Name'),
   first_name: Yup.string().required('Please Enter Your First Name'),
   last_name: Yup.string().required('Please Enter Your Last Name'),
   phone_number: Yup.number().required('Please Enter Your Phone Number'),
   address: Yup.string().max(500).required('Please Enter Your Address'),
   gender: Yup.string().required('Please Select Your Gender'),
   country: Yup.number().required('Please Select Your Country'),
-  city: Yup.string().required('Please Select Your City'),
+  city: Yup.string().required('Please Enter Your City'),
   profile_image: Yup.mixed()
     .required('Please upload a profile image')
     .test('fileType', 'Only image files are allowed', value => {
@@ -79,5 +79,4 @@ export const addBranch = Yup.object({
   name: validator.name,
   city: validator.city,
   address: validator.address,
-  // image: validator.profile_image,
 });

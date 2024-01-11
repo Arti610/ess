@@ -22,7 +22,7 @@ import authApi from '../../redux/slices/auth/authApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-const Login = (props) => {
+const Login = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { isLoading } = useSelector(state => state.auth);

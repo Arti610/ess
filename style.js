@@ -28,9 +28,9 @@ export const styles = StyleSheet.create({
     color: textColor,
     fontSize: 14,
     fontStyle: 'normal',
-    fontWeight: '500',
     lineHeight: 20,
     paddingBottom: 5,
+    fontWeight: '600'
   },
   textInput: {
     borderWidth: 1,
@@ -63,14 +63,14 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     lineHeight: 32,
-  
+
   },
 
   textDesc: {
     color: textColor,
     fontSize: 16,
     fontWeight: '400',
-    
+
   },
   textSubDesc: {
     color: textColor,
@@ -78,7 +78,9 @@ export const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '400'
   },
-
+  icons: {
+    color: primaryColor
+  },
   navigateText: {
     color: primaryColor,
     fontSize: 14,
@@ -126,7 +128,7 @@ export const styles = StyleSheet.create({
   },
   uploadUI: {
     padding: 10,
-    height: 100,
+    height: 50,
     borderWidth: 1,
     borderColor: '#D0D5DD',
     borderRadius: 8,
