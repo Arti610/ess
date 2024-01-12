@@ -60,17 +60,20 @@ const userSlice = createSlice({
             state.error = true
         },
        updateUserStart : state =>{
+        console.log('update user start');
             state.isLoading = true,
             state.isSuccess = false,
             state.error = false
         },
        updateUserSuccess : (state, action) => {
+        console.log('update user success');
             state.isLoading= false,
             state.isSuccess= true,
             state.error = false ,
             state.updateUserData.push([...state.userData, action.payload])
         },
        updateUserFailed : state => {
+        console.log('update user failed');
             state.isLoading = false,
             state.isSuccess = false,
             state.error = true

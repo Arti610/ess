@@ -22,7 +22,12 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   inputContainer: {
-    paddingBottom: 30,
+    paddingBottom: 15,
+  },
+  profileContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   lable: {
     color: textColor,
@@ -33,6 +38,15 @@ export const styles = StyleSheet.create({
     fontWeight: '600'
   },
   textInput: {
+    borderWidth: 1,
+    borderColor: '#D0D5DD',
+    borderRadius: 5,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    position: 'relative',
+  },
+  picker: {
     borderWidth: 1,
     borderColor: '#D0D5DD',
     borderRadius: 5,
@@ -94,6 +108,7 @@ export const styles = StyleSheet.create({
     borderColor: primaryColor,
     borderRadius: 8,
     paddingVertical: 10,
+    marginVertical: 10,
     backgroundColor: primaryColor
   },
   buttonText: {
@@ -135,6 +150,25 @@ export const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
     position: 'relative',
+  },
+  updateProfile: {
+    borderRadius: 50,
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  updateProfileBtn: {
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
+    backgroundColor: primaryColor,
+    color: 'white',
+    borderRadius: 15,
+    padding: 8,
+    fontSize: 15,
+
   },
   errorText: { color: 'red', fontSize: 14 },
 });

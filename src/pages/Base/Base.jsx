@@ -35,16 +35,7 @@ const Base = () => {
             tabBarIcon: () => <Icon name="code-branch"  style={styles.icons} size={20}/>,
           })}
         />
-
-        {/* <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={() => ({
-            headerTitle: () => <Header name='Profile'/>,
-            tabBarIcon: () => <Icon name="user-edit"  style={styles.icons} size={20}/>,
-          })}
-        /> */}
-       
+      
       </Tab.Navigator>
       <Toast />
     </>

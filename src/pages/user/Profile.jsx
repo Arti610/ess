@@ -8,12 +8,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message';
-import authApi from '../../redux/slices/auth/authApi';
-import { logoutFailure, logoutStart, logoutSuccess } from '../../redux/slices/auth/authSlice';
 
 const Profile = () => {
   const navigation = useNavigation()
-  const dispatch = useDispatch()
 
   const [currentUser, setCurrentUser] = useState(null)
 
@@ -39,26 +36,29 @@ const Profile = () => {
 
 
   return (
-    <View style={pStyles.container}>
-      <View style={pStyles.userHeader}>
-        {currentUser && currentUser.profile_image ?
-          <Image source={{ uri: `${API_CONFIG.imageUrl}${currentUser?.profile_image}` }} style={pStyles.image} /> :
-          <Image source={require('../../assests/userProfile.webp')} style={pStyles.image} />}
-        <Text style={styles.textHeading}>{currentUser?.first_name}{currentUser?.last_name}</Text>
-        <Icon name="rocket" size={30} color="#900" />
+    <>
+      <View style={pStyles.container}>
+        <View style={pStyles.userHeader}>
+          {currentUser && currentUser.profile_image ?
+            <Image source={{ uri: `${API_CONFIG.imageUrl}${currentUser?.profile_image}` }} style={pStyles.image} /> :
+            <Image source={require('../../assests/userProfile.webp')} style={pStyles.image} />}
+          <Text style={styles.textHeading}>{currentUser?.first_name}{currentUser?.last_name}</Text>
+          <Icon name="rocket" size={30} color="#900" />
+        </View>
+        <View style={pStyles.userBody}></View>
+        <View style={pStyles.userFooter}>
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: currentUser?.id })}>
+            <View style={pStyles.footerText} >
+              <Text>Edit Profile</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity >
+            <View style={pStyles.footerText}><Text>Logout</Text></View>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={pStyles.userBody}></View>
-      <View style={pStyles.userFooter}>
-        <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: currentUser?.id })}>
-          <View style={pStyles.footerText} >
-            <Text>Edit Profile</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity >
-          <View style={pStyles.footerText}><Text>Logout</Text></View>
-        </TouchableOpacity>
-      </View>
-    </View>
+      <Toast />
+    </>
   );
 };
 

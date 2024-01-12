@@ -41,11 +41,11 @@ const AddBranch = () => {
   };
 
   const initialState = {
-    country: null,
-    name: null,
-    city: null,
-    image: null,
-    address: null,
+    country: '',
+    name: '',
+    city: '',
+    image: '',
+    address: '',
   };
 
   const handleChooseImage = async () => {
@@ -83,7 +83,7 @@ const AddBranch = () => {
       form_data.append('name', values.name ? values.name : branchDataById.name);
       form_data.append('city', values.city ? values.city : branchDataById.city);
       form_data.append('address', values.address ? values.address : branchDataById.address);
-      console.log('formdata', form_data);
+    
 
       await recivedId ? updateBrnach(recivedId, dispatch, form_data, navigation) : createBranch(dispatch, form_data, navigation);
 
@@ -118,7 +118,7 @@ const AddBranch = () => {
           <Formik
             initialValues={recivedId ? { ...branchDataById } : initialState}
             // validationSchema={addBranch}
-            onSubmit={values => handlePress(values)}>
+            onSubmit={handlePress}   >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
               <View style={styles.formContainer}>
                 <View style={loginStyles.loginHeader}>
