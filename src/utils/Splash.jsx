@@ -13,6 +13,7 @@ const Splash = () => {
       try {
         setTimeout(async () => {
           const userDataString = await AsyncStorage.getItem('currentUser');
+          console.log('userDataString',userDataString);
           if (userDataString) {
             navigation.navigate('Base');
           } else {

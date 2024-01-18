@@ -7,8 +7,6 @@ export default {
     createUser: (payload) => apiService.post(`createuser`, payload),
     getUserById: (id) => apiService.get(`get_user/${id}`),
     updateUser: (id, payload, option) => apiService.put(`updateuser/${id}`, payload, option),
-    // updateUser: (id, payload) => {console.log('id',id)},
-    // updateUser: (id, payload) => {console.log('payload',payload)},
     deleteUser: (id) => apiService.delete(`deleteuser/${id}`),
     changePassword: (payload) => apiService.put(`change_password`, payload),
     deactivateUser: (id) => apiService.put(`deactivate_user/${id}`),

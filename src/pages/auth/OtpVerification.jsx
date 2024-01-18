@@ -116,7 +116,7 @@ const OtpVerification = props => {
           )}
         </Formik>
       </View>
-      <Toast ref={ref => Toast.setRef(ref)} />
+      <Toast  />
     </ScrollView>
   );
 };

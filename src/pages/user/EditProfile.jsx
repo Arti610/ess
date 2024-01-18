@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { useEffect, useRef, useState } from "react";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { useDispatch } from "react-redux";
 import { getUserFailed, getUserStart, getUserSuccess, updateUserSuccess } from "../../redux/slices/users/userSlice";
 import userApi from "../../redux/slices/users/userApi";
-import { styles } from "../../../style";
+import { primaryColor, styles } from "../../../style";
 import { Formik } from "formik";
 import { Picker } from '@react-native-picker/picker';
 import Loader from "../../utils/ActivityIndicator";
@@ -11,19 +11,23 @@ import Toast from "react-native-toast-message";
 import { updateBranchStart } from "../../redux/slices/branch/branchSlice";
 import { useNavigation } from "@react-navigation/native";
 import ButtonLoader from "../../utils/BtnActivityIndicator";
-import Icons from 'react-native-vector-icons/MaterialIcons'
+import Icons from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import IconF5 from 'react-native-vector-icons/FontAwesome5'
 import API_CONFIG from "../../config/apiConfig";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const EditProfile = ({ route }) => {
+    const refRBSheet = useRef();
     const { userId } = route.params;
-    const dispatch = useDispatch()
-    const navigation = useNavigation()
-    const [isLoading, setIsLoading] = useState(false)
-    const [updateLoading, setUpdateLoading] = useState(false)
-    const [userData, setUserData] = useState(null)
-    const [image, setImage] = useState(null)
-    const [selectedGender, setSelectedGender] = useState(userData?.gender || '');
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(false);
+    const [updateLoading, setUpdateLoading] = useState(false);
+    const [userData, setUserData] = useState(null);
+    const [image, setImage] = useState(null);
+    const [selectedGender, setSelectedGender] = useState('');
 
     const initialState = {
         first_name: null,
@@ -35,15 +39,6 @@ const EditProfile = ({ route }) => {
         profile_image: null,
     }
 
-    const options = {
-        maxWidth: 200,
-        maxHeight: 200,
-        storageOptions: {
-            skipBackup: true,
-            path: 'images',
-        },
-    };
-
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -52,6 +47,7 @@ const EditProfile = ({ route }) => {
                 const res = await userApi.getUserById(userId);
                 if (res) {
                     setUserData(res?.data);
+                    setSelectedGender(res?.data?.gender || '');
                 }
                 dispatch(getUserSuccess());
             } catch (error) {
@@ -65,19 +61,33 @@ const EditProfile = ({ route }) => {
         fetchUser();
     }, []);
 
+    const handleChooseImage = async (source) => {
+        const options = {
+            maxWidth: 200,
+            maxHeight: 200,
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
 
-    const handleChooseImage = async () => {
-        launchImageLibrary(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                setImage(response);
-            }
-        });
+        if (source === 'camera') {
+            launchCamera(options, handleImagePickerResponse);
+        } else {
+            launchImageLibrary(options, handleImagePickerResponse);
+        }
+    };
+
+    const handleImagePickerResponse = (response) => {
+        if (response.didCancel) {
+            console.log('User cancelled image picker');
+        } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+        } else {
+            setImage(response);
+        }
     };
 
     const handlePress = async (values) => {
@@ -88,7 +98,7 @@ const EditProfile = ({ route }) => {
                 name: image.assets[0].fileName ? image.assets[0].fileName : '',
                 type: image.assets[0].type ? image.assets[0].type : '',
                 uri: image.assets[0].uri ? image.assets[0].uri : '',
-              })
+            })
                 : null)
             formData.append('first_name', values.first_name ? values?.first_name : userData?.first_name)
             formData.append('last_name', values.last_name ? values?.last_name : userData?.last_name)
@@ -97,7 +107,7 @@ const EditProfile = ({ route }) => {
             formData.append('phone_number', values.phone_number ? values?.phone_number : userData?.phone_number)
             formData.append('gender', selectedGender || userData?.gender)
             formData.append('address', values.address ? values?.address : userData?.address)
-console.log('formData',formData);
+            console.log('formData', formData);
             const id = userData.id
             dispatch(updateBranchStart())
             setUpdateLoading(true)
@@ -142,7 +152,6 @@ console.log('formData',formData);
         }
     }
 
-
     return (
         isLoading ? <Loader /> :
             <ScrollView>
@@ -154,16 +163,62 @@ console.log('formData',formData);
                     >
                         {({ handleSubmit, handleBlur, handleChange, values, errors, touched }) => (
                             <View style={styles.formContainer}>
-
+                                
                                 <View style={styles.profileContainer}>
                                     {userData && userData.profile_image ?
-                                        <View>
+                                        (<View>
                                             <Image source={image !== null ? { uri: image?.assets[0].uri } : { uri: `${API_CONFIG.imageUrl}${userData?.profile_image}` }} style={styles.updateProfile} />
-                                            <TouchableOpacity onPress={handleChooseImage}><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
-                                        </View> :
+                                            <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
+                                           
+                                            <RBSheet
+                                                ref={refRBSheet}
+                                                closeOnDragDown={true}
+                                                closeOnPressMask={false}
+                                                customStyles={{
+                                                    wrapper: {
+                                                        backgroundColor: "transparent",
+                                                    },
+                                                    container: {
+                                                        height: 150 
+                                                      },
+                                                    draggableIcon: {
+                                                        backgroundColor: "#000",
+                                                    }
+                                                }}
+                                            >
+                                                <View style={styles.launchImageOption}>
+                                                    <TouchableOpacity onPress={()=>handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.cameraIcon}/><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
+                                                    <TouchableOpacity onPress={()=>handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.gallaryIcon}/><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
+                                                </View>
+                                            </RBSheet>
+                                        </View> )
+                                        :
                                         <View>
                                             {image ? <Image source={{ uri: image?.assets[0].uri }} style={styles.updateProfile} /> : <Image source={require('../../assests/userProfile.webp')} style={styles.updateProfile} />}
-                                            <TouchableOpacity onPress={handleChooseImage}><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
+                                            {/* <TouchableOpacity onPress={handleChooseImage}><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity> */}
+                                            <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
+                                           
+                                           <RBSheet
+                                               ref={refRBSheet}
+                                               closeOnDragDown={true}
+                                               closeOnPressMask={false}
+                                               customStyles={{
+                                                   wrapper: {
+                                                       backgroundColor: "transparent",
+                                                   },
+                                                   container: {
+                                                       height: 150 
+                                                     },
+                                                   draggableIcon: {
+                                                       backgroundColor: "#000",
+                                                   }
+                                               }}
+                                           >
+                                               <View style={styles.launchImageOption}>
+                                                   <TouchableOpacity onPress={()=>handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.cameraIcon}/><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
+                                                   <TouchableOpacity onPress={()=>handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.gallaryIcon}/><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
+                                               </View>
+                                           </RBSheet>
                                         </View>}
                                 </View>
 
@@ -205,7 +260,7 @@ console.log('formData',formData);
                                     <Picker
                                         style={styles.picker}
                                         selectedValue={selectedGender}
-                                        onValueChange={(itemValue) => setSelectedGender(itemValue)}
+                                        onValueChange={(itemValue) => setSelectedGender(itemValue ? itemValue : userData.gender)}
                                     >
                                         <Picker.Item label="Male" value="Male" />
                                         <Picker.Item label="Female" value="Female" />
@@ -248,4 +303,7 @@ console.log('formData',formData);
     )
 }
 
-export default EditProfile
+export default EditProfile;
+
+
+

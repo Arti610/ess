@@ -1,18 +1,79 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { styles } from '../../../style';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IconColor, primaryColor, secondaryColor, styles, textColor } from '../../../style';
 import API_CONFIG from '../../config/apiConfig';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import IconEditProfile from 'react-native-vector-icons/FontAwesome5';
+import IconLogoutUser from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import IconLogout from 'react-native-vector-icons/AntDesign'
+import IconEdit from 'react-native-vector-icons/Entypo'
 import Toast from 'react-native-toast-message';
+import userApi from '../../redux/slices/users/userApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutFailure, logoutStart, logoutSuccess } from '../../redux/slices/auth/authSlice';
+import authApi from '../../redux/slices/auth/authApi';
+import ButtonLoader from '../../utils/BtnActivityIndicator';
 
 const Profile = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const [currentUser, setCurrentUser] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null);
+  const [token, setToken] = useState(null)
+  const [data, setData] = useState(null);
+
+  const handleLogout = async () => {
+    try {
+      dispatch(logoutStart())
+      setLoading(true)
+      const res = await authApi.Logout({'key' : token});
+     
+      if(res.status === 200){
+        setLoading(false)
+        navigation.navigate('Login')
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          text1: 'Logout successfully',
+          text2: 'congratulation! you are logged out successfully',
+          visibilityTime: 4000,
+          autoHide: true,
+        });
+        try {
+          await AsyncStorage.removeItem('currentUser');
+          await AsyncStorage.removeItem('userEmail');
+  
+          console.log('AsyncStorage data cleared successfully');
+        } catch (error) {
+          console.log('Error clearing AsyncStorage data:', error);
+        }
+        dispatch(logoutSuccess())
+      }
+    } catch (error) {
+      setLoading(false)
+      dispatch(logoutFailure())
+    }
+  }
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token !== null) {
+          setToken(token)
+        } else {
+          console.log('Token not found during logout AsyncStorage');
+        }
+      } catch (error) {
+        console.error('Error fetching token for logout:', error);
+      }
+    };
+
+    fetchToken();
+  }, []);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -21,7 +82,7 @@ const Profile = () => {
         if (resString) {
           const res = JSON.parse(resString);
           if (res && res.data) {
-            setCurrentUser(res?.data)
+            setCurrentUser(res.data);
           }
         } else {
           console.log('No user data found in AsyncStorage');
@@ -34,27 +95,58 @@ const Profile = () => {
     fetchCurrentUser();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (currentUser) {
+          const res = await userApi.getUserById(currentUser.id);
+          if (res.data) {
+            setData(res.data);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [currentUser]);
 
   return (
     <>
       <View style={pStyles.container}>
         <View style={pStyles.userHeader}>
-          {currentUser && currentUser.profile_image ?
-            <Image source={{ uri: `${API_CONFIG.imageUrl}${currentUser?.profile_image}` }} style={pStyles.image} /> :
-            <Image source={require('../../assests/userProfile.webp')} style={pStyles.image} />}
-          <Text style={styles.textHeading}>{currentUser?.first_name}{currentUser?.last_name}</Text>
-          <Icon name="rocket" size={30} color="#900" />
+          {data && data.profile_image ? (
+            <Image source={{ uri: `${API_CONFIG.imageUrl}${data.profile_image ? data.profile_image : null}` }} style={pStyles.image} />
+          ) : (
+            <Image source={require('../../assests/userProfile.webp')} style={pStyles.image} />
+          )}
+          
         </View>
-        <View style={pStyles.userBody}></View>
+        <View style={pStyles.userBody}>
+          <Text style={styles.lable}>{`${data && data.user_type ? data.user_type : 'Guest User'}`}</Text>
+          <Text style={styles.textHeading}>{`${data && data.first_name ? data.first_name : 'User'} ${data && data.last_name ? data.last_name : "Name"}`}</Text>
+          <Text>{data && data.gender ? data.gender : null}</Text>
+        </View>
         <View style={pStyles.userFooter}>
-          <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: currentUser?.id })}>
-            <View style={pStyles.footerText} >
-              <Text>Edit Profile</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
+            <View style={pStyles.footerTextView}>
+              <View style={pStyles.leftFooterText}>
+                <IconEditProfile name='user-edit'  style={pStyles.logoutUserIcon}/>
+                <Text style={pStyles.lable}>Edit Profile</Text>
+              </View>
+              <IconEdit name='chevron-right' style={pStyles.iconStyles}/>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity >
-            <View style={pStyles.footerText}><Text>Logout</Text></View>
-          </TouchableOpacity>
+          { loading ? <ButtonLoader/> : <TouchableOpacity style={pStyles.footerText} onPress={()=> handleLogout()}>
+              <View style={pStyles.footerTextView}>
+                <View style={pStyles.leftFooterText}>
+                    <IconLogoutUser name='arrow-left' style={pStyles.logoutUserIcon}/>
+                    <Text style={pStyles.lable}>Logout</Text>
+                </View>
+                <IconLogout name='logout' style={pStyles.iconStyles}/>     
+            </View>
+          </TouchableOpacity> }
         </View>
       </View>
       <Toast />
@@ -69,44 +161,74 @@ const pStyles = StyleSheet.create({
     height: '100%',
     paddingVertical: 100,
     paddingHorizontal: 40,
-    backgroundColor: 'yellow',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   userHeader: {
-    flex: 2,
-    backgroundColor: 'pink',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  userBody: {
-    backgroundColor: 'green',
     flex: 1,
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  userFooter: {
-    backgroundColor: 'pink',
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
-
-  },
-  image: {
-    borderRadius: 20,
-    width: 45,
-    height: 45,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  userBody: {
+    flex: 2,
+    width: '100%',
+    justifyContent: 'start',
+    alignItems: 'center',
+  },
+  userFooter: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lable:{
+    color: textColor,
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: '600'
+  },
+  image: {
+    borderRadius: 50,
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   footerText: {
+    backgroundColor: secondaryColor,
+    width : '100%',
+    marginVertical: 10,
+    padding : 15,
+    borderRadius: 8,
+  },
 
+  leftFooterText:{
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15
+  },
+  footerTextView:{
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+ 
+  iconStyles:{
+    color: primaryColor,
+    fontSize: 20,
+    fontWeight: 400
+  },
+  logoutUserIcon:{
+    backgroundColor: IconColor,
+    height: 30,
+    width:30,
+    padding: 9,
+    borderRadius: 15,
+    textAlign: 'center',
+    color : '#fff'
   }
-
-})
+});

@@ -13,7 +13,7 @@ const apiService = axios.create({
 apiService.interceptors.request.use(async config => {
   try {
     const token = await AsyncStorage.getItem('token');
-    console.log('mu token', token);
+   
     if (token !== null) {
       config.headers['Authorization'] = `token ${token}`;
     }

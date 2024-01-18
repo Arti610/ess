@@ -12,7 +12,6 @@ import Base from '../pages/Base/Base.jsx';
 import AddBranch from '../pages/home/Branch/AddBranch.jsx';
 import EditProfile from '../pages/user/EditProfile.jsx';
 import Profile from '../pages/user/Profile.jsx';
-import HeaderTitle from '../utils/headerTitle.jsx';
 import { Text, View } from 'react-native';
 import { styles } from '../../style.js';
 

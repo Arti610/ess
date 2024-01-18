@@ -3,15 +3,16 @@ import { StyleSheet } from 'react-native';
 
 // colors.js
 export const primaryColor = '#00073d';
-export const secondaryColor = '#2ecc71';
+export const secondaryColor = '#e4eafb';
 export const textColor = '#102b4d';
+export const IconColor = '#3d6fe2'
 // Add more colors as needed
 
 
 export const styles = StyleSheet.create({
   container: {
-    height: '100%',
     width: '100%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -171,4 +172,43 @@ export const styles = StyleSheet.create({
 
   },
   errorText: { color: 'red', fontSize: 14 },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  },
+  addIcon: {
+    backgroundColor: primaryColor,
+    color: '#fff', 
+    padding: 8,
+    borderRadius: 25,
+    fontSize: 30
+  },
+
+  // Launch Cameras and Gallary Bottom Sheet @start
+  launchImageOption: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 20,
+    position: 'fixed'
+  },
+  cameraIcon: {
+    fontSize: 40,
+    color: primaryColor,
+
+  },
+  gallaryIcon: {
+    fontSize: 40,
+    color: primaryColor,
+  },
+  touchableOpacity: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  }
+  // Launch Cameras and Gallary Bottom Sheet @end
 });

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const authSlice = createSlice({
   name: 'auth',
@@ -10,19 +10,16 @@ const authSlice = createSlice({
   },
   reducers: {
     loginStart: state => {
-      console.log('login start');
       state.isLoading = true;
       state.error = false;
     },
     loginSuccess: (state, action) => {
-      console.log('login success');
       state.isLoading = false;
       state.error = false;
       state.currentUser = action.payload;
       setCurrentUserData(action.payload);
     },
     loginFailure: state => {
-      console.log('login failed');
       state.isLoading = false;
       state.error = true;
     },
@@ -33,14 +30,14 @@ const authSlice = createSlice({
     logoutSuccess: async state => {
       state.isLoading = false;
       state.error = false;
-      try {
-        await AsyncStorage.removeItem('currentUser');
-        await AsyncStorage.removeItem('userEmail');
-        await AsyncStorage.removeItem('userEmail');
-        console.log('AsyncStorage data cleared successfully');
-      } catch (error) {
-        console.log('Error clearing AsyncStorage data:', error);
-      }
+      // try {
+      //   await AsyncStorage.removeItem('currentUser');
+      //   await AsyncStorage.removeItem('userEmail');
+      //   await AsyncStorage.removeItem('userEmail');
+      //   console.log('AsyncStorage data cleared successfully');
+      // } catch (error) {
+      //   console.log('Error clearing AsyncStorage data:', error);
+      // }
     },
     logoutFailure: state => {
       state.isLoading = false;
