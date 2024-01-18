@@ -17,6 +17,7 @@ import IconF5 from 'react-native-vector-icons/FontAwesome5'
 import API_CONFIG from "../../config/apiConfig";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { getAllBranch } from "../../redux/slices/branch/branchApi";
 
 const EditProfile = ({ route }) => {
     const refRBSheet = useRef();
@@ -129,6 +130,7 @@ const EditProfile = ({ route }) => {
                     visibilityTime: 4000,
                     autoHide: true
                 });
+                getAllBranch(dispatch)
                 return res
             } else {
                 Toast.show({
@@ -195,7 +197,6 @@ const EditProfile = ({ route }) => {
                                         :
                                         <View>
                                             {image ? <Image source={{ uri: image?.assets[0].uri }} style={styles.updateProfile} /> : <Image source={require('../../assests/userProfile.webp')} style={styles.updateProfile} />}
-                                            {/* <TouchableOpacity onPress={handleChooseImage}><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity> */}
                                             <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
                                            
                                            <RBSheet

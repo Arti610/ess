@@ -80,3 +80,12 @@ export const addBranch = Yup.object({
   city: validator.city,
   address: validator.address,
 });
+
+
+export const addBranchInfoValidationSchema = Yup.object({
+  checkin: Yup.date().required('CheckIn Time is required'),
+  checkout: Yup.date().required('CheckOut Time is required'),
+  breakTime: Yup.number().typeError('BreakTime must be a number').min(0, 'BreakTime must be greater than or equal to 0'),
+  totalOfficeHour: Yup.number().typeError('Total office hour must be a number').min(0, 'Total office hour must be greater than or equal to 0'),
+  city: Yup.string().required('City is required'),
+});

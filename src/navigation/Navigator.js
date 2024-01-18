@@ -14,6 +14,7 @@ import EditProfile from '../pages/user/EditProfile.jsx';
 import Profile from '../pages/user/Profile.jsx';
 import { Text, View } from 'react-native';
 import { styles } from '../../style.js';
+import AddBranchInfo from '../pages/home/Branch/AddBranchInfo.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,18 +28,18 @@ const Navigator = () => {
           headerShown: true,
         }} initialRouteName='Splash'>
 
-        <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-        <Stack.Screen name="Base" component={Base} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Forgot Password" component={ForgetPassword} options={{ headerShown: false }} />
-        <Stack.Screen name="OTP Verification" component={OtpVerification} options={{ headerShown: false }} />
-        <Stack.Screen name="Reset Password" component={ResetPassword}options={{ headerShown: false }}  />
-        <Stack.Screen name="Confirmation" component={Confirmation} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="AddBranch" component={AddBranch} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Add Branch</Text></View> }} />
-        <Stack.Screen name='Profile' component={Profile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Profile</Text></View> }} />
-        <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit Profile</Text></View> }} />
-
+          <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+          <Stack.Screen name="Base" component={Base} options={{ headerShown: false }} />
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Forgot Password" component={ForgetPassword} options={{ headerShown: false }} />
+          <Stack.Screen name="OTP Verification" component={OtpVerification} options={{ headerShown: false }} />
+          <Stack.Screen name="Reset Password" component={ResetPassword}options={{ headerShown: false }}  />
+          <Stack.Screen name="Confirmation" component={Confirmation} options={{ headerShown: false }} />
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="AddBranch" component={AddBranch} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Branch</Text></View> }} />
+          <Stack.Screen name="AddBranchInfo" component={AddBranchInfo} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>BranchInfo</Text></View> }} />
+          <Stack.Screen name='Profile' component={Profile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Profile</Text></View> }} />
+          <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit Profile</Text></View> }} />
 
       </Stack.Navigator>
     </NavigationContainer>

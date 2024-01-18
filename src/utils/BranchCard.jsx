@@ -1,43 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { deleteBranch, getAllBranch, getBranchById } from '../redux/slices/branch/branchApi';
-import { useDispatch, useSelector } from 'react-redux';
+import { deleteBranch,  getBranchById } from '../redux/slices/branch/branchApi';
 import { styles } from '../../style';
 import Icon from 'react-native-vector-icons/Entypo'; // Replace 'FontAwesome' with the desired icon set
 import API_CONFIG from '../config/apiConfig';
 import Menus from './Menus';
+import RBSheet from "react-native-raw-bottom-sheet";
 
-
-const BranchCard = () => {
-  const dispatch = useDispatch();
+const BranchCard = ({item}) => {
+  const refRBSheet = useRef();
   const [branchModalOpen, setBranchModalOpen] = useState({});
   const [branchId, setBranchId] = useState({});
-  const { branchData } = useSelector((state) => state.branch);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await getAllBranch(dispatch);
-    };
-    fetchData();
-  }, [dispatch]);
-
+ 
   const hanldeNavigateWithId = () => {
     setBranchModalOpen(false)
   }
 
   const handleBranchId = (id) => {
+    refRBSheet.current.open()
     setBranchId(id)
     setBranchModalOpen((prev) => ({
       ...prev,
       [id]: !prev[id] || !branchModalOpen,
     }));
   };
+
   return (
-    <>
-    
-      {branchData
-        ? branchData.map(item => (
-          <TouchableOpacity style={cardStyles.card} key={item.id} onPress={() => hanldeNavigateWithId(item.id)}>
+    <>    
+      <TouchableOpacity style={cardStyles.card} key={item.id} onPress={() => hanldeNavigateWithId(item.id)}>
 
             <View style={cardStyles.image}>
 
@@ -63,13 +53,29 @@ const BranchCard = () => {
             <View style={cardStyles.burger} >
               <TouchableOpacity onPress={() => handleBranchId(item.id)}  >
                 <Icon name="dots-three-vertical" style={styles.icons} size={15}/>
-                {branchModalOpen[item.id] ? <Menus id={branchId} getEdit={getBranchById} getDelete={deleteBranch} path='AddBranch' /> : null}
+             
+                <RBSheet
+                        ref={refRBSheet}
+                        closeOnDragDown={true}
+                        closeOnPressMask={false}
+                        customStyles={{
+                          wrapper: {
+                            backgroundColor: "transparent",
+                          },
+                          container: {
+                            height: 150
+                          },
+                          draggableIcon: {
+                            backgroundColor: "#000",
+                          }
+                        }}
+                      >
+                        {branchModalOpen[item.id] ? <Menus id={branchId} getEdit={getBranchById} getDelete={deleteBranch} path='AddBranch' name = 'Branch' /> : null}                      
+                      </RBSheet>
               </TouchableOpacity>
             </View>
 
-          </TouchableOpacity>
-        ))
-        : []}
+      </TouchableOpacity>  
     </>
   );
 };
@@ -102,9 +108,9 @@ const cardStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   imageInside: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
 
   },
   burger: {

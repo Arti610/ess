@@ -69,7 +69,7 @@ const branchSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true
       state.error = false;
-      state.branchData = [...state.branchData, action.payload];
+      state.branchDataById = [...state.branchData, action.payload];
     },
     updateBranchFailure: state => {
       state.isLoading = false;

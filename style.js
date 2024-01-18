@@ -195,14 +195,10 @@ export const styles = StyleSheet.create({
     padding: 20,
     position: 'fixed'
   },
-  cameraIcon: {
-    fontSize: 40,
+  icon: {
+    fontSize: 30,
     color: primaryColor,
 
-  },
-  gallaryIcon: {
-    fontSize: 40,
-    color: primaryColor,
   },
   touchableOpacity: {
     display: 'flex',

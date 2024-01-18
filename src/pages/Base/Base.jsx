@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Home from '../home/Home';
@@ -7,10 +7,29 @@ import HeaderTitle from '../../utils/headerTitle';
 import BranchInfo from '../home/BranchInfo';
 import Toast from 'react-native-toast-message';
 import { styles } from '../../../style';
+import { BackHandler } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 const Base = () => {
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress
+    );
+
+    
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
+
+  const handleBackPress = () => {
+   
+    return true;
+ 
+  };
   return (
     <>
       <Tab.Navigator>
