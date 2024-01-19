@@ -9,7 +9,7 @@ import branchApi from "../../redux/slices/branch/branchApi";
 const BranchInfo = () =>{
     const navigation = useNavigation();
     const [data , setData] = useState(null)
-    console.log('data',data);
+
 
     useEffect(()=>{
         const fetchBranchInfo = async () =>{
