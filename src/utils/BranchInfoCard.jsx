@@ -1,47 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {   useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { deleteBranch,  getBranchById } from '../redux/slices/branch/branchApi';
 import { styles } from '../../style';
-import Icon from 'react-native-vector-icons/Entypo'; // Replace 'FontAwesome' with the desired icon set
+import Icon from 'react-native-vector-icons/Entypo'; 
 import API_CONFIG from '../config/apiConfig';
-import Menus from './Menus';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { useNavigation } from '@react-navigation/native';
 
-const BranchCard = ({item}) => {
-  const refRBSheet = useRef();
-  const navigation = useNavigation()
-  const [branchModalOpen, setBranchModalOpen] = useState({});
-  const [branchId, setBranchId] = useState(null);
+const BranchInfoCard = ({item}) => {
+    const navigation = useNavigation();
 
- 
-  const hanldeNavigateWithId = (id) => {
-
-    if(id){
-      navigation.navigate('ManagementDashboard', { id: id });
-    } 
-    setBranchModalOpen(false);
-  }
   
+
   const handleBranchId = (id) => {
- 
-    refRBSheet.current.open()
-    setBranchId(id)
-    setBranchModalOpen((prev) => ({
-      ...prev,
-      [id]: !prev[id] || !branchModalOpen,
-    }));
+    if(id){
+        navigation.navigate('AddBranchInfo', { data: id })
+    }
   };
 
   return (
     <>    
-      <TouchableOpacity style={cardStyles.card} key={item.id} onPress={() => hanldeNavigateWithId(item.id)}>
+      <TouchableOpacity style={cardStyles.card} key={item.id} >
 
             <View style={cardStyles.image}>
 
-              {item?.image ? (
+              {item?.branch.image ? (
                 <Image
-                  source={{ uri: `${API_CONFIG.imageUrl}${item.image}` }}
+                  source={{ uri: `${API_CONFIG.imageUrl}${item.branch.image}` }}
                   style={cardStyles.imageInside}
                 />
               ) : (
@@ -53,16 +36,19 @@ const BranchCard = ({item}) => {
             </View>
 
             <View style={cardStyles.content}>
-              <Text style={styles.textSubHeading}>{item?.name ? item?.name : null}</Text>
-              <Text style={styles.textSubDesc}>{item?.city ? item?.city : null}</Text>
-              <Text style={styles.textSubDesc}>{item?.address ? item?.address : null}</Text>
+              <Text style={styles.textSubHeading}>{item?.branch.name ? item?.branch.name : null}</Text>
+              <Text style={styles.textSubDesc}><Text style={styles.lable}>CheckIn Time : </Text>{item?.check_in_time ? item?.check_in_time : null}</Text>
+              <Text style={styles.textSubDesc}><Text style={styles.lable}>CheckOut Time : </Text>{item?.check_out_time ? item?.check_out_time : null}</Text>
+              <Text style={styles.textSubDesc}><Text style={styles.lable}>Break Time : </Text>{item?.break_time1 ? item?.break_time1 : null}</Text>
+              <Text style={styles.textSubDesc}><Text style={styles.lable}>Total Office Time : </Text>{item?.total_office_time1 ? item?.total_office_time1 : null}</Text>
+              <Text style={styles.textSubDesc}><Text style={styles.lable}>Place : </Text>{item?.place ? item?.place : null}</Text>
             </View>
 
             <View style={cardStyles.burger} >
               <TouchableOpacity onPress={() => handleBranchId(item.id)}  >
-                <Icon name="dots-three-vertical" style={styles.icons} size={15}/>
+                <Icon name="edit" style={styles.icons} size={15}/>
              
-                <RBSheet
+                {/* <RBSheet
                         ref={refRBSheet}
                         closeOnDragDown={true}
                         closeOnPressMask={false}
@@ -79,7 +65,7 @@ const BranchCard = ({item}) => {
                         }}
                       >
                         {branchModalOpen[item.id] ? <Menus id={branchId} getEdit={getBranchById} getDelete={deleteBranch} path='AddBranch' name = 'Branch' /> : null}                      
-                      </RBSheet>
+                      </RBSheet> */}
               </TouchableOpacity>
             </View>
 
@@ -127,4 +113,4 @@ const cardStyles = StyleSheet.create({
 
 });
 
-export default BranchCard;
+export default BranchInfoCard;

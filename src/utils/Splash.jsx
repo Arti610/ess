@@ -1,8 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native"
-import Loader from "./ActivityIndicator";
+import {  ImageBackground, StyleSheet, Text, View } from "react-native"
+import { primaryColor, secondaryColor } from "../../style";
+
 
 const Splash = () => {
   const navigation = useNavigation()
@@ -27,11 +28,29 @@ const Splash = () => {
     navigationAuth()
   })
   return (
-    <>
-      <Loader/>
-    </>
+  
+    <View style={styles.container}>     
+       <Text style={styles.textHeading}>WELCOME TO ESS</Text>
+    </View>
+
+        
   )
 }
 
 export default Splash;
 
+const styles = StyleSheet.create({
+  container:{
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: secondaryColor
+  },
+  textHeading:{
+    color : primaryColor,
+    fontSize: 30,
+    fontWeight: 'bold'
+  }
+})

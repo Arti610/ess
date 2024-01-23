@@ -1,12 +1,26 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import { View} from 'react-native';
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
+import { primaryColor } from '../../style';
 
 const ButtonLoader = () =>{
     return (
         <View >
-          <ActivityIndicator size={40} color="#0E81B9" />
+          <SkypeIndicator color={'white'} size={25}/>
         </View>
       );
 }
 
-export default ButtonLoader
+export default ButtonLoader;
+
+

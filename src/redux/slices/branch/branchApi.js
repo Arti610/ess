@@ -4,6 +4,7 @@ import { createBranchFailure, createBranchStart, createBranchSuccess, deleteBran
 
 
 export const getAllBranch = async (dispatch) => {
+
   try {
     dispatch(getBranchStart());
     const res = await apiService.get('get_all_branch');
@@ -152,9 +153,7 @@ export default {
   getAllBranchInfo : () => apiService.get(`all_branch_info`),
   getBranchInfoById : (id) => apiService.get(`get_branch_info/${id}`),
   createBranchInfo : (payload) => apiService.post(`create_branch_info`, payload),
-  updateBranchInfo : (id, payload) => apiService.put(`update_branch_info/${id}`, payload),
+  updateBranchInfo : (id, payload, option) => apiService.post(`update_branch_info/${id}`, payload, option),
   get_places:(place)=> apiService.post(`get_places`,{places:place}),
-  // createBranchInfo :(payload)=> apiService.post(`create_branch_info`, payload)
   createBranchInfo:(payload, option)=>apiService.post('create_branch_info', payload, option),
-  // createBranchInfo :(payload)=> console.log('payload', payload),
 }

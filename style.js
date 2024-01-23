@@ -17,6 +17,18 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  header: {
+    marginBottom: 20,
+  },
+
+  body: {
+    marginBottom: 20,
+  },
+
+  footer: {
+    marginTop: 0,
+  },
+
   formContainer: {
     padding: 20,
     height: '100%',

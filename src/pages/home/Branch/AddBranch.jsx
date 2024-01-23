@@ -15,6 +15,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF5 from 'react-native-vector-icons/FontAwesome5'
+import ButtonLoader from '../../../utils/BtnActivityIndicator';
 
 const AddBranch = () => {
   const refRBSheet = useRef();
@@ -94,8 +95,8 @@ const AddBranch = () => {
       form_data.append('city', values.city ? values.city : branchDataById.city);
       form_data.append('address', values.address ? values.address : branchDataById.address);
 
-      recivedId ?  await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
-     
+      recivedId ? await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
+
     } catch (error) {
       console.log('Error occured during branch creation or updation : ', error);
     }
@@ -135,7 +136,7 @@ const AddBranch = () => {
               </View>
 
               <View style={styles.loginBody}>
-        
+
                 <View style={styles.profileContainer}>
                   {recivedId ?
                     <View>
@@ -267,7 +268,11 @@ const AddBranch = () => {
 
               <View style={styles.loginFooter}>
                 {isLoading ? (
-                  <ActivityIndicator size={'large'} />
+                  <TouchableOpacity
+                  style={styles.primaryButton}
+                  >
+                    <ButtonLoader />
+                  </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
                     style={styles.primaryButton}

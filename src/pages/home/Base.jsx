@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Home from '../home/Home';
+import Home from './Home';
 import UserProfile from '../../utils/userProfile';
 import HeaderTitle from '../../utils/headerTitle';
-import BranchInfo from '../home/BranchInfo';
+import BranchInfo from './BranchInfo';
 import Toast from 'react-native-toast-message';
 import { styles } from '../../../style';
 import { BackHandler } from 'react-native';
@@ -18,7 +18,6 @@ const Base = () => {
       'hardwareBackPress',
       handleBackPress
     );
-
     
     return () => {
       backHandler.remove();
@@ -26,15 +25,14 @@ const Base = () => {
   }, []);
 
   const handleBackPress = () => {
-   
     return true;
- 
   };
+
   return (
     <>
       <Tab.Navigator>
         <Tab.Screen
-          name="Home"
+          name="Branch"
           component={Home}
           options={() => ({
             headerTitle: () => null,
