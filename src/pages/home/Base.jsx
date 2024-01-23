@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import BranchIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Home from './Home';
 import UserProfile from '../../utils/userProfile';
@@ -7,7 +8,7 @@ import HeaderTitle from '../../utils/headerTitle';
 import BranchInfo from './BranchInfo';
 import Toast from 'react-native-toast-message';
 import { styles } from '../../../style';
-import { BackHandler } from 'react-native';
+import { BackHandler, Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +31,7 @@ const Base = () => {
 
   return (
     <>
-      <Tab.Navigator>
+      <Tab.Navigator >
         <Tab.Screen
           name="Branch"
           component={Home}
@@ -38,7 +39,8 @@ const Base = () => {
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
             headerRight: () => <UserProfile />,
-            tabBarIcon: () => <Icon name="home" style={styles.icons} size={20} />,
+            tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons}  size={20} />,
+            tabBarLabel: () => <Text style={styles.lable}>Branch</Text>
           })}
         />
 
@@ -50,6 +52,7 @@ const Base = () => {
             headerLeft: () => <HeaderTitle />,
             headerRight: () => <UserProfile />,
             tabBarIcon: () => <Icon name="code-branch"  style={styles.icons} size={20}/>,
+            tabBarLabel: () => <Text style={styles.lable}>BranchInfo</Text>
           })}
         />
       

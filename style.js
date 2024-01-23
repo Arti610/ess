@@ -8,7 +8,6 @@ export const textColor = '#102b4d';
 export const IconColor = '#3d6fe2'
 // Add more colors as needed
 
-
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -90,7 +89,6 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     lineHeight: 32,
-
   },
 
   textDesc: {

@@ -15,7 +15,8 @@ import Profile from '../pages/user/Profile.jsx';
 import { Text, View } from 'react-native';
 import { styles } from '../../style.js';
 import AddBranchInfo from '../pages/home/Branch/AddBranchInfo.jsx';
-import ManagementDashboard from '../pages/dashboard/ManagementDashboard.jsx';
+import DashboardBase from '../pages/management/DashboardBase.js';
+import UserForm from '../pages/management/Users/UserForm.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,11 +25,7 @@ const Navigator = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: true,
-        }} initialRouteName='Splash'>
-
+      <Stack.Navigator screenOptions={{ headerShown: true}} initialRouteName='Splash'>
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Base" component={Base} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
@@ -41,8 +38,8 @@ const Navigator = () => {
           <Stack.Screen name="AddBranchInfo" component={AddBranchInfo} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>BranchInfo</Text></View> }} />
           <Stack.Screen name='Profile' component={Profile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Profile</Text></View> }} />
           <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit Profile</Text></View> }} />
-          <Stack.Screen name='ManagementDashboard' component={ManagementDashboard} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Dashboard</Text></View> }} />
-
+          <Stack.Screen name='DashboardBase' component={DashboardBase} options={{headerShown: false}} />
+          <Stack.Screen name='UserForm' component={UserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User</Text></View> }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

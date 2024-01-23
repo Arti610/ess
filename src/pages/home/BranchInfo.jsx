@@ -6,19 +6,27 @@ import { useNavigation } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import branchApi from "../../redux/slices/branch/branchApi";
 import BranchInfoCard from "../../utils/BranchInfoCard";
+import Loader from "../../utils/ActivityIndicator";
 
 const BranchInfo = () => {
     const navigation = useNavigation();
     const [data, setData] = useState([])
+    const [loading, setLoading] = useState(false)
    
     useEffect(() => {
         try { 
             const fetchBranchInfo = async () => {
+            try {
+                setLoading(true)
                 const res = await branchApi.getAllBranchInfo()
                 
                 if (res) {
                     setData(res.data)
+                    setLoading(false)
                 }
+            } catch (error) {
+                
+            }
             }
             fetchBranchInfo()
         } catch (error) {
@@ -27,7 +35,7 @@ const BranchInfo = () => {
     }, [])
 
     return (
-        <>
+        loading ? <Loader/> :   <>
             <ScrollView>  
                 <View style={styles.container}>
                     {data && data.map((item, i) =>

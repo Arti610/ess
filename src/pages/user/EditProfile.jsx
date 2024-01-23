@@ -292,7 +292,7 @@ const EditProfile = ({ route }) => {
                                 </View>
 
                                 <View >
-                                    {updateLoading ? <ButtonLoader /> : <TouchableOpacity style={styles.primaryButton} onPress={handleSubmit}>
+                                    {updateLoading ?  <TouchableOpacity style={styles.primaryButton} ><ButtonLoader /></TouchableOpacity> : <TouchableOpacity style={styles.primaryButton} onPress={handleSubmit}>
                                         <Text style={styles.buttonText}>Submit</Text>
                                     </TouchableOpacity>}
                                 </View>

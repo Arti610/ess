@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import BranchCard from '../../utils/BranchCard';
 import { styles } from '../../../style';
@@ -7,21 +7,31 @@ import Toast from 'react-native-toast-message';
 import IconAdd from 'react-native-vector-icons/MaterialIcons'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBranch } from '../../redux/slices/branch/branchApi';
+import Loader from '../../utils/ActivityIndicator';
 
 const Home = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch()
   const { branchData } = useSelector((state) => state.branch);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
   const fetchData = async () => {
-    await getAllBranch(dispatch);
+  try {
+    setLoading(true)
+    const res =  await getAllBranch(dispatch);
+
+    if(res.status === 200){
+      setLoading(false)
+    }
+  } catch (error) {
+  }
   };
   fetchData();
   }, [dispatch]);
 
   return (
-    <>
+    loading ? <Loader/> : <>
       <ScrollView>
         <View style={styles.container}>
         {branchData

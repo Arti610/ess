@@ -18,7 +18,7 @@ const BranchCard = ({item}) => {
   const hanldeNavigateWithId = (id) => {
 
     if(id){
-      navigation.navigate('ManagementDashboard', { id: id });
+      navigation.navigate('DashboardBase', { id: id });
     } 
     setBranchModalOpen(false);
   }
