@@ -36,11 +36,12 @@ const validator = {
       }
       return value.size <= 5 * 1024 * 1024; // 5MB
     }),
-  manager: Yup.number().required('Please Select Your manager'),
-  department: Yup.number().required('Please Select Your department'),
-  designation: Yup.number().required('Please Select Your designation'),
-  user_type: Yup.string().required('Please Select Your user_type'),
-  branch: Yup.number().required('Please Select Your branch'),
+  manager: Yup.number().required('Please Select Your Manager'),
+  department: Yup.number().required('Please Select Your Department'),
+  designation: Yup.number().required('Please Select Your Designation'),
+  user_type: Yup.string().required('Please Select Your User Type'),
+  branch: Yup.number().required('Please Select Your Branch'),
+  week_off: Yup.number().required('Please Select Your Week Off'),
 };
 
 export const loginSchema = Yup.object({
@@ -63,13 +64,12 @@ export const addUserSchema = Yup.object({
   last_name: validator.last_name,
   phone_number: validator.phone_number,
   address: validator.address,
-  gender: validator.gender,
-  profile_image: validator.profile_image,
-  manager: validator.manager,
-  department: validator.department,
-  designation: validator.designation,
-  user_type: validator.user_type,
-  branch: validator.branch,
+  // gender: validator.gender,
+  // manager: validator.manager,
+  // department: validator.department,
+  // designation: validator.designation,
+  // user_type: validator.user_type,
+  // week_off: validator.week_off,
   password: validator.password,
   confirm_password: validator.confirm_password,
 });
@@ -89,3 +89,5 @@ export const addBranchInfoValidationSchema = Yup.object({
   totalOfficeHour: Yup.number().typeError('Total office hour must be a number').min(0, 'Total office hour must be greater than or equal to 0'),
   city: Yup.string().required('City is required'),
 });
+
+

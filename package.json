@@ -22,6 +22,7 @@
     "formik": "^2.4.5",
     "react": "18.2.0",
     "react-native": "0.73.1",
+    "react-native-dropdown-select-list": "^2.0.5",
     "react-native-image-picker": "^7.1.0",
     "react-native-indicators": "^0.17.0",
     "react-native-raw-bottom-sheet": "^2.2.0",

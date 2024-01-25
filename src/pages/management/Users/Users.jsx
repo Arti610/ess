@@ -29,15 +29,15 @@ const Users = ()=>{
     return(
         <>
             <ScrollView>
-                    {data && data.map((item, i)=>{
-                        return(
-                            <Text key={i}>{item.first_name ? item.first_name : 'User Name'}</Text> 
-                            
-                        )
-                    })}
+                {data && data.map((item, i)=>{
+                    return(
+                        <Text key={i}>{item.first_name ? item.first_name : 'User Name'}</Text> 
+
+                    )
+                })}
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('UserForm')}>
+                <TouchableOpacity onPress={() => navigation.navigate('UserForm', {id : id})}>
                 <IconAdd name='add' style={styles.addIcon} />
                 </TouchableOpacity>
             </View>

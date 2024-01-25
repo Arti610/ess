@@ -49,7 +49,7 @@ const DashboardBase = () => {
                 <Tab.Screen name='Document' component={Document} initialParams={{ id: id }}
                     options={{
                         headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrow-back-ios-new' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Document</Text></View>,
-                        tabBarIcon: () => <IconMCI name="file-document" style={styles.icons} size={20} />,
+                        tabBarIcon: () => <IconMCI name="file-document" style={styles.icons} size={20} />,                       
                         tabBarLabel: () => <Text style={styles.lable}>Documents</Text>
                     }} />
             </Tab.Navigator>
