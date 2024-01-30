@@ -6,10 +6,12 @@ export default{
     getLeaveList : (id) => apiService.get(`get_leave_list/${id}`),
 
     getAllUserList: (id) => apiService.get(`all_details_user/${id}`),
+    getIndividualUser: (id) => apiService.get(`get_user/${id}`),
+  
 
 
     // utils
-    getManagerStaff : (id) => apiService.get(`get_managers_staff/${id}`),
+    getManagerStaff : (id) => apiService.get(`all_branch_managers/${id}`),
     getWeekOff : (id) => apiService.get(`week_off_list/${id}`),
     getBranchDepartment : (id) => apiService.get(`get_branch_department/${id}`),
     getBranchDesignation : (id) => apiService.get(`get_branch_designation/${id}`),

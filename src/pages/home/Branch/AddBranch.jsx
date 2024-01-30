@@ -131,12 +131,7 @@ const AddBranch = () => {
           onSubmit={handlePress}   >
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
             <View style={styles.formContainer}>
-              <View style={loginStyles.loginHeader}>
-                <Text style={styles.textHeading}>{recivedId ? 'Update' : 'Add'} Branch</Text>
-              </View>
-
               <View style={styles.loginBody}>
-
                 <View style={styles.profileContainer}>
                   {recivedId ?
                     <View>

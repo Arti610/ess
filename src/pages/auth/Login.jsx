@@ -21,6 +21,7 @@ import authApi from '../../redux/slices/auth/authApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import ButtonLoader from '../../utils/BtnActivityIndicator.jsx';
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -101,7 +102,7 @@ const Login = () => {
                     <TouchableOpacity
                       style={{ position: 'absolute', top: 40, right: 8 }}
                       onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
-                      <Text>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
+                      {isPasswordHidden ? <Icon name='eye-slash' style={styles.eyeIcon}/> :  <Icon name='eye' style={styles.eyeIcon}/>}
                     </TouchableOpacity>
                     {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
                   </View>
@@ -140,3 +141,4 @@ const Login = () => {
 };
 
 export default Login;
+

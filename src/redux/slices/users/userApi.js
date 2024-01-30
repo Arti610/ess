@@ -3,6 +3,7 @@ import apiService from "../../../config/apiService";
 export default {
     getBranchUsers: (branchId) => apiService.get(`get_branch_user/${branchId}`),
     getManagerUsers: (managerId) => apiService.get(`get_managers_staff/${managerId}`),
+    
     // staff apiServices @start
     createUser: (payload) => apiService.post(`createuser`, payload),
     getUserById: (id) => apiService.get(`get_user/${id}`),

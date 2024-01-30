@@ -3,7 +3,7 @@ import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 import { useDispatch } from "react-redux";
 import { getUserFailed, getUserStart, getUserSuccess, updateUserSuccess } from "../../redux/slices/users/userSlice";
 import userApi from "../../redux/slices/users/userApi";
-import { primaryColor, styles } from "../../../style";
+import {  styles } from "../../../style";
 import { Formik } from "formik";
 import { Picker } from '@react-native-picker/picker';
 import Loader from "../../utils/ActivityIndicator";
@@ -108,7 +108,7 @@ const EditProfile = ({ route }) => {
             formData.append('phone_number', values.phone_number ? values?.phone_number : userData?.phone_number)
             formData.append('gender', selectedGender || userData?.gender)
             formData.append('address', values.address ? values?.address : userData?.address)
-            console.log('formData', formData);
+         
             const id = userData.id
             dispatch(updateBranchStart())
             setUpdateLoading(true)
@@ -131,7 +131,7 @@ const EditProfile = ({ route }) => {
                     autoHide: true
                 });
                 getAllBranch(dispatch)
-                return res
+                
             } else {
                 Toast.show({
                     type: 'error',

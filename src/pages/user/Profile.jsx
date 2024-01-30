@@ -138,7 +138,7 @@ const Profile = () => {
               <IconEdit name='chevron-right' style={pStyles.iconStyles}/>
             </View>
           </TouchableOpacity>
-          { loading ? <TouchableOpacity style={styles.prim} ><ButtonLoader/> </TouchableOpacity> : <TouchableOpacity style={pStyles.footerText} onPress={()=> handleLogout()}>
+          { loading ? <TouchableOpacity style={styles.prim} > <ButtonLoader/> </TouchableOpacity> : <TouchableOpacity style={pStyles.footerText} onPress={()=> handleLogout()}>
               <View style={pStyles.footerTextView}>
                 <View style={pStyles.leftFooterText}>
                     <IconLogoutUser name='arrow-left' style={pStyles.logoutUserIcon}/>

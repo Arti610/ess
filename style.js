@@ -113,19 +113,42 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 20,
   },
-  primaryButton: {
+  eyeIcon:{
+    color: primaryColor,
+    fontSize: 20
+  },
+
+  primaryButton:{
     borderRadius: 8,
     borderWidth: 1,
     borderColor: primaryColor,
     borderRadius: 8,
     paddingVertical: 10,
     marginVertical: 10,
-    backgroundColor: primaryColor
+    backgroundColor: primaryColor,
+    flex : 1,
   },
+  secondaryButton:{
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: secondaryColor,
+    borderRadius: 8,
+    paddingVertical: 10,
+    marginVertical: 10,
+    flex : 1,
+    margin: 10
+},
   buttonText: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: 'bold'
+  },
+  secondaryButtonText: {
+    color: 'black',
+    textAlign: 'center',
+    fontSize: 15,
+    fontWeight: 'bold'
   },
   dropdownArea: {
     width: "100%",
@@ -208,7 +231,6 @@ export const styles = StyleSheet.create({
   icon: {
     fontSize: 30,
     color: primaryColor,
-
   },
   touchableOpacity: {
     display: 'flex',
