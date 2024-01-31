@@ -7,6 +7,7 @@ export default{
 
     getAllUserList: (id) => apiService.get(`all_details_user/${id}`),
     getIndividualUser: (id) => apiService.get(`get_user/${id}`),
+    getVlog : (id) => apiService.get(`/${id}`),
 
     // utils
     getManagerStaff : (id) => apiService.get(`all_branch_managers/${id}`),

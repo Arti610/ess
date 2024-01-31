@@ -30,7 +30,7 @@ const UserForm = () => {
 
     const [loading, setLoading] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [data, setData] = useState(null)
+
     const [image, setImage] = useState(null)
     const [managerStaffData, setManagertaffData] = useState([])
     const [departmentData, setDepartmentData] = useState([])
@@ -208,40 +208,7 @@ const UserForm = () => {
 
     }
 
-    // Get Individual User Details @start
-    // useEffect(() => {
-
-    //     const fetchData = async () => {
-    //         if (userId) { // Check if userId is defined
-    //             try {
-
-    //                 setLoading(true);
-    //                 const res = await getApi.getIndividualUser(userId);
-
-    //                 // Inside the useEffect fetching user details
-    //                 if (res.data) {
-    //                     setData(res.data);
-    //                     setSelectedGender(res.data.gender ? res.data.gender : null);
-    //                     setSelectedUsertype(res.data.user_type ? res.data.user_type : null);
-    //                     setSelectManager(res.data.manager ? `${res.data.manager.first_name} ${res.data.manager.last_name}` : null);
-    //                     setSelectDepartment(res.data.department ? res.data.department.name : null);
-    //                     setSelectDesignation(res.data.designation ? res.data.designation.name : null);
-    //                     setSelectWeekoff(res.data.week_off ? res.data.week_off.name : null);
-    //                     setLoading(false);
-    //                 }
-    //             } catch (error) {
-    //                 console.log('Error got during fetch individual data details for filling up the form fields', error);
-    //             }
-    //         } else {
-    //             console.log('Error got during fetch individual data details for filling up the form fields');
-    //         }
-    //     }
-    //     fetchData();
-
-    // }, [userId]);
-
-    // Get Individual User Details @end
-
+   
     return (
         loading ? <Loader /> : <ScrollView>
             <View style={styles.container}>

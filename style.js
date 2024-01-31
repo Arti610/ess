@@ -106,6 +106,10 @@ export const styles = StyleSheet.create({
   icons: {
     color: primaryColor
   },
+  eyeIcon:{
+    color: primaryColor,
+    fontSize: 20
+  },
   navigateText: {
     color: primaryColor,
     fontSize: 14,

@@ -27,16 +27,17 @@ const Profile = () => {
   const [data, setData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleModalVisible = () =>[
-    setModalVisible(!modalVisible)
-  ]
+  const handleModalVisible = () => {
+    setModalVisible(!modalVisible);
+  }
+
   const handleLogout = async () => {
     try {
       dispatch(logoutStart())
       setLoading(true)
-      const res = await authApi.Logout({'key' : token});
-     
-      if(res.status === 200){
+      const res = await authApi.Logout({ 'key': token });
+
+      if (res.status === 200) {
         setLoading(false)
         navigation.navigate('Login')
         Toast.show({
@@ -50,7 +51,7 @@ const Profile = () => {
         try {
           await AsyncStorage.removeItem('currentUser');
           await AsyncStorage.removeItem('userEmail');
-  
+
           console.log('AsyncStorage data cleared successfully');
         } catch (error) {
           console.log('Error clearing AsyncStorage data:', error);
@@ -126,7 +127,7 @@ const Profile = () => {
           ) : (
             <Image source={require('../../assests/userProfile.webp')} style={pStyles.image} />
           )}
-          
+
         </View>
         <View style={pStyles.userBody}>
           <Text style={styles.lable}>{`${data && data.user_type ? data.user_type : 'Guest User'}`}</Text>
@@ -137,7 +138,7 @@ const Profile = () => {
           <TouchableOpacity onPress={() => navigation.navigate('ChangePassword', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
             <View style={pStyles.footerTextView}>
               <View style={pStyles.leftFooterText}>
-                <IconEditProfile name='user-edit'  style={pStyles.logoutUserIcon}/>
+                <IconEditProfile name='user-edit' style={pStyles.logoutUserIcon} />
                 <Text style={pStyles.lable}>Change Password</Text>
               </View>
               <IconEdit name='chevron-right' style={pStyles.iconStyles}/>
@@ -146,24 +147,25 @@ const Profile = () => {
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
             <View style={pStyles.footerTextView}>
               <View style={pStyles.leftFooterText}>
-                <IconEditProfile name='user-edit'  style={pStyles.logoutUserIcon}/>
+                <IconEditProfile name='user-edit' style={pStyles.logoutUserIcon} />
                 <Text style={pStyles.lable}>Edit Profile</Text>
               </View>
-              <IconEdit name='chevron-right' style={pStyles.iconStyles}/>
+              <IconEdit name='chevron-right' style={pStyles.iconStyles} />
             </View>
           </TouchableOpacity>
-          { loading ? <TouchableOpacity style={styles.prim} > <ButtonLoader/> </TouchableOpacity> : <TouchableOpacity style={pStyles.footerText} onPress={handleModalVisible}>
-              <View style={pStyles.footerTextView}>
-                <View style={pStyles.leftFooterText}>
-                    <IconLogoutUser name='arrow-left' style={pStyles.logoutUserIcon}/>
-                    <Text style={pStyles.lable}>Logout</Text>
-                </View>
-                <IconLogout name='logout' style={pStyles.iconStyles}/>     
+          {loading ? <TouchableOpacity style={pStyles.footerText}  ><ButtonLoader /></TouchableOpacity> : <TouchableOpacity style={pStyles.footerText} onPress={handleModalVisible}>
+            <View style={pStyles.footerTextView}>
+              <View style={pStyles.leftFooterText}>
+                <IconLogoutUser name='arrow-left' style={pStyles.logoutUserIcon} />
+                <Text style={pStyles.lable}>Logout</Text>
+              </View>
+              <IconLogout name='logout' style={pStyles.iconStyles} />
             </View>
-          </TouchableOpacity> }
+          </TouchableOpacity>}
+
         </View>
       </View>
-      <LogoutModal modalVisible={modalVisible} handleModalVisible = {handleModalVisible} handleLogout ={handleLogout}/>
+      <LogoutModal modalVisible={modalVisible} handleModalVisible={handleModalVisible} handleLogout={handleLogout} />
       <Toast />
     </>
   );
@@ -198,7 +200,7 @@ const pStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  lable:{
+  lable: {
     color: textColor,
     fontSize: 14,
     fontStyle: 'normal',
@@ -213,37 +215,37 @@ const pStyles = StyleSheet.create({
   },
   footerText: {
     backgroundColor: secondaryColor,
-    width : '100%',
+    width: '100%',
     marginVertical: 10,
-    padding : 15,
+    padding: 15,
     borderRadius: 8,
   },
 
-  leftFooterText:{
+  leftFooterText: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 15
   },
-  footerTextView:{
+  footerTextView: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
- 
-  iconStyles:{
+
+  iconStyles: {
     color: primaryColor,
     fontSize: 20,
     fontWeight: 400
   },
-  logoutUserIcon:{
+  logoutUserIcon: {
     backgroundColor: IconColor,
     height: 30,
-    width:30,
+    width: 30,
     padding: 9,
     borderRadius: 15,
     textAlign: 'center',
-    color : '#fff'
+    color: '#fff'
   }
 });

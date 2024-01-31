@@ -6,54 +6,57 @@ import { useEffect, useState } from "react"
 import userApi from "../../../redux/slices/users/userApi"
 import API_CONFIG from "../../../config/apiConfig"
 import Toast from "react-native-toast-message"
+import Loader from "../../../utils/ActivityIndicator"
 
-const Users = ()=>{
+const Users = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const {id} = route.params;
+    const { id } = route.params;
     const [data, setData] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleNavigate = (userId) => {
-        navigation.navigate('UserProfile', { userId: userId, id : id});
+        navigation.navigate('UserProfile', { userId: userId, id: id });
     }
-    
 
-    useEffect(()=>{
-        const fetchusers = async ()=>{
+
+    useEffect(() => {
+        const fetchusers = async () => {
             try {
-                
+                setIsLoading(true)
                 const res = await userApi.getBranchUsers(id)
-                if(res.status === 200){
+                if (res.status === 200) {
                     setData(res.data)
+                    setIsLoading(false)
                 }
             } catch (error) {
-                
+                setIsLoading(false)
             }
         }
         fetchusers();
-    },[])
+    }, [])
 
-    return(
-        <>
+    return (
+        isLoading ? <Loader /> : <>
             <ScrollView>
-                <View style={style.container}> 
-                {data && data.map((item, i) => (
-                    <TouchableOpacity key={i} style={style.card} onPress={()=>handleNavigate(item.id)}>
-                       { item?.profile_image ?  <Image source={{ uri: `${API_CONFIG.imageUrl}${item?.profile_image}` }} style={style.userIcon} /> : <Image source={require('../../../assests/userProfile.webp')} style={style.userIcon}/>}
-                        <Text style={styles.lable}>{item.first_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
-                        <Text style={style.text}>{item.designation.name ? item.designation.name : 'No Designation'}</Text>
-                        <Text style={style.text}>{item.user_type ? item.user_type : 'No User Type'}</Text>
-                    </TouchableOpacity>
-                ))}
-                   
+                <View style={style.container}>
+                    {data && data.map((item, i) => (
+                        <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item.id)}>
+                            {item?.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item?.profile_image}` }} style={style.userIcon} /> : <Image source={require('../../../assests/userProfile.webp')} style={style.userIcon} />}
+                            <Text style={styles.lable}>{item.first_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
+                            <Text style={style.text}>{item.designation.name ? item.designation.name : 'No Designation'}</Text>
+                            <Text style={style.text}>{item.user_type ? item.user_type : 'No User Type'}</Text>
+                        </TouchableOpacity>
+                    ))}
+
                 </View>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('UserForm', {id : id})}>
-                <IconAdd name='add' style={styles.addIcon} />
+                <TouchableOpacity onPress={() => navigation.navigate('UserForm', { id: id })}>
+                    <IconAdd name='add' style={styles.addIcon} />
                 </TouchableOpacity>
             </View>
-            <Toast/>
+            <Toast />
         </>
     )
 }
@@ -65,12 +68,12 @@ const style = StyleSheet.create({
     container: {
         padding: 20,
         flexDirection: "row",
-        flexWrap :"wrap",
+        flexWrap: "wrap",
         alignItems: 'center',
         justifyContent: 'start',
-      },
-    
-      card: {
+    },
+
+    card: {
         width: 150,
         height: 150,
         margin: 5,
@@ -81,18 +84,18 @@ const style = StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      userIcon:{ 
+    },
+    userIcon: {
         padding: 5,
         marginBottom: 5,
         height: 50,
         width: 50,
         borderRadius: 25,
-        padding:10,  
-      },
-      text:{
+        padding: 10,
+    },
+    text: {
         color: '#5f6368',
         fontSize: 12
-      }
-      
+    }
+
 })

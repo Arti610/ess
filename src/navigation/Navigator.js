@@ -19,9 +19,9 @@ import DashboardBase from '../pages/management/DashboardBase.js';
 import UserForm from '../pages/management/Users/UserForm.jsx';
 import UserProfile from '../pages/management/Users/UserProfile.jsx';
 import ChangePassword from '../pages/user/ChangePassword.jsx';
+import EditUserForm from '../pages/management/Users/EditUserForm.jsx';
 
 const Stack = createNativeStackNavigator();
-
 
 const Navigator = () => {
 
@@ -42,7 +42,8 @@ const Navigator = () => {
           <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit Profile</Text></View> }} />
           <Stack.Screen name='ChangePassword' component={ChangePassword} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Change Password</Text></View> }} />
           <Stack.Screen name='DashboardBase' component={DashboardBase} options={{headerShown: false}} />
-          <Stack.Screen name='UserForm' component={UserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User</Text></View> }} />
+          <Stack.Screen name='UserForm' component={UserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Add User</Text></View> }} />
+          <Stack.Screen name='EditUserForm' component={EditUserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit User</Text></View> }} />
           <Stack.Screen name='UserProfile' component={UserProfile}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User Profile</Text></View> }} />
       </Stack.Navigator>
     </NavigationContainer>
