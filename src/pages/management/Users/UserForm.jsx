@@ -20,7 +20,7 @@ import updateApi from "../../../redux/slices/utils/updateApi";
 const UserForm = () => {
     const route = useRoute();
     const navigation = useNavigation();
-    const { id, userId } = route.params;
+    const { id } = route.params;
  
 
     const refRBSheet = useRef();
@@ -188,8 +188,8 @@ const UserForm = () => {
                     visibilityTime: 4000,
                     autoHide: true
                 });
-                await getApi.getStaffList(userId)
-                await  getApi.getStaffList(userId)
+                await getApi.getStaffList(id)
+                await  getApi.getStaffList(id)
              
             }
         } catch (error) {

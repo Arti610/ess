@@ -7,24 +7,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles} from '../../../style';
-import {loginStyles} from './Login.js';
-import {Formik} from 'formik';
-import {OTPSchema} from '../../utils/validationSchema.js';
+import { styles } from '../../../style';
+import { loginStyles } from './Login.js';
+import { Formik } from 'formik';
+import { OTPSchema } from '../../utils/validationSchema.js';
 import Toast from 'react-native-toast-message';
 import authApi from '../../redux/slices/auth/authApi.js';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  getCurrentUserEmail,
   otpVerificationFailure,
   otpVerificationStart,
   otpVerificationSuccess,
 } from '../../redux/slices/auth/authSlice.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ButtonLoader from '../../utils/BtnActivityIndicator.jsx';
 
 const OtpVerification = props => {
   const dispatch = useDispatch();
-  const {isLoading} = useSelector(state => state.auth);
+  const { isLoading } = useSelector(state => state.auth);
 
   const handlePress = async values => {
     const storedEmail = await AsyncStorage.getItem('userEmail');
@@ -71,10 +71,10 @@ const OtpVerification = props => {
     <ScrollView>
       <View style={styles.container}>
         <Formik
-          initialValues={{otp: ''}}
+          initialValues={{ otp: '' }}
           validationSchema={OTPSchema}
           onSubmit={values => handlePress(values)}>
-          {({handleSubmit, handleChange, handleBlur, errors, values}) => (
+          {({ handleSubmit, handleChange, handleBlur, errors, values }) => (
             <View style={loginStyles.logincontainer}>
               <View style={loginStyles.loginHeader}>
                 <Text style={styles.textHeading}>OTP Verification</Text>
@@ -102,21 +102,19 @@ const OtpVerification = props => {
                 </View>
               </View>
               <View style={loginStyles.loginFooter}>
-                {isLoading ? (
-                  <ActivityIndicator size={'large'} />
-                ) : (
-                  <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleSubmit}>
-                    <Text style={styles.buttonText}>Verify OTP</Text>
-                  </TouchableOpacity>
-                )}
+
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={handleSubmit}>
+                  {isLoading ? <ButtonLoader /> : <Text style={styles.buttonText}>Verify OTP</Text>}
+                </TouchableOpacity>
+
               </View>
             </View>
           )}
         </Formik>
       </View>
-      <Toast  />
+      <Toast />
     </ScrollView>
   );
 };

@@ -6,11 +6,11 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import {styles} from '../../../style';
-import {loginStyles} from './Login.js';
-import {Formik} from 'formik';
-import {changePasswordSchema} from '../../utils/validationSchema.js';
-import {useDispatch, useSelector} from 'react-redux';
+import { styles } from '../../../style';
+import { loginStyles } from './Login.js';
+import { Formik } from 'formik';
+import { changePasswordSchema } from '../../utils/validationSchema.js';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   resetPasswordFailure,
   resetPasswordStart,
@@ -19,10 +19,11 @@ import {
 import Toast from 'react-native-toast-message';
 import authApi from '../../redux/slices/auth/authApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ButtonLoader from '../../utils/BtnActivityIndicator.jsx';
 
 const ResetPassword = props => {
   const dispatch = useDispatch();
-  const {isLoading} = useSelector(state => state.auth);
+  const { isLoading } = useSelector(state => state.auth);
 
   const handlePress = async values => {
     const storedEmail = await AsyncStorage.getItem('userEmail');
@@ -65,10 +66,10 @@ const ResetPassword = props => {
     <>
       <View style={styles.container}>
         <Formik
-          initialValues={{password: '', confirm_password: ''}}
+          initialValues={{ password: '', confirm_password: '' }}
           validationSchema={changePasswordSchema}
           onSubmit={values => handlePress(values)}>
-          {({handleSubmit, handleChange, handleBlur, errors, values}) => (
+          {({ handleSubmit, handleChange, handleBlur, errors, values }) => (
             <View style={loginStyles.logincontainer}>
               <View style={loginStyles.loginHeader}>
                 <Text style={styles.textHeading}>Reset Password</Text>
@@ -110,15 +111,13 @@ const ResetPassword = props => {
                 </View>
               </View>
               <View style={loginStyles.loginFooter}>
-                {isLoading ? (
-                  <ActivityIndicator size={'large'} />
-                ) : (
-                  <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleSubmit}>
-                    <Text style={styles.buttonText}>Reset Password</Text>
-                  </TouchableOpacity>
-                )}
+
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={handleSubmit}>
+                  {isLoading ? <ButtonLoader /> : <Text style={styles.buttonText}>Reset Password</Text>}
+                </TouchableOpacity>
+
               </View>
             </View>
           )}

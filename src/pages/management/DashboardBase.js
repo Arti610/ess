@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import Users from "./Users/Users";
-import Vlog from "./Vlog";
 import Clock from "./Clock";
 import Home from "./Home";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -11,6 +10,7 @@ import Document from "./Document";
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons'
 import IconFa from 'react-native-vector-icons/FontAwesome'
+import Vlog from "./Vlog/Vlog";
 
 const Tab = createBottomTabNavigator()
 
@@ -36,7 +36,7 @@ const DashboardBase = () => {
                     }} />
                 <Tab.Screen name='Vlog' component={Vlog} initialParams={{ id: id }}
                     options={{
-                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrow-back-ios-new' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Vlog</Text></View>,
+                        headerShown: false,
                         tabBarIcon: () => <IconFa name="home" style={styles.icons} size={20} />,
                         tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>
                     }} />

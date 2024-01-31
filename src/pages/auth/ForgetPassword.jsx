@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles} from '../../../style';
-import {loginStyles} from './Login.js';
-import {Formik} from 'formik';
-import {forgetPasswordSchema} from '../../utils/validationSchema.js';
+import { styles } from '../../../style';
+import { loginStyles } from './Login.js';
+import { Formik } from 'formik';
+import { forgetPasswordSchema } from '../../utils/validationSchema.js';
 import authApi from '../../redux/slices/auth/authApi.js';
 import Toast from 'react-native-toast-message';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   forgetPasswordFailure,
   forgetPasswordStart,
@@ -24,7 +24,7 @@ import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const ForgetPassword = props => {
   const dispatch = useDispatch();
-  const {isLoading} = useSelector(state => state.auth);
+  const { isLoading } = useSelector(state => state.auth);
 
   const handlePress = async values => {
     try {
@@ -62,13 +62,13 @@ const ForgetPassword = props => {
     <>
       <View style={styles.container}>
         <Formik
-          initialValues={{email: ''}}
+          initialValues={{ email: '' }}
           validationSchema={forgetPasswordSchema}
           onSubmit={values => handlePress(values)}>
-          {({handleChange, handleBlur, handleSubmit, values, errors}) => (
+          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
             <View style={loginStyles.logincontainer}>
               <View >
-              <IconM name='onepassword' style={[styles.icon, style.loginIcon]}/>
+                <IconM name='onepassword' style={[styles.icon, style.loginIcon]} />
                 <Text style={styles.textHeading}>Forgot Password</Text>
                 <Text style={styles.textDesc}>
                   Enter your e-mail address and we'll send you a OTP to reset
@@ -96,24 +96,20 @@ const ForgetPassword = props => {
                   </Text>
                 </View>
               </View>
-                <View >
-                  {isLoading ? (
-                    <TouchableOpacity style={styles.primaryButton}>
-                      <ButtonLoader />
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.primaryButton}
-                      onPress={handleSubmit}>
-                      <Text style={styles.buttonText}>Send OTP</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
+              <View >
+
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={handleSubmit}>
+                  {isLoading ? <ButtonLoader /> : <Text style={styles.buttonText}>Send OTP</Text>}
+                </TouchableOpacity>
+
+              </View>
             </View>
           )}
         </Formik>
       </View>
-      <Toast  />
+      <Toast />
     </>
   );
 };
@@ -121,7 +117,7 @@ const ForgetPassword = props => {
 export default ForgetPassword;
 
 const style = StyleSheet.create({
-  loginIcon:{
+  loginIcon: {
     textAlign: 'center',
     fontSize: 180,
     marginBottom: 50,

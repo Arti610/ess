@@ -3,7 +3,7 @@ import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 import { useDispatch } from "react-redux";
 import { getUserFailed, getUserStart, getUserSuccess, updateUserSuccess } from "../../redux/slices/users/userSlice";
 import userApi from "../../redux/slices/users/userApi";
-import {  styles } from "../../../style";
+import { styles } from "../../../style";
 import { Formik } from "formik";
 import { Picker } from '@react-native-picker/picker';
 import Loader from "../../utils/ActivityIndicator";
@@ -108,7 +108,7 @@ const EditProfile = ({ route }) => {
             formData.append('phone_number', values.phone_number ? values?.phone_number : userData?.phone_number)
             formData.append('gender', selectedGender || userData?.gender)
             formData.append('address', values.address ? values?.address : userData?.address)
-         
+
             const id = userData.id
             dispatch(updateBranchStart())
             setUpdateLoading(true)
@@ -131,7 +131,7 @@ const EditProfile = ({ route }) => {
                     autoHide: true
                 });
                 getAllBranch(dispatch)
-                
+
             } else {
                 Toast.show({
                     type: 'error',
@@ -165,13 +165,13 @@ const EditProfile = ({ route }) => {
                     >
                         {({ handleSubmit, handleBlur, handleChange, values, errors, touched }) => (
                             <View style={styles.formContainer}>
-                                
+
                                 <View style={styles.profileContainer}>
                                     {userData && userData.profile_image ?
                                         (<View>
                                             <Image source={image !== null ? { uri: image?.assets[0].uri } : { uri: `${API_CONFIG.imageUrl}${userData?.profile_image}` }} style={styles.updateProfile} />
                                             <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
-                                           
+
                                             <RBSheet
                                                 ref={refRBSheet}
                                                 closeOnDragDown={true}
@@ -181,45 +181,45 @@ const EditProfile = ({ route }) => {
                                                         backgroundColor: "transparent",
                                                     },
                                                     container: {
-                                                        height: 150 
-                                                      },
+                                                        height: 150
+                                                    },
                                                     draggableIcon: {
                                                         backgroundColor: "#000",
                                                     }
                                                 }}
                                             >
                                                 <View style={styles.launchImageOption}>
-                                                    <TouchableOpacity onPress={()=>handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.cameraIcon}/><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
-                                                    <TouchableOpacity onPress={()=>handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.gallaryIcon}/><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
+                                                    <TouchableOpacity onPress={() => handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.cameraIcon} /><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
+                                                    <TouchableOpacity onPress={() => handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.gallaryIcon} /><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
                                                 </View>
                                             </RBSheet>
-                                        </View> )
+                                        </View>)
                                         :
                                         <View>
                                             {image ? <Image source={{ uri: image?.assets[0].uri }} style={styles.updateProfile} /> : <Image source={require('../../assests/userProfile.webp')} style={styles.updateProfile} />}
                                             <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
-                                           
-                                           <RBSheet
-                                               ref={refRBSheet}
-                                               closeOnDragDown={true}
-                                               closeOnPressMask={false}
-                                               customStyles={{
-                                                   wrapper: {
-                                                       backgroundColor: "transparent",
-                                                   },
-                                                   container: {
-                                                       height: 150 
-                                                     },
-                                                   draggableIcon: {
-                                                       backgroundColor: "#000",
-                                                   }
-                                               }}
-                                           >
-                                               <View style={styles.launchImageOption}>
-                                                   <TouchableOpacity onPress={()=>handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.cameraIcon}/><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
-                                                   <TouchableOpacity onPress={()=>handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.gallaryIcon}/><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
-                                               </View>
-                                           </RBSheet>
+
+                                            <RBSheet
+                                                ref={refRBSheet}
+                                                closeOnDragDown={true}
+                                                closeOnPressMask={false}
+                                                customStyles={{
+                                                    wrapper: {
+                                                        backgroundColor: "transparent",
+                                                    },
+                                                    container: {
+                                                        height: 150
+                                                    },
+                                                    draggableIcon: {
+                                                        backgroundColor: "#000",
+                                                    }
+                                                }}
+                                            >
+                                                <View style={styles.launchImageOption}>
+                                                    <TouchableOpacity onPress={() => handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.cameraIcon} /><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
+                                                    <TouchableOpacity onPress={() => handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.gallaryIcon} /><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
+                                                </View>
+                                            </RBSheet>
                                         </View>}
                                 </View>
 
@@ -292,9 +292,9 @@ const EditProfile = ({ route }) => {
                                 </View>
 
                                 <View >
-                                    {updateLoading ?  <TouchableOpacity style={styles.primaryButton} ><ButtonLoader /></TouchableOpacity> : <TouchableOpacity style={styles.primaryButton} onPress={handleSubmit}>
-                                        <Text style={styles.buttonText}>Submit</Text>
-                                    </TouchableOpacity>}
+                                    <TouchableOpacity style={styles.primaryButton} onPress={handleSubmit}>
+                                        {updateLoading ? <ButtonLoader /> : <Text style={styles.buttonText}>Submit</Text>}
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         )}

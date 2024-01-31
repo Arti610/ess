@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import {  styles } from '../../../style';
+import { styles } from '../../../style';
 import { loginStyles } from './Login.js';
 import { Formik } from 'formik';
 import { LoginSchema } from '../../utils/validationSchema.js';
@@ -75,8 +75,8 @@ const Login = () => {
             {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
               <View style={loginStyles.logincontainer}>
                 <View style={loginStyles.loginHeader}>
-                <IconA name='login' style={[styles.icon, style.loginIcon]}/>
-                  
+                  <IconA name='login' style={[styles.icon, style.loginIcon]} />
+
                   <Text style={styles.textHeading}>Login</Text>
                   <Text style={styles.textDesc}>
                     Welcome back ! Please enter your details.
@@ -107,7 +107,7 @@ const Login = () => {
                     <TouchableOpacity
                       style={{ position: 'absolute', top: 40, right: 8 }}
                       onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
-                      {isPasswordHidden ? <Icon name='eye-slash' style={styles.eyeIcon}/> :  <Icon name='eye' style={styles.eyeIcon}/>}
+                      {isPasswordHidden ? <Icon name='eye-slash' style={styles.eyeIcon} /> : <Icon name='eye' style={styles.eyeIcon} />}
                     </TouchableOpacity>
                     {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
                   </View>
@@ -122,17 +122,13 @@ const Login = () => {
                   </View>
                 </View>
                 <View style={loginStyles.loginFooter}>
-                  {isLoading ? (
-                    <TouchableOpacity style={styles.primaryButton}>
-                      <ButtonLoader />
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.primaryButton}
-                      onPress={handleSubmit}>
-                      <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
-                  )}
+
+                  <TouchableOpacity
+                    style={styles.primaryButton}
+                    onPress={handleSubmit}>
+                    {isLoading ? <ButtonLoader /> : <Text style={styles.buttonText}>Login</Text>}
+                  </TouchableOpacity>
+
                 </View>
               </View>
             )}
@@ -148,7 +144,7 @@ const Login = () => {
 export default Login;
 
 const style = StyleSheet.create({
-  loginIcon:{
+  loginIcon: {
     textAlign: 'center',
     fontSize: 180,
     marginBottom: 50,

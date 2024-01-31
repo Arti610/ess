@@ -166,6 +166,7 @@ const EditUserForm = () => {
            
             if (res.status === 200 || res.status === 201) {
                 setIsLoading(false);
+
                 navigation.navigate('Users');
                 Toast.show({
                     type: 'success',
@@ -175,6 +176,8 @@ const EditUserForm = () => {
                     visibilityTime: 4000,
                     autoHide: true,
                 });
+                getApi.getAllUserList(id)
+                getApi.getAllUserList(id)
             }
         } catch (error) {
             console.log('error', error.response.data);

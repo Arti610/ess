@@ -43,7 +43,7 @@ const Users = () => {
                     {data && data.map((item, i) => (
                         <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item.id)}>
                             {item?.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item?.profile_image}` }} style={style.userIcon} /> : <Image source={require('../../../assests/userProfile.webp')} style={style.userIcon} />}
-                            <Text style={styles.lable}>{item.first_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
+                            <Text style={[styles.lable, {textAlign: 'center'}]}>{item.first_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
                             <Text style={style.text}>{item.designation.name ? item.designation.name : 'No Designation'}</Text>
                             <Text style={style.text}>{item.user_type ? item.user_type : 'No User Type'}</Text>
                         </TouchableOpacity>

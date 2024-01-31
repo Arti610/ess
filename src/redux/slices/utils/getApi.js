@@ -15,4 +15,7 @@ export default{
     getBranchDepartment : (id) => apiService.get(`get_branch_department/${id}`),
     getBranchDesignation : (id) => apiService.get(`get_branch_designation/${id}`),
 
+
+    // VLog
+    getAllVlog : (id) => apiService.get(`get_task_list/${id}`)
 }
