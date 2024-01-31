@@ -16,6 +16,7 @@ import Icons from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF5 from 'react-native-vector-icons/FontAwesome5'
 import ButtonLoader from '../../../utils/BtnActivityIndicator';
+import { addBranch } from '../../../utils/validationSchema';
 
 const AddBranch = () => {
   const refRBSheet = useRef();
@@ -127,7 +128,7 @@ const AddBranch = () => {
       <View style={styles.container}>
         <Formik
           initialValues={recivedId ? { ...branchDataById } : initialState}
-          // validationSchema={addBranch}
+          validationSchema={addBranch}
           onSubmit={handlePress}   >
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
             <View style={styles.formContainer}>
@@ -215,6 +216,9 @@ const AddBranch = () => {
                       nestedScrollEnabled: true,
                     }}
                   />
+                   {selectedCountryName === null  ? (
+                    <Text style={styles.errorText}>{errors.name}</Text>
+                  ) : null}
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -263,18 +267,14 @@ const AddBranch = () => {
 
               <View style={styles.loginFooter}>
                 {isLoading ? (
-                  <TouchableOpacity
-                  style={styles.primaryButton}
-                  >
-                    <ButtonLoader />
-                  </TouchableOpacity>
+                    <TouchableOpacity style={styles.primaryButton}>
+                      <ButtonLoader />
+                    </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
                     style={styles.primaryButton}
-                    onPress={
-                      handleSubmit
-                    }>
-                    <Text style={styles.buttonText}>Submit</Text>
+                    onPress={handleSubmit}>
+                     <Text style={styles.buttonText}>Submit</Text>
                   </TouchableOpacity>
                 )}
               </View>

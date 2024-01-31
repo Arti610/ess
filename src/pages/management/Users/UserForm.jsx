@@ -188,8 +188,9 @@ const UserForm = () => {
                     visibilityTime: 4000,
                     autoHide: true
                 });
-                getApi.getAllUserList(id)
-                getApi.getAllUserList(id)
+                await getApi.getStaffList(userId)
+                await  getApi.getStaffList(userId)
+             
             }
         } catch (error) {
            

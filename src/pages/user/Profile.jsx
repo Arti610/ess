@@ -11,10 +11,11 @@ import IconLogout from 'react-native-vector-icons/AntDesign'
 import IconEdit from 'react-native-vector-icons/Entypo'
 import Toast from 'react-native-toast-message';
 import userApi from '../../redux/slices/users/userApi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logoutFailure, logoutStart, logoutSuccess } from '../../redux/slices/auth/authSlice';
 import authApi from '../../redux/slices/auth/authApi';
 import ButtonLoader from '../../utils/BtnActivityIndicator';
+import LogoutModal from '../../utils/LogoutModal';
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -24,7 +25,11 @@ const Profile = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(null)
   const [data, setData] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
+  const handleModalVisible = () =>[
+    setModalVisible(!modalVisible)
+  ]
   const handleLogout = async () => {
     try {
       dispatch(logoutStart())
@@ -129,6 +134,15 @@ const Profile = () => {
           <Text>{data && data.gender ? data.gender : null}</Text>
         </View>
         <View style={pStyles.userFooter}>
+          <TouchableOpacity onPress={() => navigation.navigate('ChangePassword', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
+            <View style={pStyles.footerTextView}>
+              <View style={pStyles.leftFooterText}>
+                <IconEditProfile name='user-edit'  style={pStyles.logoutUserIcon}/>
+                <Text style={pStyles.lable}>Change Password</Text>
+              </View>
+              <IconEdit name='chevron-right' style={pStyles.iconStyles}/>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
             <View style={pStyles.footerTextView}>
               <View style={pStyles.leftFooterText}>
@@ -138,7 +152,7 @@ const Profile = () => {
               <IconEdit name='chevron-right' style={pStyles.iconStyles}/>
             </View>
           </TouchableOpacity>
-          { loading ? <TouchableOpacity style={styles.prim} > <ButtonLoader/> </TouchableOpacity> : <TouchableOpacity style={pStyles.footerText} onPress={()=> handleLogout()}>
+          { loading ? <TouchableOpacity style={styles.prim} > <ButtonLoader/> </TouchableOpacity> : <TouchableOpacity style={pStyles.footerText} onPress={handleModalVisible}>
               <View style={pStyles.footerTextView}>
                 <View style={pStyles.leftFooterText}>
                     <IconLogoutUser name='arrow-left' style={pStyles.logoutUserIcon}/>
@@ -149,6 +163,7 @@ const Profile = () => {
           </TouchableOpacity> }
         </View>
       </View>
+      <LogoutModal modalVisible={modalVisible} handleModalVisible = {handleModalVisible} handleLogout ={handleLogout}/>
       <Toast />
     </>
   );

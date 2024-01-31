@@ -15,9 +15,9 @@ import { primaryColor } from '../../style';
 
 const ButtonLoader = () =>{
     return (
-        <View >
-          <SkypeIndicator color={'white'} size={25}/>
-        </View>
+       
+          <SkypeIndicator color={'white'} size={25} style={{margin: 10}}/>
+       
       );
 }
 

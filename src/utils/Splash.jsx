@@ -3,7 +3,17 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, } from "react";
 import {  ImageBackground, StyleSheet, Text, View } from "react-native"
 import { primaryColor, secondaryColor } from "../../style";
-
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
 
 const Splash = () => {
   const navigation = useNavigation()
@@ -30,7 +40,8 @@ const Splash = () => {
   return (
   
     <View style={styles.container}>     
-       <Text style={styles.textHeading}>WELCOME TO ESS</Text>
+       <BarIndicator color= {primaryColor} />
+       {/* <Text style={styles.textHeading}>WELCOME TO ESS</Text> */}
     </View>
 
         

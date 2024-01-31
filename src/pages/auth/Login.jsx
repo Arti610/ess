@@ -5,8 +5,10 @@ import {
   TextInput,
   View,
   ScrollView,
+  StyleSheet,
+  Image,
 } from 'react-native';
-import { styles } from '../../../style';
+import {  styles } from '../../../style';
 import { loginStyles } from './Login.js';
 import { Formik } from 'formik';
 import { LoginSchema } from '../../utils/validationSchema.js';
@@ -22,6 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import ButtonLoader from '../../utils/BtnActivityIndicator.jsx';
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import IconA from 'react-native-vector-icons/AntDesign'
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -72,6 +75,8 @@ const Login = () => {
             {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
               <View style={loginStyles.logincontainer}>
                 <View style={loginStyles.loginHeader}>
+                <IconA name='login' style={[styles.icon, style.loginIcon]}/>
+                  
                   <Text style={styles.textHeading}>Login</Text>
                   <Text style={styles.textDesc}>
                     Welcome back ! Please enter your details.
@@ -141,4 +146,12 @@ const Login = () => {
 };
 
 export default Login;
+
+const style = StyleSheet.create({
+  loginIcon:{
+    textAlign: 'center',
+    fontSize: 180,
+    marginBottom: 50,
+  }
+})
 

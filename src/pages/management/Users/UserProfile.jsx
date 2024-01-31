@@ -11,9 +11,8 @@ const UserProfile =  () => {
     const {userId} = route.params;
     const {id} = route.params;
     const [modalVisible, setModalVisible] = useState(false);
-    const [userid, setuserid] = useState(null)
+ 
     const handleModalVisible = ()=>{
-       
         setModalVisible(!modalVisible)
     }
 

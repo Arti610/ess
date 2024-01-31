@@ -1,5 +1,6 @@
 import apiService from "../../../config/apiService";
 
 export default{
-    deleteUser : (id)=> apiService.delete(`deleteuser/${id}`)
+    deleteBranch : (id)=> apiService.delete(`delete_branch/${id}`),
+    deleteUser : (id)=> apiService.delete(`deleteuser/${id}`),
 }

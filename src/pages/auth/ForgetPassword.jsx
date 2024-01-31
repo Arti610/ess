@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   ActivityIndicator,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -18,6 +19,8 @@ import {
   forgetPasswordStart,
   forgetPasswordSuccess,
 } from '../../redux/slices/auth/authSlice.js';
+import ButtonLoader from '../../utils/BtnActivityIndicator.jsx';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const ForgetPassword = props => {
   const dispatch = useDispatch();
@@ -64,14 +67,15 @@ const ForgetPassword = props => {
           onSubmit={values => handlePress(values)}>
           {({handleChange, handleBlur, handleSubmit, values, errors}) => (
             <View style={loginStyles.logincontainer}>
-              <View style={loginStyles.loginHeader}>
+              <View >
+              <IconM name='onepassword' style={[styles.icon, style.loginIcon]}/>
                 <Text style={styles.textHeading}>Forgot Password</Text>
                 <Text style={styles.textDesc}>
                   Enter your e-mail address and we'll send you a OTP to reset
                   your password
                 </Text>
               </View>
-              <View style={loginStyles.loginBody}>
+              <View >
                 <View style={styles.inputContainer}>
                   <Text style={styles.lable}>Email</Text>
                   <TextInput
@@ -92,17 +96,19 @@ const ForgetPassword = props => {
                   </Text>
                 </View>
               </View>
-              <View style={loginStyles.loginFooter}>
-                {isLoading ? (
-                  <ActivityIndicator size={'large'} />
-                ) : (
-                  <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleSubmit}>
-                    <Text style={styles.buttonText}>Send OTP</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+                <View >
+                  {isLoading ? (
+                    <TouchableOpacity style={styles.primaryButton}>
+                      <ButtonLoader />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.primaryButton}
+                      onPress={handleSubmit}>
+                      <Text style={styles.buttonText}>Send OTP</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
             </View>
           )}
         </Formik>
@@ -113,3 +119,11 @@ const ForgetPassword = props => {
 };
 
 export default ForgetPassword;
+
+const style = StyleSheet.create({
+  loginIcon:{
+    textAlign: 'center',
+    fontSize: 180,
+    marginBottom: 50,
+  }
+})

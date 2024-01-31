@@ -55,6 +55,7 @@ export const OTPSchema = Yup.object({
   otp: validator.otp,
 });
 export const changePasswordSchema = Yup.object({
+  old_password: validator.password,
   password: validator.password,
   confirm_password: validator.confirm_password,
 });
@@ -64,18 +65,11 @@ export const addUserSchema = Yup.object({
   last_name: validator.last_name,
   phone_number: validator.phone_number,
   address: validator.address,
-  // gender: validator.gender,
-  // manager: validator.manager,
-  // department: validator.department,
-  // designation: validator.designation,
-  // user_type: validator.user_type,
-  // week_off: validator.week_off,
   password: validator.password,
   confirm_password: validator.confirm_password,
 });
 
 export const addBranch = Yup.object({
-  country: validator.country,
   name: validator.name,
   city: validator.city,
   address: validator.address,

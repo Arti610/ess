@@ -113,11 +113,16 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 20,
   },
-  eyeIcon:{
-    color: primaryColor,
-    fontSize: 20
+  ModalPrimaryButton: {
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: primaryColor,
+    borderRadius: 8,
+    paddingVertical: 10,
+    marginVertical: 10,
+    backgroundColor: primaryColor,
+    flex: 1
   },
-
   primaryButton:{
     borderRadius: 8,
     borderWidth: 1,
@@ -126,7 +131,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     marginVertical: 10,
     backgroundColor: primaryColor,
-    flex : 1,
   },
   secondaryButton:{
     borderRadius: 8,
@@ -225,18 +229,18 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 20,
+    padding: 10,
     position: 'fixed'
   },
   icon: {
-    fontSize: 30,
+    fontSize: 18,
     color: primaryColor,
   },
   touchableOpacity: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
+    gap: 5,
   }
   // Launch Cameras and Gallary Bottom Sheet @end
 });

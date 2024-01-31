@@ -320,12 +320,17 @@ const AddBranchInfo = () => {
             </View>
             <View style={styles.footer}>
               <View style={styles.inputContainer}>
+              {isLoading ? (
+                    <TouchableOpacity style={styles.primaryButton}>
+                      <ButtonLoader />
+                    </TouchableOpacity>
+                ) : (
                 <TouchableOpacity
                   style={styles.primaryButton}
                   onPress={handleSubmit}
                 >
                   <Text style={styles.buttonText}>Submit</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>)}
               </View>
             </View>
           </View>
