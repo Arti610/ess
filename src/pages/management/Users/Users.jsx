@@ -42,10 +42,10 @@ const Users = () => {
                 <View style={style.container}>
                     {data && data.map((item, i) => (
                         <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item.id)}>
-                            {item?.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item?.profile_image}` }} style={style.userIcon} /> : <Image source={require('../../../assests/userProfile.webp')} style={style.userIcon} />}
-                            <Text style={[styles.lable, {textAlign: 'center'}]}>{item.first_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
-                            <Text style={style.text}>{item.designation.name ? item.designation.name : 'No Designation'}</Text>
-                            <Text style={style.text}>{item.user_type ? item.user_type : 'No User Type'}</Text>
+                            {item.profile_image && item.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item.profile_image}` }} style={style.userIcon} /> : <Image source={require('../../../assests/userProfile.webp')} style={style.userIcon} />}
+                            <Text style={[styles.lable, {textAlign: 'center'}]}>{item.first_name && item.first_name && item.last_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
+                            <Text style={style.text}>{item.designation && item.designation.name ? item.designation.name : 'No Designation'}</Text>
+                            <Text style={style.text}>{item.user_type && item.user_type ? item.user_type : 'No User Type'}</Text>
                         </TouchableOpacity>
                     ))}
 

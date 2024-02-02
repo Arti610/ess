@@ -22,7 +22,7 @@ const ChangePassword = () => {
         confirm_password: null
     }
 
-    const handlePress =async (values) => {
+    const handlePress = async (values) => {
 
         const fData = new FormData();
         fData.append('old_password', values.old_password)
@@ -35,7 +35,7 @@ const ChangePassword = () => {
                     "content-type": "multipart/form-data"
                 }
             });
-           
+
             if (res.status === 200) {
                 setIsLoading(false)
                 navigation.navigate('Profile')
@@ -99,9 +99,9 @@ const ChangePassword = () => {
                         {touched.confirm_password && errors.confirm_password ? <Text style={styles.errorText}>{errors.confirm_password}</Text> : null}
                     </View>
                     <View>
-                    {isLoading ? <TouchableOpacity style={styles.primaryButton}><ButtonLoader  /></TouchableOpacity> :   <TouchableOpacity style={styles.primaryButton}>
-                            <Text style={styles.buttonText} onPress={handleSubmit}>Submit</Text>
-                        </TouchableOpacity>}
+                        <TouchableOpacity style={styles.primaryButton}>
+                            {isLoading ? <ButtonLoader /> : <Text style={styles.buttonText} onPress={handleSubmit}>Submit</Text>}
+                        </TouchableOpacity>
                     </View>
                 </View>
             )}
@@ -109,4 +109,4 @@ const ChangePassword = () => {
     )
 }
 
-export default ChangePassword
+export default ChangePassword;

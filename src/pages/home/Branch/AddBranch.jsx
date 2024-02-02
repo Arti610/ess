@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF5 from 'react-native-vector-icons/FontAwesome5'
 import ButtonLoader from '../../../utils/BtnActivityIndicator';
 import { addBranch } from '../../../utils/validationSchema';
+import Loader from '../../../utils/ActivityIndicator';
 
 const AddBranch = () => {
   const refRBSheet = useRef();
@@ -28,6 +29,7 @@ const AddBranch = () => {
 
   const recivedId = route.params?.data || null;
   const [data, setData] = useState(null);
+  const [loding, setLoading] = useState(false)
   const [image, setImage] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedCountryName, setSelectedCountryName] = useState(null);
@@ -107,9 +109,11 @@ const AddBranch = () => {
     // Fetch Country Data
     const fetchCountry = async () => {
       try {
+        setLoading(true)
         const res = await getCountry();
 
         if (res) {
+          setLoading(false)
           setData(res.data);
         } else {
           console.error('Invalid data format from getCountry');
@@ -125,7 +129,7 @@ const AddBranch = () => {
   return (
 
     <>
-      <View style={styles.container}>
+      {loding ? <Loader /> : <View style={styles.container}>
         <Formik
           initialValues={recivedId ? { ...branchDataById } : initialState}
           validationSchema={addBranch}
@@ -138,7 +142,6 @@ const AddBranch = () => {
                     <View>
                       <Image source={image !== null ? { uri: image?.assets[0].uri } : { uri: `${API_CONFIG.imageUrl}${branchDataById?.image}` }} style={styles.updateProfile} />
                       <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
-
                       <RBSheet
                         ref={refRBSheet}
                         closeOnDragDown={true}
@@ -164,7 +167,6 @@ const AddBranch = () => {
                     <View>
                       {image ? <Image source={{ uri: image?.assets[0].uri }} style={styles.updateProfile} /> : <Image source={require('../../../assests/branch.jpg')} style={styles.updateProfile} />}
                       <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icons name='edit' style={styles.updateProfileBtn} /></TouchableOpacity>
-
                       <RBSheet
                         ref={refRBSheet}
                         closeOnDragDown={true}
@@ -216,11 +218,10 @@ const AddBranch = () => {
                       nestedScrollEnabled: true,
                     }}
                   />
-                   {selectedCountryName === null  ? (
+                  {selectedCountryName === null ? (
                     <Text style={styles.errorText}>{errors.name}</Text>
                   ) : null}
                 </View>
-
                 <View style={styles.inputContainer}>
                   <Text style={styles.lable}>Name</Text>
                   <TextInput
@@ -266,23 +267,18 @@ const AddBranch = () => {
               </View>
 
               <View style={styles.loginFooter}>
-                {isLoading ? (
-                    <TouchableOpacity style={styles.primaryButton}>
-                      <ButtonLoader />
-                    </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleSubmit}>
-                     <Text style={styles.buttonText}>Submit</Text>
-                  </TouchableOpacity>
-                )}
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={handleSubmit}>
+                  {isLoading ? (<ButtonLoader />) : (<Text style={styles.buttonText}>Submit</Text>)}
+                </TouchableOpacity>
+
               </View>
 
             </View>
           )}
         </Formik>
-      </View>
+      </View>}
       <Toast />
     </>
   );
