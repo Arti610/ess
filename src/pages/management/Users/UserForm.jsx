@@ -12,10 +12,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Toast from "react-native-toast-message";
-import API_CONFIG from "../../../config/apiConfig";
 import Loader from "../../../utils/ActivityIndicator";
 import ButtonLoader from "../../../utils/BtnActivityIndicator";
-import updateApi from "../../../redux/slices/utils/updateApi";
+
 
 const UserForm = () => {
     const route = useRoute();
@@ -139,7 +138,7 @@ const UserForm = () => {
     }
 
     const handlePress = async (values) => {
-        { console.log('values', values) }
+  
         const fData = new FormData();
         
         if (image === null) {
@@ -228,27 +227,28 @@ const UserForm = () => {
                                 />
 
                                 <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icon name='camera' style={styles.updateProfileBtn} /></TouchableOpacity>
-                                <RBSheet
-                                    ref={refRBSheet}
-                                    closeOnDragDown={true}
-                                    closeOnPressMask={false}
-                                    customStyles={{
-                                        wrapper: {
-                                            backgroundColor: "transparent",
-                                        },
-                                        container: {
-                                            height: 150
-                                        },
-                                        draggableIcon: {
-                                            backgroundColor: "#000",
-                                        }
-                                    }}
-                                >
-                                    <View style={styles.launchImageOption}>
-                                        <TouchableOpacity onPress={() => handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.icon} /><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
-                                        <TouchableOpacity onPress={() => handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.icon} /><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
-                                    </View>
-                                </RBSheet>
+                                    <RBSheet
+                                        ref={refRBSheet}
+                                        closeOnDragDown={true}
+                                        closeOnPressMask={false}
+                                        customStyles={{
+                                            wrapper: {
+                                                backgroundColor: "transparent",
+                                            },
+                                            container: {
+                                                height: 150
+                                            },
+                                            draggableIcon: {
+                                                backgroundColor: "#000",
+                                            }
+                                        }}
+                                    >
+                                        <View style={styles.launchImageOption}>
+                                            <TouchableOpacity onPress={() => handleChooseImage('camera')} style={styles.touchableOpacity}><Icon name='camera' style={styles.icon} /><Text style={styles.lable}>Use Camera</Text></TouchableOpacity>
+                                            <TouchableOpacity onPress={() => handleChooseImage('gallary')} style={styles.touchableOpacity}><IconF5 name='images' style={styles.icon} /><Text style={styles.lable}>Upload from Gallary</Text></TouchableOpacity>
+                                        </View>
+                                    </RBSheet>
+                                    
                                 {imgError ? <Text style={styles.errorText}>{imgError}</Text> : null}
                             </View>
                             <View style={styles.inputContainer}>
@@ -421,7 +421,7 @@ const UserForm = () => {
                                 <TextInput
                                     multiline={true}
                                     numberOfLines={3}
-                                    style={styles.textInput}
+                                    style={[styles.textInput, {  textAlignVertical: 'top', textAlign: 'left'}]}
                                     placeholder="Address e.g. (Street Road 05)"
                                     onBlur={handleBlur('address')}
                                     onChangeText={handleChange('address')}

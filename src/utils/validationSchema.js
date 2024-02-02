@@ -84,4 +84,7 @@ export const addBranchInfoValidationSchema = Yup.object({
   city: Yup.string().required('City is required'),
 });
 
-
+export const taskUpload = Yup.object({
+  title: Yup.string().required('Please Enter Task Title'),
+  description: Yup.string().required('Please Enter Task Description')
+})

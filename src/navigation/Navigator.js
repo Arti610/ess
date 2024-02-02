@@ -20,6 +20,7 @@ import UserForm from '../pages/management/Users/UserForm.jsx';
 import UserProfile from '../pages/management/Users/UserProfile.jsx';
 import ChangePassword from '../pages/user/ChangePassword.jsx';
 import EditUserForm from '../pages/management/Users/EditUserForm.jsx';
+import ShowingVlog from '../pages/management/Vlog/ShwongVlog.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,7 @@ const Navigator = () => {
           <Stack.Screen name='UserForm' component={UserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Add User</Text></View> }} />
           <Stack.Screen name='EditUserForm' component={EditUserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit User</Text></View> }} />
           <Stack.Screen name='UserProfile' component={UserProfile}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User Profile</Text></View> }} />
+          <Stack.Screen name='UploadVlog' component={ShowingVlog}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User Profile</Text></View> }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

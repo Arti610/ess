@@ -7,7 +7,7 @@ import userApi from "../../../redux/slices/users/userApi"
 import API_CONFIG from "../../../config/apiConfig"
 import Toast from "react-native-toast-message"
 import Loader from "../../../utils/ActivityIndicator"
-
+import Video from 'react-native-video';
 const Users = () => {
     const navigation = useNavigation();
     const route = useRoute();
@@ -43,7 +43,7 @@ const Users = () => {
                     {data && data.map((item, i) => (
                         <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item.id)}>
                             {item.profile_image && item.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item.profile_image}` }} style={style.userIcon} /> : <Image source={require('../../../assests/userProfile.webp')} style={style.userIcon} />}
-                            <Text style={[styles.lable, {textAlign: 'center'}]}>{item.first_name && item.first_name && item.last_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
+                            <Text style={[styles.lable, { textAlign: 'center' }]}>{item.first_name && item.last_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
                             <Text style={style.text}>{item.designation && item.designation.name ? item.designation.name : 'No Designation'}</Text>
                             <Text style={style.text}>{item.user_type && item.user_type ? item.user_type : 'No User Type'}</Text>
                         </TouchableOpacity>
@@ -56,6 +56,7 @@ const Users = () => {
                     <IconAdd name='add' style={styles.addIcon} />
                 </TouchableOpacity>
             </View>
+           
             <Toast />
         </>
     )
