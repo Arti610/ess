@@ -21,6 +21,12 @@ import UserProfile from '../pages/management/Users/UserProfile.jsx';
 import ChangePassword from '../pages/user/ChangePassword.jsx';
 import EditUserForm from '../pages/management/Users/EditUserForm.jsx';
 import ShowingVlog from '../pages/management/Vlog/ShwongVlog.jsx';
+import ActiveUser from '../pages/management/Home/ActiveUser.jsx';
+import CheckInUser from '../pages/management/Home/CheckInUser.jsx';
+import NotCheckInUser from '../pages/management/Home/NotCheckInUser.jsx';
+import LeaveRequest from '../pages/management/Home/LeaveRequest.jsx';
+import LateEarly from '../pages/management/Home/LateEarly.jsx';
+import InactiveStaff from '../pages/management/Home/InactiveStaff.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +53,13 @@ const Navigator = () => {
           <Stack.Screen name='EditUserForm' component={EditUserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit User</Text></View> }} />
           <Stack.Screen name='UserProfile' component={UserProfile}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User Profile</Text></View> }} />
           <Stack.Screen name='UploadVlog' component={ShowingVlog}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User Profile</Text></View> }} />
+          <Stack.Screen name = 'ActiveUser' component={ActiveUser} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Active Staffs</Text></View>}}/>
+          <Stack.Screen name = 'CheckInUser' component={CheckInUser} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Check In Staffs</Text></View>}}/>
+          <Stack.Screen name = 'NotCheckInUser' component={NotCheckInUser} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Not Check In Staffs</Text></View>}}/>
+          <Stack.Screen name = 'LeaveRequest' component={LeaveRequest} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Leave Request</Text></View>}}/>
+          <Stack.Screen name = 'LateEarly' component={LateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Late Early</Text></View>}}/>
+          <Stack.Screen name = 'InactiveUser' component={InactiveStaff} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
+          
       </Stack.Navigator>
     </NavigationContainer>
   );

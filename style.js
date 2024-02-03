@@ -52,7 +52,6 @@ export const styles = StyleSheet.create({
   textInput: {
     borderWidth: 1,
     borderColor: '#D0D5DD',
-    borderRadius: 5,
     padding: 10,
     borderRadius: 8,
     backgroundColor: '#FFF',
@@ -61,7 +60,6 @@ export const styles = StyleSheet.create({
   picker: {
     borderWidth: 1,
     borderColor: '#D0D5DD',
-    borderRadius: 5,
     padding: 10,
     borderRadius: 8,
     backgroundColor: '#FFF',
@@ -69,7 +67,6 @@ export const styles = StyleSheet.create({
   },
   dropdown: {
     borderWidth: 1,
-    borderRadius: 5,
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 8,

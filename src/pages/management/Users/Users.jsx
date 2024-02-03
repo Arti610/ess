@@ -8,17 +8,13 @@ import API_CONFIG from "../../../config/apiConfig"
 import Toast from "react-native-toast-message"
 import Loader from "../../../utils/ActivityIndicator"
 import Video from 'react-native-video';
+import UserCard from "../../../utils/UserCard"
 const Users = () => {
-    const navigation = useNavigation();
+
     const route = useRoute();
     const { id } = route.params;
     const [data, setData] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-
-    const handleNavigate = (userId) => {
-        navigation.navigate('UserProfile', { userId: userId, id: id });
-    }
-
 
     useEffect(() => {
         const fetchusers = async () => {
@@ -36,27 +32,18 @@ const Users = () => {
         fetchusers();
     }, [])
 
+    
     return (
         isLoading ? <Loader /> : <>
             <ScrollView>
-                <View style={style.container}>
-                    {data && data.map((item, i) => (
-                        <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item.id)}>
-                            {item.profile_image && item.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item.profile_image}` }} style={style.userIcon} /> : <Image source={require('../../../assests/userProfile.webp')} style={style.userIcon} />}
-                            <Text style={[styles.lable, { textAlign: 'center' }]}>{item.first_name && item.last_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
-                            <Text style={style.text}>{item.designation && item.designation.name ? item.designation.name : 'No Designation'}</Text>
-                            <Text style={style.text}>{item.user_type && item.user_type ? item.user_type : 'No User Type'}</Text>
-                        </TouchableOpacity>
-                    ))}
-
-                </View>
+                <UserCard item={data} id={id}/>
             </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('UserForm', { id: id })}>
                     <IconAdd name='add' style={styles.addIcon} />
                 </TouchableOpacity>
             </View>
-           
+
             <Toast />
         </>
     )
@@ -65,38 +52,3 @@ const Users = () => {
 export default Users;
 
 
-const style = StyleSheet.create({
-    container: {
-        padding: 20,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        alignItems: 'center',
-        justifyContent: 'start',
-    },
-
-    card: {
-        width: 150,
-        height: 150,
-        margin: 5,
-        borderRadius: 8,
-        elevation: 1,
-        backgroundColor: 'white',
-        borderColor: textColor,
-        padding: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    userIcon: {
-        padding: 5,
-        marginBottom: 5,
-        height: 50,
-        width: 50,
-        borderRadius: 25,
-        padding: 10,
-    },
-    text: {
-        color: '#5f6368',
-        fontSize: 12
-    }
-
-})

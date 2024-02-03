@@ -2,12 +2,12 @@ import { createBottomTabNavigator, useBottomTabBarHeight } from "@react-navigati
 import React, { useEffect } from "react";
 import Users from "./Users/Users";
 import Clock from "./Clock/Clock";
-import Home from "./Home";
+import Home from "./Home/Home";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, Text, View } from "react-native";
 import { styles } from "../../../style";
 import Document from "./Document";
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/AntDesign'
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons'
 import IconFa from 'react-native-vector-icons/FontAwesome'
 import Vlog from "./Vlog/Vlog";
@@ -29,13 +29,13 @@ const DashboardBase = () => {
             }}>
                 <Tab.Screen name='Home' component={Home} initialParams={{ id: id }}
                     options={{
-                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrow-back-ios-new' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Home</Text></View>,
+                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrowleft' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Home</Text></View>,
                         tabBarIcon: () => <IconFa name="home" style={styles.icons} size={20} />,
                         tabBarLabel: () => <Text style={styles.lable}>Home</Text>
                     }} />
                 <Tab.Screen name='Users' component={Users} initialParams={{ id: id }}
                     options={{
-                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrow-back-ios-new' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Users</Text></View>,
+                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrowleft' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Users</Text></View>,
                         tabBarIcon: () => <IconFa name="users" style={styles.icons} size={20} />,
                         tabBarLabel: () => <Text style={styles.lable}>Users</Text>
                     }} />
@@ -47,13 +47,14 @@ const DashboardBase = () => {
                     }} />
                 <Tab.Screen name='Clock' component={Clock} initialParams={{ id: id }}
                     options={{
-                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrow-back-ios-new' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Clock</Text></View>,
+                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrowleft' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Clock</Text></View>,
                         tabBarIcon: () => <IconFa name="clock-o" style={styles.icons} size={20} />,
                         tabBarLabel: () => <Text style={styles.lable}>Clock</Text>
                     }} />
                 <Tab.Screen name='Document' component={Document} initialParams={{ id: id }}
                     options={{
-                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrow-back-ios-new' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Document</Text></View>,
+                        headerTitle: () => <View style={tStyles.headerShown}><Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}><Icon name='arrowleft' style={styles.textSubHeading} /></Text><Text style={styles.textSubHeading}>Document</Text></View>,
+                        // headerTitle: () =>  <View onPress={() => navigation.navigate('Base')}><Text style={styles.textSubHeading}>Documents</Text></View>,
                         tabBarIcon: () => <IconMCI name="file-document" style={styles.icons} size={20} />,
                         tabBarLabel: () => <Text style={styles.lable}>Documents</Text>
                     }} />
@@ -72,7 +73,7 @@ const tStyles = StyleSheet.create({
     },
     icon: {
         padding: 13.5,
-        paddingRight: 100
+        paddingRight: 10
     }
 
 });
