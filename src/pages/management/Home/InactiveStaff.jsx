@@ -11,7 +11,7 @@ const InactiveStaff = () => {
     const route = useRoute()
     const { id } = route.params
 
-    const [userData, setUserData] = useState([])
+    const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {

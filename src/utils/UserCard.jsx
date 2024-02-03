@@ -13,7 +13,7 @@ const UserCard = ({ item, id }) => {
     return (
         <View style={styles.container}>
             <View style={style.container}>
-                {item && item.map((item, i) => (
+                {item ? item.map((item, i) => (
                     <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item)}>
                         {item.profile_image && item.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item.profile_image}` }} style={style.userIcon} /> : <Image source={require('../assests/userProfile.webp')} style={style.userIcon} />}
                         <Text style={[styles.lable, { textAlign: 'center' }]}>{item.first_name && item.last_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
@@ -22,7 +22,7 @@ const UserCard = ({ item, id }) => {
                         <Text style={style.text}>{item.status && item.status ? item.status : 'No User Type'}</Text>
 
                     </TouchableOpacity>
-                ))}
+                )) : <Text>No Data Found</Text>}
             </View>
         </View>
     )
