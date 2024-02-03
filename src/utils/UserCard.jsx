@@ -7,14 +7,14 @@ import { useNavigation } from "@react-navigation/native";
 const UserCard = ({ item, id }) => {
     const navigation = useNavigation();
 
-    const handleNavigate = (userId) => {
-        navigation.navigate('UserProfile', { userId: userId, id: id });
+    const handleNavigate = (user) => {
+        navigation.navigate('UserProfile', { userData: user, id: id });
     }
     return (
         <View style={styles.container}>
             <View style={style.container}>
                 {item && item.map((item, i) => (
-                    <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item.id)}>
+                    <TouchableOpacity key={i} style={style.card} onPress={() => handleNavigate(item)}>
                         {item.profile_image && item.profile_image ? <Image source={{ uri: `${API_CONFIG.imageUrl}${item.profile_image}` }} style={style.userIcon} /> : <Image source={require('../assests/userProfile.webp')} style={style.userIcon} />}
                         <Text style={[styles.lable, { textAlign: 'center' }]}>{item.first_name && item.last_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
                         <Text style={style.text}>{item.designation && item.designation.name ? item.designation.name : 'No Designation'}</Text>

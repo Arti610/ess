@@ -7,10 +7,11 @@ import userApi from "../../../redux/slices/users/userApi"
 import API_CONFIG from "../../../config/apiConfig"
 import Toast from "react-native-toast-message"
 import Loader from "../../../utils/ActivityIndicator"
-import Video from 'react-native-video';
 import UserCard from "../../../utils/UserCard"
-const Users = () => {
 
+
+const Users = () => {
+    const navigation = useNavigation()
     const route = useRoute();
     const { id } = route.params;
     const [data, setData] = useState(null)

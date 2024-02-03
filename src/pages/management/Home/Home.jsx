@@ -6,6 +6,7 @@ import getApi from "../../../redux/slices/utils/getApi";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import IconFa6 from 'react-native-vector-icons/FontAwesome6'
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
+import Loader from "../../../utils/ActivityIndicator";
 
 const Home = () => {
   const navigation = useNavigation()
@@ -104,7 +105,6 @@ const Home = () => {
             <View><Text style={styles.lable}>Inactive Staffs</Text></View>
           </TouchableOpacity>
         </View>
-      
       </ScrollView>
     </>
   )
