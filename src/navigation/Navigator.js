@@ -24,11 +24,16 @@ import ShowingVlog from '../pages/management/Vlog/ShwongVlog.jsx';
 import ActiveUser from '../pages/management/Home/ActiveUser.jsx';
 import CheckInUser from '../pages/management/Home/CheckInUser.jsx';
 import NotCheckInUser from '../pages/management/Home/NotCheckInUser.jsx';
-import LeaveRequest from '../pages/management/Home/LeaveRequest.jsx';
-import LateEarly from '../pages/management/Home/LateEarly.jsx';
 import InactiveStaff from '../pages/management/Home/InactiveStaff.jsx';
 import StaffDashboard from '../pages/staff/StaffDashboard.jsx';
 import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
+import ApprovedLeave from '../pages/staff/leave/leaveRequest/ApprovedLeave.jsx';
+import ApprovedLateEarly from '../pages/staff/leave/lateEarly/ApprovedLateEarly.jsx';
+import PendingLeave from '../pages/staff/leave/leaveRequest/PendingLeave.jsx';
+import DeclinedLeave from '../pages/staff/leave/leaveRequest/DeclinedLeave.jsx';
+import PendingLateEarly from '../pages/staff/leave/lateEarly/PendingLateEarly.jsx';
+import DeclinedLateEarly from '../pages/staff/leave/lateEarly/DeclinedLateEarly.jsx';
+import ApplyLR from '../pages/staff/leave/leaveRequest/ApplyLR.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -60,10 +65,15 @@ const Navigator = () => {
           <Stack.Screen name = 'ActiveUser' component={ActiveUser} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Active Staffs</Text></View>}}/>
           <Stack.Screen name = 'CheckInUser' component={CheckInUser} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Check In Staffs</Text></View>}}/>
           <Stack.Screen name = 'NotCheckInUser' component={NotCheckInUser} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Not Check In Staffs</Text></View>}}/>
-          <Stack.Screen name = 'LeaveRequest' component={LeaveRequest} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Leave Request</Text></View>}}/>
-          <Stack.Screen name = 'LateEarly' component={LateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Late Early</Text></View>}}/>
           <Stack.Screen name = 'InactiveUser' component={InactiveStaff} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
-          
+          <Stack.Screen name = 'ApplyLR' component={ApplyLR} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Leave Request</Text></View>}}/>
+          {/* <Stack.Screen name = 'ApprovedLR' component={ApprovedLeave} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
+          <Stack.Screen name = 'ApprovedLE' component={ApprovedLateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
+          <Stack.Screen name = 'PendingLR' component={PendingLeave} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
+          <Stack.Screen name = 'PendingLE' component={PendingLateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
+          <Stack.Screen name = 'DeclinedLR' component={DeclinedLeave} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
+          <Stack.Screen name = 'DeclinedLE' component={DeclinedLateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
+           */}
       </Stack.Navigator>
     </NavigationContainer>
   );

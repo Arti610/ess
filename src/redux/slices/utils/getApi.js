@@ -14,8 +14,24 @@ export default{
     getWeekOff : (id) => apiService.get(`week_off_list/${id}`),
     getBranchDepartment : (id) => apiService.get(`get_branch_department/${id}`),
     getBranchDesignation : (id) => apiService.get(`get_branch_designation/${id}`),
+    getLeaveTypeList : (id)=> apiService.get( `leavetype_by_branch/${id}`),
+
 
 
     // VLog
-    getAllVlog : (id) => apiService.get(`get_task_list/${id}`)
+    getAllVlog : (id) => apiService.get(`get_task_list/${id}`),
+
+
+
+
+
+
+
+
+
+
+
+    // Single Get API @start
+        getAllLeaveRequest : ()=> apiService.get(`get_leaverequest_list`)
+    // Single Get API @end
 }

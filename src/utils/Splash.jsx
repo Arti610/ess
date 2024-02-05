@@ -26,6 +26,8 @@ const Splash = () => {
           const userDataString = await AsyncStorage.getItem('currentUser');
           const parsedUserData = JSON.parse(userDataString)
 
+          const id = parsedUserData?.data.branch.id;
+
           if (parsedUserData) {
 
             if (parsedUserData.user_type === 'Management') {
@@ -33,7 +35,7 @@ const Splash = () => {
             } else if (parsedUserData.user_type === 'Manager') {
               navigation.navigate('ManagerBase');
             } else {
-              navigation.navigate('StaffBase');
+              navigation.navigate('StaffBase', {id : id});
             }
           } else {
             navigation.navigate('Login');
