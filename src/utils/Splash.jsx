@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, } from "react";
-import {  ImageBackground, StyleSheet, Text, View } from "react-native"
+import { ImageBackground, StyleSheet, Text, View } from "react-native"
 import { primaryColor, secondaryColor } from "../../style";
 import {
   BallIndicator,
@@ -24,9 +24,17 @@ const Splash = () => {
       try {
         setTimeout(async () => {
           const userDataString = await AsyncStorage.getItem('currentUser');
-       
-          if (userDataString) {
-            navigation.navigate('Base');
+          const parsedUserData = JSON.parse(userDataString)
+
+          if (parsedUserData) {
+
+            if (parsedUserData.user_type === 'Management') {
+              navigation.navigate('Base');
+            } else if (parsedUserData.user_type === 'Manager') {
+              navigation.navigate('ManagerBase');
+            } else {
+              navigation.navigate('StaffBase');
+            }
           } else {
             navigation.navigate('Login');
           }
@@ -38,20 +46,19 @@ const Splash = () => {
     navigationAuth()
   })
   return (
-  
-    <View style={styles.container}>     
-       <BarIndicator color= {primaryColor} />
-       {/* <Text style={styles.textHeading}>WELCOME TO ESS</Text> */}
+
+    <View style={styles.container}>
+      <BarIndicator color={primaryColor} />
     </View>
 
-        
+
   )
 }
 
 export default Splash;
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     height: '100%',
     width: '100%',
     display: 'flex',
@@ -59,8 +66,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: secondaryColor
   },
-  textHeading:{
-    color : primaryColor,
+  textHeading: {
+    color: primaryColor,
     fontSize: 30,
     fontWeight: 'bold'
   }

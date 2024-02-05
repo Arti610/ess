@@ -40,7 +40,14 @@ const Login = () => {
       if (res.status === 200) {
         await AsyncStorage.setItem('token', res.data.token);
         dispatch(loginSuccess(res.data));
-        navigation.navigate("Base");
+        console.log('res.data', res.data.user_type);
+        if (res.data.user_type === "Management") {
+          navigation.navigate("Base");
+        } else if (res.data.user_type === "Management") {
+          navigation.navigate("ManagerBase");
+        } else {
+          navigation.navigate("StaffBase");
+        }
         Toast.show({
           type: 'success',
           position: 'top',

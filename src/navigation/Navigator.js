@@ -27,6 +27,8 @@ import NotCheckInUser from '../pages/management/Home/NotCheckInUser.jsx';
 import LeaveRequest from '../pages/management/Home/LeaveRequest.jsx';
 import LateEarly from '../pages/management/Home/LateEarly.jsx';
 import InactiveStaff from '../pages/management/Home/InactiveStaff.jsx';
+import StaffDashboard from '../pages/staff/StaffDashboard.jsx';
+import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +51,8 @@ const Navigator = () => {
           <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit Profile</Text></View> }} />
           <Stack.Screen name='ChangePassword' component={ChangePassword} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Change Password</Text></View> }} />
           <Stack.Screen name='DashboardBase' component={DashboardBase} options={{headerShown: false}} />
+          <Stack.Screen name='StaffBase' component={StaffDashboard} options={{headerShown: false}} />
+          <Stack.Screen name='ManagerBase' component={ManagerDashboard} options={{headerShown: false}} />
           <Stack.Screen name='UserForm' component={UserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Add User</Text></View> }} />
           <Stack.Screen name='EditUserForm' component={EditUserForm}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit User</Text></View> }} />
           <Stack.Screen name='UserProfile' component={UserProfile}  options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>User Profile</Text></View> }} />

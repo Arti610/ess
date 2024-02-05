@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    borderRadius: 20,
+    borderRadius: 22.5,
     width: 45,
     height: 45,
     justifyContent: 'center',
