@@ -29,9 +29,8 @@ export default{
 
 
 
-
-
     // Single Get API @start
-        getAllLeaveRequest : ()=> apiService.get(`get_leaverequest_list`)
+        getAllLeaveRequest : ()=> apiService.get(`get_leaverequest_list`),
+        getIndividualLeaveRequest : (id)=> apiService.get(`get_leaverequest/${id}`)
     // Single Get API @end
 }

@@ -1,25 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from "react-native";
-import { styles } from "../../../../../style";
+import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { primaryColor, styles } from "../../../../../style";
 import { currentUser } from "../../../../utils/currentUser";
 import getApi from "../../../../redux/slices/utils/getApi";
 import { SelectList } from "react-native-dropdown-select-list";
 import Loader from "../../../../utils/ActivityIndicator";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik } from "formik";
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import DocumentPicker from 'react-native-document-picker';
+import createApi from "../../../../redux/slices/utils/createApi";
+import ButtonLoader from "../../../../utils/BtnActivityIndicator";
+import moment from 'moment';
+import Toast from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
+
 
 const ApplyLR = () => {
-    // State variables
+    const navigation = useNavigation()
     const [id, setId] = useState(null);
     const [leaveType, setLeaveType] = useState([]);
     const [selectLeaveType, setSelectLeaveType] = useState(null);
     const [loading, setLoading] = useState(false);
     const [showFromDatePicker, setShowFromDatePicker] = useState(false);
     const [showToDatePicker, setShowToDatePicker] = useState(false);
+    const [document, setDocument] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
     const [formValues, setFormValues] = useState({
         from_date: null,
         to_date: null
     })
+    console.log('formValues', formValues);
 
     useEffect(() => {
         // Fetch user data
@@ -70,26 +81,72 @@ const ApplyLR = () => {
     };
 
     const handleDateChange = (selectedDate) => {
-
         setShowFromDatePicker(false);
         setShowToDatePicker(false);
-        const formattedDate = selectedDate.toLocaleDateString();
-
+        const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
         setFormValues(values => ({
             ...values,
             [showFromDatePicker ? 'from_date' : 'to_date']: formattedDate
         }));
     };
 
-    const handlePress = (values) => {
+
+    const selectDoc = async () => {
+        try {
+            const doc = await DocumentPicker.pickSingle({
+                type: [DocumentPicker.types.pdf]
+            });
+
+            if (doc) {
+                setDocument(doc)
+            }
+
+        } catch (error) {
+            if (DocumentPicker.isCancel(error)) {
+                console.log("Document selection cancelled", error);
+            } else {
+                console.log(error);
+            }
+        }
+    };
+
+
+    const handlePress = async (values) => {
         const fData = new FormData()
-        fData.append('title', values.title)
-        fData.append('leaveType', selectLeaveType)
-        fData.append('from_date', formValues.from_date)
-        fData.append('to_date', formValues.to_date)
-        fData.append('description', values.description)
+        fData.append('title', values.title ? values.title : null)
+        fData.append('leaveType', selectLeaveType ? selectLeaveType : null)
+        fData.append('from_date', formValues.from_date ? formValues.from_date : null)
+        fData.append('to_date', formValues.to_date ? formValues.to_date : null)
+        fData.append('description', values.description ? values.description : null)
+        fData.append('attachment', document ? document : null)
         console.log('fData', fData);
+
+        try {
+            setIsLoading(true)
+            const res = await createApi.createLeaveRequest(fData, {
+                headers : {
+                    'content-type' : 'multipart/form-data'
+                }
+            })
+            console.log('res', res);
+            if (res.status === 201 || 200) {
+                setIsLoading(false)
+                navigation.navigate('Leave')
+                console.log('leave requested successfully');
+                Toast.show({
+                    type: "success",
+                    text1: 'Leave request submitted successfully',
+                    text2: "Your leave request has been successfully submitted.",
+                    autoHide: 4000
+                })
+            }
+        } catch (error) {
+            setIsLoading(false)
+            console.log(`Request for leave failed`, error.response.data);
+        }
+
     }
+
     return (
         loading ? <Loader /> : <ScrollView>
             <Formik
@@ -98,7 +155,8 @@ const ApplyLR = () => {
                     title: "",
                     from_date: formValues.from_date,
                     to_date: formValues.to_date,
-                    description: ""
+                    description: "",
+                    attachment: null
                 }}
                 onSubmit={(values) => {
                     handlePress(values)
@@ -166,9 +224,19 @@ const ApplyLR = () => {
                                 onChangeText={handleChange("description")}
                             />
                         </View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.lable}>Attachment</Text>
+                            <TouchableOpacity style={style.uploadUI} onPress={selectDoc}>
+                                <Icon name='cloud-upload-alt' style={style.icon} />
+                                {document && document.name ? <Text >{document.name}</Text> : <Text >Upload your files</Text>}
+                            </TouchableOpacity>
+
+                        </View>
+
+
                         <View>
                             <TouchableOpacity style={styles.primaryButton} onPress={handleSubmit}>
-                                <Text style={styles.buttonText}>Submit</Text>
+                                {isLoading ? <ButtonLoader /> : <Text style={styles.buttonText} > Submit</Text>}
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -179,3 +247,37 @@ const ApplyLR = () => {
 };
 
 export default ApplyLR;
+
+const style = StyleSheet.create({
+    uploadUI: {
+        padding: 10,
+        height: 'fit-content',
+        borderWidth: 4,
+        borderColor: '#D0D5DD',
+        borderRadius: 8,
+        backgroundColor: '#FFF',
+        boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderStyle: 'dotted'
+
+    },
+    icon: {
+        fontSize: 50,
+        color: primaryColor
+    },
+    documentView: {
+        padding: 10,
+        height: 'fit-content',
+        borderWidth: 4,
+        borderColor: '#D0D5DD',
+        borderRadius: 8,
+        backgroundColor: '#FFF',
+        boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderStyle: 'dotted'
+    }
+})
