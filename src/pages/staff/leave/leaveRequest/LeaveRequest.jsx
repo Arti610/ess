@@ -127,7 +127,7 @@ const LeaveRequest = () => {
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Title : {uniqueData && uniqueData.title ? uniqueData.title : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Start Date : {uniqueData && uniqueData.from_date ? moment(uniqueData.from_date).format('DD/MM/YYYY') : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>End Date : {uniqueData && uniqueData.to_date ? moment(uniqueData.to_date).format('DD/MM/YYYY') : null}</Text>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.description ? uniqueData.description : null} </Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.description ? uniqueData.description : null}  </Text>
                     </View>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5, textAlign: "right" , fontWeight: 'bold'}}>Applied On {uniqueData && uniqueData.created_date ? moment(uniqueData.created_date).format('dddd, DD MMM YYYY') : null}</Text>
                     <TouchableOpacity style={styles.primaryButton} onPress={() => rbSheet.current.close()}><Text style={styles.buttonText}>Close</Text></TouchableOpacity>
