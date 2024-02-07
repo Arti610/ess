@@ -30,6 +30,12 @@ export default{
     // Single Get API @start
         getAllLeaveRequest : ()=> apiService.get(`get_leaverequest_list`),
         getAllLateEarly : ()=> apiService.get(`get_LateEarly_list`),
+        getAllCheckinoutList : (token) => apiService.get(`check_in_out_list`, {
+            headers: {
+                Authorization: `token ${token}`
+            }
+        }),
+        // getAllCheckinoutList : (option) => console.log(option, 'tokenjjjj'),
         getIndividualLeaveRequest : (id)=> apiService.get(`get_leaverequest/${id}`),
         getIndividualLateEarly : (id)=> apiService.get(`get_lateEarly/${id}`)
     // Single Get API @end

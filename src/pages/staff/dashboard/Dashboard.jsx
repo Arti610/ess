@@ -1,12 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { primaryColor, styles, textColor } from "../../../../style";
 import Icon from 'react-native-vector-icons/AntDesign'
-
+import getApi from "../../../redux/slices/utils/getApi";
+import { currentUser } from "../../../utils/currentUser";
 const Dashboard = () => {
     const currentDate = new Date();
     const options = { hour: '2-digit', minute: '2-digit', hour12: true };
     const formattedTime = currentDate.toLocaleTimeString('en-US', options);
+
+    const [inoutData, setInoutData] = useState(null)
+    const [token, setToken] = useState(null)
+    console.log('inoutData', inoutData);
+    console.log('token', token);
+
+    useEffect(() => {
+
+        const fetchCurrentUser = async () => {
+            const res = await currentUser()
+
+            if (res.token) {
+                setToken(res.token)
+            }
+        }
+        fetchCurrentUser()
+
+        const fetchData = async () => {
+            try {
+                const res = await getApi.getAllCheckinoutList(token);
+                console.log('res.data', res);
+                if (res.data) {
+                    setInoutData(res.data);
+                }
+            } catch (error) {
+                console.log('error during getting all checkin/checkout', error.response);
+            }
+        };
+        fetchData()
+    }, [])
 
     return (
         <View style={style.container}>
@@ -35,7 +66,14 @@ const Dashboard = () => {
             {/*Body @end */}
             {/*Footer @start */}
             <View style={style.footer}>
-                <Text>Header</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={styles.textSubHeading}>Recent Activity</Text>
+                    <Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text>
+                </View>
+
+                {inoutData && inoutData.check_in && inoutData.check_in.map((item) => (
+                    <View><Text>{item && item.date_time ? item.date_time : null}</Text></View>
+                ))}
             </View>
             {/*Footer @end */}
 
@@ -66,6 +104,7 @@ const style = StyleSheet.create({
     footer: {
         flex: 2,
         backgroundColor: 'pink'
+
     },
     card: {
         width: 150,
