@@ -27,12 +27,6 @@ import NotCheckInUser from '../pages/management/Home/NotCheckInUser.jsx';
 import InactiveStaff from '../pages/management/Home/InactiveStaff.jsx';
 import StaffDashboard from '../pages/staff/StaffDashboard.jsx';
 import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
-import ApprovedLeave from '../pages/staff/leave/leaveRequest/ApprovedLeave.jsx';
-import ApprovedLateEarly from '../pages/staff/leave/lateEarly/ApprovedLateEarly.jsx';
-import PendingLeave from '../pages/staff/leave/leaveRequest/PendingLeave.jsx';
-import DeclinedLeave from '../pages/staff/leave/leaveRequest/DeclinedLeave.jsx';
-import PendingLateEarly from '../pages/staff/leave/lateEarly/PendingLateEarly.jsx';
-import DeclinedLateEarly from '../pages/staff/leave/lateEarly/DeclinedLateEarly.jsx';
 import ApplyLR from '../pages/staff/leave/leaveRequest/ApplyLR.jsx';
 import ApplyLE from '../pages/staff/leave/lateEarly/ApplyLE.jsx';
 

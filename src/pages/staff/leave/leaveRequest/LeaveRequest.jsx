@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { primaryColor, secondaryColor, styles } from "../../../../../style";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import IconAdd from 'react-native-vector-icons/MaterialIcons'
@@ -19,7 +19,7 @@ const LeaveRequest = () => {
     const [status, setStatus] = useState('All');
     const [uniqueData, setUniqueData] = useState(null)
 
- 
+
     useEffect(() => {
         try {
             setLoading(true);
@@ -128,9 +128,9 @@ const LeaveRequest = () => {
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Start Date : {uniqueData && uniqueData.from_date ? moment(uniqueData.from_date).format('DD/MM/YYYY') : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>End Date : {uniqueData && uniqueData.to_date ? moment(uniqueData.to_date).format('DD/MM/YYYY') : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.description ? uniqueData.description : null}  </Text>
-                        
+
                     </View>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5, textAlign: "right" , fontWeight: 'bold'}}>Applied On {uniqueData && uniqueData.created_date ? moment(uniqueData.created_date).format('dddd, DD MMM YYYY') : null}</Text>
+                    <Text style={{ color: 'black', fontSize: 12, padding: 5, textAlign: "right", fontWeight: 'bold' }}>Applied On {uniqueData && uniqueData.created_date ? moment(uniqueData.created_date).format('dddd, DD MMM YYYY') : null}</Text>
                     <TouchableOpacity style={styles.primaryButton} onPress={() => rbSheet.current.close()}><Text style={styles.buttonText}>Close</Text></TouchableOpacity>
                 </View>
 
@@ -141,7 +141,7 @@ const LeaveRequest = () => {
 
 export default LeaveRequest;
 
-const style = StyleSheet.create({ 
+const style = StyleSheet.create({
     container: {
         padding: 10,
         flexDirection: 'row',

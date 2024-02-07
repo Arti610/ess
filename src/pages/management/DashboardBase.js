@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons'
 import IconFa from 'react-native-vector-icons/FontAwesome'
 import Vlog from "./Vlog/Vlog";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const Tab = createBottomTabNavigator()
 

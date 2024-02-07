@@ -10,6 +10,7 @@ import {  Text } from 'react-native';
 import Vlog from './vlog/Vlog';
 import Clock from './clock/clock';
 import LeaveBase from './leave/LeaveBase';
+import Dashboard from './dashboard/Dashboard';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,8 +21,8 @@ const StaffDashboard = () => {
     <>
       <Tab.Navigator >
           <Tab.Screen
-            name="Clock"
-            component={Clock}
+            name="dashboard"
+            component={Dashboard}
             options={() => ({
               headerTitle: () => null,
               headerLeft: () => <HeaderTitle />,
@@ -39,6 +40,17 @@ const StaffDashboard = () => {
             headerRight: () => <UserProfile />,
             tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons}  size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>
+          })}
+        />
+        <Tab.Screen
+          name="Clock"
+          component={Clock}
+          options={() => ({
+            headerTitle: () => null,
+            headerLeft: () => <HeaderTitle />,
+            headerRight: () => <UserProfile />,
+            tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons}  size={20} />,
+            tabBarLabel: () => <Text style={styles.lable}>Clock</Text>
           })}
         />
         <Tab.Screen

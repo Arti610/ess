@@ -4,7 +4,7 @@ import {Text, View} from 'react-native';
 import {styles} from '../../style';
 
 const HeaderTitle = () => {
-  const option = {day: '2-digit', month: 'short', year: 'numeric'};
+  const option = { day: '2-digit', month: 'short', year: 'numeric', weekday: 'long'};
   const currentDate = new Date();
   const currentHour = currentDate.getHours();
   const formattedDate = currentDate.toLocaleDateString('en-US', option);
