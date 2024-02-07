@@ -91,7 +91,7 @@ const LeaveRequest = () => {
                                 {item && item.status}
                             </Text>
                         </TouchableOpacity>
-                    )) : status === 'Pending' ? <Text>There are currently no pending requests for leave.</Text> : status === "Approved" ? <Text>There are currently no leaves that have been approved.</Text> : <Text>There have been no leave requests declined.</Text>}
+                    )) : <Text>No Data Found</Text>}
                 </View>
             }
             <View style={styles.buttonContainer}>

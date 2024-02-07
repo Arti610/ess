@@ -11,26 +11,24 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import DocumentPicker from 'react-native-document-picker';
 import createApi from "../../../../redux/slices/utils/createApi";
 import ButtonLoader from "../../../../utils/BtnActivityIndicator";
-import moment from 'moment';
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
-
-const ApplyLR = () => {
+const ApplyLE = () => {
     const navigation = useNavigation()
     const [id, setId] = useState(null);
-    const [leaveType, setLeaveType] = useState([]);
-    const [selectLeaveType, setSelectLeaveType] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const lateEarly = [{ key: 'Late', value: 'Late' }, { key: 'Early', value: 'Early' }]
+    const [selectLateEarly, setSelectLateEarly] = useState(null);
     const [showFromDatePicker, setShowFromDatePicker] = useState(false);
-    const [showToDatePicker, setShowToDatePicker] = useState(false);
+    const [showTime, setShowTime] = useState(false);
     const [document, setDocument] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [formValues, setFormValues] = useState({
-        from_date: null,
-        to_date: null
-    })
+    const [formValues, setFormValues] = useState({ date: null }, { time: null })
+
+
     console.log('formValues', formValues);
+
 
     useEffect(() => {
         // Fetch user data
@@ -47,49 +45,23 @@ const ApplyLR = () => {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        // Fetch leave types
-        const fetchLeaveType = async () => {
-            try {
-                setLoading(true);
-                if (id) {
-                    const res = await getApi.getLeaveTypeList(id);
-                    if (res.data) {
-                        const transformedData = res.data.map(item => ({
-                            key: item.id.toString(),
-                            value: item.name
-                        }));
-                        setLeaveType(transformedData);
-                    }
-                    setLoading(false);
-                }
-            } catch (error) {
-                setLoading(false);
-                console.error("Error fetching leave type list:", error);
-            }
-        };
-        fetchLeaveType();
-    }, [id]);
-
-    const showDateTimePicker = (isFromDate) => {
-        // Show the DateTimePicker based on the type of date
-        if (isFromDate) {
-            setShowFromDatePicker(true);
-        } else {
-            setShowToDatePicker(true);
-        }
-    };
 
     const handleDateChange = (selectedDate) => {
         setShowFromDatePicker(false);
-        setShowToDatePicker(false);
         const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+        console.log('formattedDate', formattedDate);
         setFormValues(values => ({
             ...values,
-            [showFromDatePicker ? 'from_date' : 'to_date']: formattedDate
+            date: formattedDate,
         }));
     };
 
+    const handleTimeChange = (selectTime) => {
+        console.log('selectTime',selectTime);
+      
+        setShowTime(false);
+        setFormValues({ ...formValues, time: selectTime });
+    };
 
     const selectDoc = async () => {
         try {
@@ -110,53 +82,50 @@ const ApplyLR = () => {
         }
     };
 
-    console.log('document', document);
     const handlePress = async (values) => {
         const fData = new FormData()
-        fData.append('title', values.title ? values.title : null)
-        fData.append('leaveType', selectLeaveType ? selectLeaveType : null)
-        fData.append('from_date', formValues.from_date ? formValues.from_date : null)
-        fData.append('to_date', formValues.to_date ? formValues.to_date : null)
-        fData.append('description', values.description ? values.description : null)
+
+        fData.append('leaveType', selectLateEarly ? selectLateEarly : null)
+        fData.append('date', formValues.date ? formValues.date : null)
+        fData.append('time', formValues.time ? moment(formValues.time).format('HH:mm:ss') : null)
+        fData.append('reason', values.reason ? values.reason : null)
         document ? fData.append('attachment', document ? document : null) : null
         console.log('fData', fData);
 
         try {
             setIsLoading(true)
-            const res = await createApi.createLeaveRequest(fData, {
+            const res = await createApi.createLateEarly(fData, {
                 headers: {
                     'content-type': 'multipart/form-data'
                 }
             })
-            
+            console.log('res', res);
             if (res.status === 201 || 200) {
                 setIsLoading(false)
                 navigation.navigate('Leave')
-                console.log('leave requested successfully');
+                console.log('late/early requested successfully');
                 Toast.show({
                     type: "success",
-                    text1: 'Leave request submitted successfully',
-                    text2: "Your leave request has been successfully submitted.",
+                    text1: 'Request for late/early submitted successfully',
+                    text2: "Your late/early request has been successfully submitted.",
                     autoHide: 4000
                 })
-                getApi.getAllLeaveRequest()
             }
         } catch (error) {
             setIsLoading(false)
-            console.log(`Request for leave failed`, error.response.data);
+            console.log(`Request for late/early failed`, error.response.data);
         }
 
     }
 
     return (
-        loading ? <Loader /> : <ScrollView>
+        <ScrollView>
             <Formik
                 initialValues={{
-                    leaveType: null,
-                    title: "",
-                    from_date: formValues.from_date,
-                    to_date: formValues.to_date,
-                    description: "",
+                    late_early: null,
+                    date: "",
+                    time: "",
+                    reason: "",
                     attachment: null
                 }}
                 onSubmit={(values) => {
@@ -166,63 +135,57 @@ const ApplyLR = () => {
                 {({ handleChange, handleSubmit, values }) => (
                     <View style={styles.formContainer}>
                         <View style={styles.inputContainer}>
-                            <Text style={styles.lable}>Leave Type</Text>
+                            <Text style={styles.lable}>Late/Early</Text>
                             <SelectList
                                 boxStyles={styles.textInput}
                                 dropdownStyles={styles.textInput}
-                                setSelected={(val) => setSelectLeaveType(val)}
-                                data={leaveType}
+                                setSelected={(val) => setSelectLateEarly(val)}
+                                data={lateEarly}
                                 save="key"
-                                placeholder={'Select Weekoff e.g. (Saturday)'}
+                                placeholder={'Select  e.g. (Late)'}
                                 notFoundText="Data not found"
-                                value={selectLeaveType}
+                                value={selectLateEarly}
                             />
                         </View>
+
                         <View style={styles.inputContainer}>
-                            <Text style={styles.lable}>Title</Text>
-                            <TextInput
-                                value={values.title || ""}
-                                style={styles.textInput}
-                                placeholder="e.g. (One Day Leave)"
-                                onChangeText={handleChange("title")}
-                            />
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.lable}>From Date</Text>
-                            <TouchableOpacity onPress={() => showDateTimePicker(true)} style={styles.textInput}>
-                                <Text>{formValues.from_date || 'Select Date'}</Text>
+                            <Text style={styles.lable}>Date</Text>
+                            <TouchableOpacity onPress={() => setShowFromDatePicker(true)} style={styles.textInput}>
+                                <Text>{formValues.date || 'Select Date'}</Text>
                             </TouchableOpacity>
                             {showFromDatePicker && (
                                 <DateTimePicker
-                                    value={formValues.from_date ? new Date(formValues.from_date) : new Date()}
+                                    value={formValues.date ? new Date(formValues.date) : new Date()}
                                     mode="date"
                                     onChange={(event, selectedDate) => handleDateChange(selectedDate)}
                                 />
                             )}
                         </View>
                         <View style={styles.inputContainer}>
-                            <Text style={styles.lable}>To Date</Text>
-                            <TouchableOpacity onPress={() => showDateTimePicker(false)} style={styles.textInput}>
-                                <Text>{formValues.to_date || 'Select Date'}</Text>
+                            <Text style={styles.label}>Time</Text>
+                            <TouchableOpacity onPress={() => setShowTime(true)} style={styles.textInput}>
+                                <Text>{formValues.time ? moment(formValues.time).format('HH:mm:ss') : 'Select Time'}</Text>
                             </TouchableOpacity>
-                            {showToDatePicker && (
+                            {showTime && (
                                 <DateTimePicker
-                                    value={formValues.to_date ? new Date(formValues.to_date) : new Date()}
-                                    mode="date"
-                                    onChange={(event, selectedDate) => handleDateChange(selectedDate)}
+                                    value={formValues.time || new Date()}
+                                    mode="time"
+                                    is24Hour={true}
+                                    onChange={(event, selectTime) => handleTimeChange(selectTime)}
                                 />
                             )}
                         </View>
+
                         <View style={styles.inputContainer}>
-                            <Text style={styles.lable}>Description</Text>
+                            <Text style={styles.lable}>Reason</Text>
                             <TextInput
-                                name='description'
-                                value={values.description || ""}
+                                name='reason'
+                                value={values.reason || ""}
                                 style={[styles.textInput, { textAlignVertical: 'top', textAlign: 'left' }]}
-                                placeholder="Enter description for leave"
+                                placeholder="Enter reason for leave"
                                 multiline={true}
                                 numberOfLines={5}
-                                onChangeText={handleChange("description")}
+                                onChangeText={handleChange("reason")}
                             />
                         </View>
                         <View style={styles.inputContainer}>
@@ -247,7 +210,7 @@ const ApplyLR = () => {
     );
 };
 
-export default ApplyLR;
+export default ApplyLE;
 
 const style = StyleSheet.create({
     uploadUI: {

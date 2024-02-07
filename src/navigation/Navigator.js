@@ -34,6 +34,7 @@ import DeclinedLeave from '../pages/staff/leave/leaveRequest/DeclinedLeave.jsx';
 import PendingLateEarly from '../pages/staff/leave/lateEarly/PendingLateEarly.jsx';
 import DeclinedLateEarly from '../pages/staff/leave/lateEarly/DeclinedLateEarly.jsx';
 import ApplyLR from '../pages/staff/leave/leaveRequest/ApplyLR.jsx';
+import ApplyLE from '../pages/staff/leave/lateEarly/ApplyLE.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,13 +68,8 @@ const Navigator = () => {
           <Stack.Screen name = 'NotCheckInUser' component={NotCheckInUser} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Not Check In Staffs</Text></View>}}/>
           <Stack.Screen name = 'InactiveUser' component={InactiveStaff} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
           <Stack.Screen name = 'ApplyLR' component={ApplyLR} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Leave Request</Text></View>}}/>
-          {/* <Stack.Screen name = 'ApprovedLR' component={ApprovedLeave} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
-          <Stack.Screen name = 'ApprovedLE' component={ApprovedLateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
-          <Stack.Screen name = 'PendingLR' component={PendingLeave} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
-          <Stack.Screen name = 'PendingLE' component={PendingLateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
-          <Stack.Screen name = 'DeclinedLR' component={DeclinedLeave} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
-          <Stack.Screen name = 'DeclinedLE' component={DeclinedLateEarly} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
-           */}
+          <Stack.Screen name = 'ApplyLE' component={ApplyLE} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Late/Early Request</Text></View>}}/>
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
