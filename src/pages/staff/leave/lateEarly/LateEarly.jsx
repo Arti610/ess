@@ -19,7 +19,7 @@ const LateEarly = () => {
     const [status, setStatus] = useState('All');
     const [uniqueData, setUniqueData] = useState(null)
 
- 
+ console.log('data', data);
     useEffect(() => {
         try {
             setLoading(true);
@@ -57,10 +57,10 @@ const LateEarly = () => {
 
     const handleOpenRBSheet = async (id) => {
 
-        const res = await getApi.getIndividualLeaveRequest(id)
+        const res = await getApi.getIndividualLateEarly(id)
         setUniqueData(res.data)
         if (res.data) {
-            rbSheet.current.open()
+            rbSheet.current.open();
         }
     }
     return (
@@ -84,8 +84,8 @@ const LateEarly = () => {
                     {filteredData.length > 0 ? filteredData.map((item, i) => (
                         <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
                             <View>
-                                <Text>{item && item.title ? item.title : null} {`(${item && item.leave_type && item.leave_type.code ? item.leave_type.code : null})`}</Text>
-                                <Text style={styles.lable}>{moment(item && item.from_date ? item.from_date : null).format('DD/MM/YYYY')} - {moment(item && item.to_date ? item.to_date : null).format('DD/MM/YYYY')}</Text>
+                                <Text>{item && item.late_early ? item.late_early : 'Late/Early'} </Text>
+                                <Text style={styles.lable}>{moment(item && item.date ? item.date : null).format('DD/MM/YYYY')}  {(item && item.time ? item.time : null)}</Text>
                             </View>
                             <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
                                 {item && item.status}
@@ -124,12 +124,12 @@ const LateEarly = () => {
                         </Text>
                     </View>
                     <View>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Title : {uniqueData && uniqueData.title ? uniqueData.title : null}</Text>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Start Date : {uniqueData && uniqueData.from_date ? moment(uniqueData.from_date).format('DD/MM/YYYY') : null}</Text>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>End Date : {uniqueData && uniqueData.to_date ? moment(uniqueData.to_date).format('DD/MM/YYYY') : null}</Text>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.description ? uniqueData.description : null}  </Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Late/Early : {uniqueData && uniqueData.late_early ? uniqueData.late_early : null}</Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Date : {uniqueData && uniqueData.date ? moment(uniqueData.date).format('DD/MM/YYYY') : null}</Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Time : {uniqueData && uniqueData.time ? (uniqueData.time): null}</Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.reason ? uniqueData.reason : null}  </Text>
                     </View>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5, textAlign: "right" , fontWeight: 'bold'}}>Applied On {uniqueData && uniqueData.created_date ? moment(uniqueData.created_date).format('dddd, DD MMM YYYY') : null}</Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5, textAlign: "right" , fontWeight: 'bold'}}>Applied On {uniqueData && uniqueData.created_at ? moment(uniqueData.created_at).format('dddd, DD MMM YYYY') : null}</Text>
                     <TouchableOpacity style={styles.primaryButton} onPress={() => rbSheet.current.close()}><Text style={styles.buttonText}>Close</Text></TouchableOpacity>
                 </View>
 

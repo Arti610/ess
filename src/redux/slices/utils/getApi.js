@@ -30,6 +30,7 @@ export default{
     // Single Get API @start
         getAllLeaveRequest : ()=> apiService.get(`get_leaverequest_list`),
         getAllLateEarly : ()=> apiService.get(`get_LateEarly_list`),
-        getIndividualLeaveRequest : (id)=> apiService.get(`get_leaverequest/${id}`)
+        getIndividualLeaveRequest : (id)=> apiService.get(`get_leaverequest/${id}`),
+        getIndividualLateEarly : (id)=> apiService.get(`get_lateEarly/${id}`)
     // Single Get API @end
 }

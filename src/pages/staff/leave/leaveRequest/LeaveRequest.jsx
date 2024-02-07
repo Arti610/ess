@@ -84,7 +84,7 @@ const LeaveRequest = () => {
                     {filteredData.length > 0 ? filteredData.map((item, i) => (
                         <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
                             <View>
-                                <Text>{item && item.title ? item.title : null} {`(${item && item.leave_type && item.leave_type.code ? item.leave_type.code : null})`}</Text>
+                                <Text>{item && item.title ? item.title : null} {`(${item && item.leave_type && item.leave_type.code ? item.leave_type.code : 'CL'})`}</Text>
                                 <Text style={styles.lable}>{moment(item && item.from_date ? item.from_date : null).format('DD/MM/YYYY')} - {moment(item && item.to_date ? item.to_date : null).format('DD/MM/YYYY')}</Text>
                             </View>
                             <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
@@ -118,7 +118,7 @@ const LeaveRequest = () => {
             >
                 <View style={{ paddingVertical: 30, paddingHorizontal: 20, gap: 10 }}>
                     <View style={{ flexDirection: 'row', gap: 120, alignItems: 'center' }}>
-                        <Text style={styles.lable}>{uniqueData && uniqueData.leave_type && uniqueData.leave_type.name ? uniqueData.leave_type.name : 'Leave Name'} {`(${uniqueData && uniqueData.leave_type && uniqueData.leave_type.code ? uniqueData.leave_type.code : 'LN'})`}</Text>
+                        <Text style={styles.lable}>{uniqueData && uniqueData.leave_type && uniqueData.leave_type.name ? uniqueData.leave_type.name : 'Common Leave'} {`(${uniqueData && uniqueData.leave_type && uniqueData.leave_type.code ? uniqueData.leave_type.code : 'CL'})`}</Text>
                         <Text style={{ fontSize: 12, borderRadius: 20, padding: 8, color: 'white', backgroundColor: uniqueData.status === 'Pending' ? 'gold' : uniqueData.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
                             {uniqueData.status}
                         </Text>
@@ -128,6 +128,7 @@ const LeaveRequest = () => {
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Start Date : {uniqueData && uniqueData.from_date ? moment(uniqueData.from_date).format('DD/MM/YYYY') : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>End Date : {uniqueData && uniqueData.to_date ? moment(uniqueData.to_date).format('DD/MM/YYYY') : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.description ? uniqueData.description : null}  </Text>
+                        
                     </View>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5, textAlign: "right" , fontWeight: 'bold'}}>Applied On {uniqueData && uniqueData.created_date ? moment(uniqueData.created_date).format('dddd, DD MMM YYYY') : null}</Text>
                     <TouchableOpacity style={styles.primaryButton} onPress={() => rbSheet.current.close()}><Text style={styles.buttonText}>Close</Text></TouchableOpacity>
@@ -140,7 +141,7 @@ const LeaveRequest = () => {
 
 export default LeaveRequest;
 
-const style = StyleSheet.create({
+const style = StyleSheet.create({ 
     container: {
         padding: 10,
         flexDirection: 'row',

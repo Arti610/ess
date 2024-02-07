@@ -27,9 +27,6 @@ const ApplyLE = () => {
     const [formValues, setFormValues] = useState({ date: null }, { time: null })
 
 
-    console.log('formValues', formValues);
-
-
     useEffect(() => {
         // Fetch user data
         const fetchData = async () => {
@@ -49,7 +46,7 @@ const ApplyLE = () => {
     const handleDateChange = (selectedDate) => {
         setShowFromDatePicker(false);
         const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
-        console.log('formattedDate', formattedDate);
+
         setFormValues(values => ({
             ...values,
             date: formattedDate,
@@ -57,7 +54,7 @@ const ApplyLE = () => {
     };
 
     const handleTimeChange = (selectTime) => {
-        console.log('selectTime',selectTime);
+    
       
         setShowTime(false);
         setFormValues({ ...formValues, time: selectTime });
