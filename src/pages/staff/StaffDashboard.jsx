@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BranchIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconFa from 'react-native-vector-icons/FontAwesome'
 import UserProfile from '../../utils/userProfile';
 import HeaderTitle from '../../utils/headerTitle';
 import Toast from 'react-native-toast-message';
@@ -49,7 +50,7 @@ const StaffDashboard = () => {
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
             headerRight: () => <UserProfile />,
-            tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons}  size={20} />,
+            tabBarIcon: () => <IconFa name="clock-o" style={styles.icons}  size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Clock</Text>
           })}
         />

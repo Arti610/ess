@@ -150,7 +150,8 @@ const style = StyleSheet.create({
         width: '100%',
         height: '100%',
         padding: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingBottom: 80
     },
     card: {
         width: 150,

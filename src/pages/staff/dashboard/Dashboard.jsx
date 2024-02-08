@@ -7,14 +7,29 @@ import { currentUser } from "../../../utils/currentUser";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
 import Loader from "../../../utils/ActivityIndicator";
+import createApi from "../../../redux/slices/utils/createApi";
+import Toast from "react-native-toast-message";
 const Dashboard = () => {
+
     const navigation = useNavigation()
     const currentDate = new Date();
-    const options = { hour: '2-digit', minute: '2-digit', hour12: true };
-    const formattedTime = currentDate.toLocaleTimeString('en-US', options);
+    const [currentTime, setCurrentTime] = useState('');
+
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const currentDate = new Date();
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const formattedTime = currentDate.toLocaleTimeString('en-US', options);
+            setCurrentTime(formattedTime);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
 
     const [inoutData, setInoutData] = useState(null)
     const [token, setToken] = useState(null)
+    const [currentUserId, setCurrentUserId] = useState(null)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -22,8 +37,10 @@ const Dashboard = () => {
         const fetchCurrentUser = async () => {
             const res = await currentUser()
 
-            if (res.token) {
+            if (res) {
+
                 setToken(res.token)
+                setCurrentUserId(res.data)
             }
         }
         fetchCurrentUser()
@@ -44,23 +61,46 @@ const Dashboard = () => {
         fetchData()
     }, [])
 
+    const hanldeCheckin = async () => {
+        const payload = {
+            checkin_checkout: 'CheckIn',
+            date_time: new Date(),
+            user: currentUserId && currentUserId.id ? currentUserId.id : null,
+            branch: currentUserId && currentUserId.branch && currentUserId.branch.id ? currentUserId.branch.id : null,
+        }
+        console.log('payload', payload);
+        try {
+            const res = await createApi.createCheckin(payload)
+            console.log('checkin response', res);
+            if (res.status === 201 || res.status === 200) {
+                Toast.show({
+                    type: "success",
+                    text1: 'Checkin successfully',
+                    text2: 'congratulations, you are checkin successfully',
+                    autoHide: 3000
+                })
+            }
+        } catch (error) {
+            console.log('error duting checkin', error);
+        }
+    }
     return (
         loading ? <Loader /> : <View style={style.container}>
             {/*Header @start */}
             <View style={style.header}>
+                <TouchableOpacity style={style.card} onPress={hanldeCheckin}>
+                    <View style={{ justifyContent: 'center' }}>
+                        <View><Text >checkin</Text></View>
+                        <View><Text style={[styles.lable, { fontSize: 15 }]}>{currentTime}</Text></View>
+                    </View>
+                    <View><Icon name='export' style={[style.userIcon, { backgroundColor: secondaryColor }]} /></View>
+                </TouchableOpacity>
                 <TouchableOpacity style={style.card}>
                     <View style={{ justifyContent: 'center' }}>
-                        <View><Text style={[styles.lable, { fontSize: 17 }]}>{formattedTime}</Text></View>
-                        <View><Text >checkin</Text></View>
-                    </View>
-                    <View><Icon name='export'style={[style.userIcon, { backgroundColor: secondaryColor}]}/></View>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.card} >
-                    <View style={{ justifyContent: 'center' }}>
-                        <View><Text style={[styles.lable, { fontSize: 17 }]}>{formattedTime}</Text></View>
                         <View><Text >checkout</Text></View>
+                        <View><Text style={[styles.lable, { fontSize: 15 }]}>{currentTime}</Text></View>
                     </View>
-                    <View><Icon name='export2' style={[style.userIcon, { backgroundColor: 'pink'}]} /></View>
+                    <View><Icon name='export2' style={[style.userIcon, { backgroundColor: 'pink' }]} /></View>
                 </TouchableOpacity>
             </View>
             {/*Header @end */}
@@ -75,29 +115,29 @@ const Dashboard = () => {
                     <Text style={styles.textSubHeading}>Recent Activity</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity>
                 </View>
-            
+
                 {inoutData && inoutData.check_in && inoutData.check_in.slice(0, 1).map((item, i) => (
                     <View style={style.activityCard} key={i}>
-                        <View><Icon name='export' style={[style.userIcon, { backgroundColor: secondaryColor}]} /></View>
+                        <View><Icon name='export' style={[style.userIcon, { backgroundColor: secondaryColor }]} /></View>
                         <View>
                             <Text style={styles.lable}>Checkin</Text>
                             <Text>{item.date_time ? moment(item.date_time).format('DD MMM YYYY') : null}</Text>
                         </View>
                         <View>
-                            <Text style={styles.lable}>{item.date_time ? new Date(item.date_time).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true,  timeZone: 'UTC'}) : null}</Text>
+                            <Text style={styles.lable}>{item.date_time ? new Date(item.date_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' }) : null}</Text>
                             <Text>{item.punctuality}</Text>
                         </View>
                     </View>
                 ))}
                 {inoutData && inoutData.check_out && inoutData.check_out.slice(0, 1).map((item, i) => (
                     <View style={style.activityCard} key={i}>
-                        <View><Icon name='export2' style={[style.userIcon, { backgroundColor: 'pink'}]} /></View>
+                        <View><Icon name='export2' style={[style.userIcon, { backgroundColor: 'pink' }]} /></View>
                         <View>
                             <Text style={styles.lable}>Checkout</Text>
                             <Text>{item.date_time ? moment(item.date_time).format('DD MMM YYYY') : null}</Text>
                         </View>
                         <View>
-                            <Text style={styles.lable}>{item.date_time ? new Date(item.date_time).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC'}) : null}</Text>
+                            <Text style={styles.lable}>{item.date_time ? new Date(item.date_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' }) : null}</Text>
                             <Text>{item.punctuality}</Text>
                         </View>
                     </View>
@@ -126,7 +166,7 @@ const style = StyleSheet.create({
         alignItems: 'center'
     },
     body: {
-        flex: 2,
+        flex: 3,
         // backgroundColor: 'red'
     },
     footer: {
@@ -142,7 +182,6 @@ const style = StyleSheet.create({
         borderColor: textColor,
         flexDirection: 'row',
         padding: 15,
-
         alignItems: 'start',
         justifyContent: 'space-between',
 
