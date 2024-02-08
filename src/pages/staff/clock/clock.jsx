@@ -1,11 +1,16 @@
-import React from "react";
-import { Text, View } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
+import Checkin from "./Checkin";
+import Checkout from "./Checkout";
 
-const Clock = () =>{
-    return(
-        <View>
-            <Text>Staff Clock</Text>
-        </View>
+
+
+const Tab = createMaterialTopTabNavigator()
+const Clock = () => {
+    return (
+        <Tab.Navigator>
+            <Tab.Screen name='checkin' component={Checkin} />
+            <Tab.Screen name='checkout' component={Checkout} />
+        </Tab.Navigator>
     )
 }
 

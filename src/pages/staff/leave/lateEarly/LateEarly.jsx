@@ -19,7 +19,7 @@ const LateEarly = () => {
     const [status, setStatus] = useState('All');
     const [uniqueData, setUniqueData] = useState(null)
 
- console.log('data', data);
+
     useEffect(() => {
         try {
             setLoading(true);

@@ -48,7 +48,7 @@ const Dashboard = () => {
         loading ? <Loader /> : <View style={style.container}>
             {/*Header @start */}
             <View style={style.header}>
-                <TouchableOpacity style={style.card} >
+                <TouchableOpacity style={style.card}>
                     <View style={{ justifyContent: 'center' }}>
                         <View><Text style={[styles.lable, { fontSize: 17 }]}>{formattedTime}</Text></View>
                         <View><Text >checkin</Text></View>
@@ -75,29 +75,29 @@ const Dashboard = () => {
                     <Text style={styles.textSubHeading}>Recent Activity</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity>
                 </View>
-
-                {inoutData && inoutData.check_in && inoutData.check_in.slice(0, 1).map((item) => (
-                    <View style={style.activityCard}>
+            
+                {inoutData && inoutData.check_in && inoutData.check_in.slice(0, 1).map((item, i) => (
+                    <View style={style.activityCard} key={i}>
                         <View><Icon name='export' style={[style.userIcon, { backgroundColor: secondaryColor}]} /></View>
                         <View>
                             <Text style={styles.lable}>Checkin</Text>
                             <Text>{item.date_time ? moment(item.date_time).format('DD MMM YYYY') : null}</Text>
                         </View>
                         <View>
-                            <Text style={styles.lable}>{item.date_time ? item.date_time : null}</Text>
+                            <Text style={styles.lable}>{item.date_time ? new Date(item.date_time).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true,  timeZone: 'UTC'}) : null}</Text>
                             <Text>{item.punctuality}</Text>
                         </View>
                     </View>
                 ))}
-                {inoutData && inoutData.check_out && inoutData.check_out.slice(0, 1).map((item) => (
-                    <View style={style.activityCard}>
+                {inoutData && inoutData.check_out && inoutData.check_out.slice(0, 1).map((item, i) => (
+                    <View style={style.activityCard} key={i}>
                         <View><Icon name='export2' style={[style.userIcon, { backgroundColor: 'pink'}]} /></View>
                         <View>
                             <Text style={styles.lable}>Checkout</Text>
                             <Text>{item.date_time ? moment(item.date_time).format('DD MMM YYYY') : null}</Text>
                         </View>
                         <View>
-                            <Text style={styles.lable}>{item.date_time ? item.date_time : null}</Text>
+                            <Text style={styles.lable}>{item.date_time ? new Date(item.date_time).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC'}) : null}</Text>
                             <Text>{item.punctuality}</Text>
                         </View>
                     </View>
