@@ -25,7 +25,6 @@ const Dashboard = () => {
     const [checkoutLoading, setcheckoutLoading] = useState(false)
 
 
-
     useEffect(() => {
         const timer = setInterval(() => {
             const currentDate = new Date();

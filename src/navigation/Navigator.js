@@ -29,6 +29,7 @@ import StaffDashboard from '../pages/staff/StaffDashboard.jsx';
 import ManagerDashboard from '../pages/manager/ManagerDashboard.jsx';
 import ApplyLR from '../pages/staff/leave/leaveRequest/ApplyLR.jsx';
 import ApplyLE from '../pages/staff/leave/lateEarly/ApplyLE.jsx';
+import Notification from '../pages/staff/Notification/Notification.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,7 @@ const Navigator = () => {
           <Stack.Screen name = 'InactiveUser' component={InactiveStaff} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Inactive Staffs</Text></View>}}/>
           <Stack.Screen name = 'ApplyLR' component={ApplyLR} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Leave Request</Text></View>}}/>
           <Stack.Screen name = 'ApplyLE' component={ApplyLE} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Late/Early Request</Text></View>}}/>
+          <Stack.Screen name = 'Notification' component={Notification} options={{headerTitle: ()=>  <View ><Text style={styles.textSubHeading}>Notification</Text></View>}}/>
         
       </Stack.Navigator>
     </NavigationContainer>

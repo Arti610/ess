@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
-import {styles} from '../../style';
+import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
+import { styles } from '../../style';
+import UserProfile from '../utils/userProfile';
 
 const HeaderTitle = () => {
-  const option = { day: '2-digit', month: 'short', year: 'numeric', weekday: 'long'};
+  const option = { day: '2-digit', month: 'short', year: 'numeric', weekday: 'long' };
   const currentDate = new Date();
   const currentHour = currentDate.getHours();
   const formattedDate = currentDate.toLocaleDateString('en-US', option);
@@ -39,13 +40,16 @@ const HeaderTitle = () => {
   }, []);
 
   return (
-    <View style={{marginLeft: 10}}>
-      <Text style={[styles.lable, {paddingBottom: 0}]}>
-        {currentUser?.data.first_name && currentUser?.data.last_name
-          ? `${greeting}, ${currentUser?.data.first_name} ${currentUser?.data.last_name}`
-          : `${greeting}, Guest`}
-      </Text>
-      <Text style={{fontSize: 12}}>{formattedDate}</Text>
+    <View style={{flexDirection: 'row', marginLeft : 10}}>
+      <UserProfile />
+      <View >
+        <Text style={[styles.lable, { paddingBottom: 0 }]}>
+          {currentUser?.data.first_name && currentUser?.data.last_name
+            ? `${greeting}, ${currentUser?.data.first_name} ${currentUser?.data.last_name}`
+            : `${greeting}, Guest`}
+        </Text>
+        <Text style={{ fontSize: 12 }}>{formattedDate}</Text>
+      </View>
     </View>
   );
 };
