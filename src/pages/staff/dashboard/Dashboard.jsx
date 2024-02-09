@@ -313,12 +313,22 @@ const Dashboard = () => {
             {/*Header @end */}
             {/*Body @start */}
             <View style={style.body}>
-                <Text>Header</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={styles.textSubHeading}>Recent Activity</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity>
+                </View>
+               <View style={{flexDirection: 'row', flexWrap: "wrap", justifyContent: 'center', gap : 10}}>
+                <View style={style.card}><Text>Hello</Text></View>
+                    <View style={style.card}><Text>Hello</Text></View>
+                    <View style={style.card}><Text>Hello</Text></View>
+                    <View style={style.card}><Text>Hello</Text></View>
+                   
+               </View>
             </View>
             {/*Body @end */}
             {/*Footer @start */}
             <View style={style.footer}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={styles.textSubHeading}>Recent Activity</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity>
                 </View>
@@ -368,14 +378,13 @@ const style = StyleSheet.create({
     },
     header: {
         flex: 1,
-
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center'
     },
     body: {
         flex: 3,
-        // backgroundColor: 'red'
+     
     },
     footer: {
         flex: 2,

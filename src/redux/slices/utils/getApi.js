@@ -48,5 +48,5 @@ export default {
 
 
     getNotification: (id) => apiService.get(`list_notice/${id}`),
-    // getNotification: (id) => console.log('id', id)
+
 }

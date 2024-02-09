@@ -21,7 +21,7 @@ const Tab = createBottomTabNavigator();
 
 const Notification = () => {
   const [branchId, setBranchId] = useState(null)
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +51,7 @@ const Notification = () => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Notification')} style={style.container}>
       <IconN name='notifications' style={style.icon} />
-      {data > 0 && <Text style={style.badge}>{data}</Text>}
+      {data > 0 ? <Text style={style.badge}>{data}</Text> : <Text style={style.badge}>0</Text>}
     </TouchableOpacity>
   )
 }
@@ -78,7 +78,7 @@ const StaffDashboard = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            // headerRight: () => <UserProfile />,
+            headerRight: () => <Notification />,
             tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons} size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>
           })}
@@ -89,7 +89,7 @@ const StaffDashboard = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            // headerRight: () => <UserProfile />,
+            headerRight: () => <Notification />,
             tabBarIcon: () => <IconFa name="clock-o" style={styles.icons} size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Clock</Text>
           })}
@@ -101,6 +101,7 @@ const StaffDashboard = () => {
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
             // headerRight: () => <UserProfile />,
+            headerRight: () => <Notification />,
             tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons} size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>
           })}
@@ -132,7 +133,7 @@ const style = StyleSheet.create({
   badge: {
     position: 'absolute',
     top: 5,
-    right: 5,
+    right: 4,
     minWidth: 15,
     height: 15,
     borderRadius: 10,
