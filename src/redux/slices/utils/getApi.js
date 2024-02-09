@@ -15,7 +15,7 @@ export default{
     getBranchDepartment : (id) => apiService.get(`get_branch_department/${id}`),
     getBranchDesignation : (id) => apiService.get(`get_branch_designation/${id}`),
     getLeaveTypeList : (id)=> apiService.get( `leavetype_by_branch/${id}`),
-
+    getBranchsBranchInfo : (id) => apiService.get(`get_branchs_branch_info/${id}`),
 
 
     // VLog

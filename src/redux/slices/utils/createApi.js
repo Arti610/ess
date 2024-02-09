@@ -8,7 +8,7 @@ export default {
     createLateEarly: (payload, option) => apiService.post(`create_lateEarly`, payload, option),
 
 
-    // createCheckin: (payload) => apiService.post(`create_manual_checkIn`, payload)
-    createCheckin: (payload) => console.log('payload api', payload),
-    // createLateEarly : (payload) => console.log('payload', payload)
+    createCheckin: (payload) => apiService.post(`create_manual_checkIn`, payload),
+    createCheckout: (payload) => apiService.post(`create_manual_checkOut`, payload),
+    
 }
