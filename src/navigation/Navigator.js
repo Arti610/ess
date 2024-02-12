@@ -49,8 +49,8 @@ const Navigator = () => {
           <Stack.Screen name="AddBranch" component={AddBranch} options={{ headerTitle: () => <View><Text style={styles.textSubHeading}>Branch</Text></View> }} />
           <Stack.Screen name="AddBranchInfo" component={AddBranchInfo} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>BranchInfo</Text></View> }} />
           <Stack.Screen name='Profile' component={Profile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Profile</Text></View> }} />
-          {/* <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit Profile</Text></View> }} /> */}
-          {/* <Stack.Screen name='ChangePassword' component={ChangePassword} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Change Password</Text></View> }} /> */}
+          <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Edit Profile</Text></View> }} />
+          <Stack.Screen name='ChangePassword' component={ChangePassword} options={{ headerTitle: () => <View ><Text style={styles.textSubHeading}>Change Password</Text></View> }} />
           <Stack.Screen name='DashboardBase' component={DashboardBase} options={{headerShown: false}} />
           <Stack.Screen name='StaffBase' component={StaffDashboard} options={{headerShown: false}} />
           <Stack.Screen name='ManagerBase' component={ManagerDashboard} options={{headerShown: false}} />
