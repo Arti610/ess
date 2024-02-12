@@ -26,7 +26,7 @@ const Profile = () => {
   const [token, setToken] = useState(null)
   const [data, setData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-
+  console.log('data', data);
   const handleModalVisible = () => {
     setModalVisible(!modalVisible);
   }
@@ -127,11 +127,13 @@ const Profile = () => {
           ) : (
             <Image source={require('../../assests/userProfile.webp')} style={pStyles.image} />
           )}
+          <View>
+            <Text style={styles.textHeading}>{`${data && data.first_name ? data.first_name : 'User'} ${data && data.last_name ? data.last_name : "Name"}`}</Text>
+            <Text style={styles.lable}>{`${data && data.user_type ? data.user_type : 'Guest User'}`}</Text>
+          </View>
 
         </View>
         <View style={pStyles.userBody}>
-          <Text style={styles.lable}>{`${data && data.user_type ? data.user_type : 'Guest User'}`}</Text>
-          <Text style={styles.textHeading}>{`${data && data.first_name ? data.first_name : 'User'} ${data && data.last_name ? data.last_name : "Name"}`}</Text>
           <Text>{data && data.gender ? data.gender : null}</Text>
           <Text>{data && data.email ? data.email : null}</Text>
           <Text>{data && data.address ? data.address : null}</Text>
@@ -169,7 +171,6 @@ const Profile = () => {
               <IconLogout name='logout' style={pStyles.iconStyles} />
             </View>
           </TouchableOpacity>
-
         </View>
       </View>
       <LogoutModal modalVisible={modalVisible} handleModalVisible={handleModalVisible} handleLogout={handleLogout} loading={loading} />
@@ -183,16 +184,17 @@ export default Profile;
 const pStyles = StyleSheet.create({
   container: {
     height: '100%',
-    paddingVertical: 100,
     paddingHorizontal: 40,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'start',
   },
   userHeader: {
     flex: 1,
+    flexDirection: 'row',
+    gap: 10,
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'start',
     alignItems: 'center',
   },
   userBody: {
