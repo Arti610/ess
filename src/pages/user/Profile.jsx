@@ -133,6 +133,13 @@ const Profile = () => {
           <Text style={styles.lable}>{`${data && data.user_type ? data.user_type : 'Guest User'}`}</Text>
           <Text style={styles.textHeading}>{`${data && data.first_name ? data.first_name : 'User'} ${data && data.last_name ? data.last_name : "Name"}`}</Text>
           <Text>{data && data.gender ? data.gender : null}</Text>
+          <Text>{data && data.email ? data.email : null}</Text>
+          <Text>{data && data.address ? data.address : null}</Text>
+          <Text>{data && data.designation.name ? data.designation.name : null}</Text>
+          <Text>{data && data.department.name ? data.department.name : null}</Text>
+          <Text>{data && data.manager.first_name  ? data.manager.first_name : null}</Text>
+          <Text>{data && data.phone_number ? data.phone_number : null}</Text>
+          <Text>{data && data.date_joined ? data.date_joined : null}</Text>
         </View>
         <View style={pStyles.userFooter}>
           <TouchableOpacity onPress={() => navigation.navigate('ChangePassword', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
@@ -153,7 +160,7 @@ const Profile = () => {
               <IconEdit name='chevron-right' style={pStyles.iconStyles} />
             </View>
           </TouchableOpacity>
-          {loading ? <TouchableOpacity style={pStyles.footerText}  ><ButtonLoader /></TouchableOpacity> : <TouchableOpacity style={pStyles.footerText} onPress={handleModalVisible}>
+         <TouchableOpacity style={pStyles.footerText} onPress={handleModalVisible}>
             <View style={pStyles.footerTextView}>
               <View style={pStyles.leftFooterText}>
                 <IconLogoutUser name='arrow-left' style={pStyles.logoutUserIcon} />
@@ -161,11 +168,11 @@ const Profile = () => {
               </View>
               <IconLogout name='logout' style={pStyles.iconStyles} />
             </View>
-          </TouchableOpacity>}
+          </TouchableOpacity>
 
         </View>
       </View>
-      <LogoutModal modalVisible={modalVisible} handleModalVisible={handleModalVisible} handleLogout={handleLogout} />
+      <LogoutModal modalVisible={modalVisible} handleModalVisible={handleModalVisible} handleLogout={handleLogout} loading={loading} />
       <Toast />
     </>
   );

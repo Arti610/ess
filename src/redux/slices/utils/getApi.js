@@ -38,6 +38,7 @@ export default {
     // getAllCheckinoutList : (option) => console.log(option, 'tokenjjjj'),
     getIndividualLeaveRequest: (id) => apiService.get(`get_leaverequest/${id}`),
     getIndividualLateEarly: (id) => apiService.get(`get_lateEarly/${id}`),
+    getTimeSheetList: (id) => apiService.get(`list_time_sheet/${id}`),
     // Single Get API @end
 
 

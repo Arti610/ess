@@ -107,6 +107,7 @@ const Dashboard = () => {
             { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
         );
     };
+
     const requestLocationPermission = async () => {
         try {
             const granted = await PermissionsAndroid.request(
@@ -173,7 +174,8 @@ const Dashboard = () => {
             if (distance <= thresholdDistance) {
 
                 try {
-                    setcheckinLoading(true)
+                    setLoading(true)
+                  
                     const res = await createApi.createCheckin(payload);
                     if (res.status === 201 || res.status === 200) {
                         Toast.show({
@@ -183,8 +185,9 @@ const Dashboard = () => {
                             autoHide: 3000
                         });
                         setcheckinLoading(false)
+                     
                         getApi.getAllCheckinoutList(token);
-                        getApi.getAllCheckinoutList(token);
+                      
                     }
                 } catch (error) {
                     setcheckinLoading(false)
@@ -308,22 +311,21 @@ const Dashboard = () => {
                         </>
                     }
                 </TouchableOpacity>
-
             </View>
+                  
             {/*Header @end */}
             {/*Body @start */}
             <View style={style.body}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={styles.textSubHeading}>Recent Activity</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity>
+                    <Text style={styles.textSubHeading}>Explore</Text>
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity> */}
                 </View>
-               <View style={{flexDirection: 'row', flexWrap: "wrap", justifyContent: 'center', gap : 10}}>
-                <View style={style.card}><Text>Hello</Text></View>
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: 'center', gap: 10 }}>
                     <View style={style.card}><Text>Hello</Text></View>
                     <View style={style.card}><Text>Hello</Text></View>
                     <View style={style.card}><Text>Hello</Text></View>
-                   
-               </View>
+                    <View style={style.card}><Text>Hello</Text></View>
+                </View>
             </View>
             {/*Body @end */}
             {/*Footer @start */}
@@ -384,7 +386,7 @@ const style = StyleSheet.create({
     },
     body: {
         flex: 3,
-     
+
     },
     footer: {
         flex: 2,
