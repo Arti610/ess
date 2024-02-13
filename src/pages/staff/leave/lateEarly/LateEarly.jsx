@@ -85,7 +85,7 @@ const LateEarly = () => {
                         <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
                             <View>
                                 <Text>{item && item.late_early ? item.late_early : 'Late/Early'} </Text>
-                                <Text style={styles.lable}>{moment(item && item.date ? item.date : null).format('DD/MM/YYYY')}  {(item && item.time ? item.time : null)}</Text>
+                                <Text style={styles.lable}>{moment(item && item.date ? item.date : null).format('DD MMM YYYY')}  {(item && item.time ? item.time : null)}</Text>
                             </View>
                             <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
                                 {item && item.status}
@@ -125,7 +125,7 @@ const LateEarly = () => {
                     </View>
                     <View>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Late/Early : {uniqueData && uniqueData.late_early ? uniqueData.late_early : null}</Text>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Date : {uniqueData && uniqueData.date ? moment(uniqueData.date).format('DD/MM/YYYY') : null}</Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Date : {uniqueData && uniqueData.date ? moment(uniqueData.date).format('DD MMM YYYY') : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Time : {uniqueData && uniqueData.time ? (uniqueData.time): null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.reason ? uniqueData.reason : null}  </Text>
                     </View>

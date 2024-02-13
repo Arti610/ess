@@ -85,7 +85,7 @@ const LeaveRequest = () => {
                         <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
                             <View>
                                 <Text>{item && item.title ? item.title : null} {`(${item && item.leave_type && item.leave_type.code ? item.leave_type.code : 'CL'})`}</Text>
-                                <Text style={styles.lable}>{moment(item && item.from_date ? item.from_date : null).format('DD/MM/YYYY')} - {moment(item && item.to_date ? item.to_date : null).format('DD/MM/YYYY')}</Text>
+                                <Text style={styles.lable}>{moment(item && item.from_date ? item.from_date : null).format('DD MMM YYYY')} - {moment(item && item.to_date ? item.to_date : null).format('DD MMM YYYY')}</Text>
                             </View>
                             <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
                                 {item && item.status}
@@ -125,8 +125,8 @@ const LeaveRequest = () => {
                     </View>
                     <View>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Title : {uniqueData && uniqueData.title ? uniqueData.title : null}</Text>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Start Date : {uniqueData && uniqueData.from_date ? moment(uniqueData.from_date).format('DD/MM/YYYY') : null}</Text>
-                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>End Date : {uniqueData && uniqueData.to_date ? moment(uniqueData.to_date).format('DD/MM/YYYY') : null}</Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Start Date : {uniqueData && uniqueData.from_date ? moment(uniqueData.from_date).format('DD MMM YYYY') : null}</Text>
+                        <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>End Date : {uniqueData && uniqueData.to_date ? moment(uniqueData.to_date).format('DD MMM YYYY') : null}</Text>
                         <Text style={{ color: 'black', fontSize: 12, padding: 5 }}>Reason : {uniqueData && uniqueData.description ? uniqueData.description : null}  </Text>
 
                     </View>

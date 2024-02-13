@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { primaryColor, secondaryColor, styles } from "../../../../style";
 import getApi from "../../../redux/slices/utils/getApi";
 import { currentUser } from "../../../utils/currentUser";
+import Loader from "../../../utils/ActivityIndicator";
+import moment from "moment";
+
 
 const Timesheet = () => {
     const [branchId, setBranchId] = useState(null)
     const [data, setData] = useState([])
     const [status, setStatus] = useState('All');
-    console.log('data', data);
+    const [filteredData, setFilteredData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    console.log('filteredData', filteredData);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,15 +32,34 @@ const Timesheet = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+
             try {
+                setLoading(true);
                 const res = await getApi.getTimeSheetList(branchId)
                 setData(res.data)
+                setLoading(false);
             } catch (error) {
                 console.log(error.response.data, 'error during fetching timesheet');
+                setLoading(false);
             }
         }
         fetchData()
     }, [])
+
+    useEffect(() => {
+        filterData(status);
+    }, [status, data]);
+
+    const filterData = (status) => {
+      
+        let newData;
+        if (status === 'All') {
+            newData = data;
+        } else {
+            newData = data.filter(item => item.attendance === status);
+        }
+        setFilteredData(newData);
+    }
 
     const handleFilterData = (status) => {
         setStatus(status);
@@ -43,9 +67,10 @@ const Timesheet = () => {
 
     return (
         <>
-            <View style={style.container}>
+
+            <View style={style.topcontainer}>
                 <TouchableOpacity style={style.header}>
-                    <Text style={styles.lable}>Today </Text>
+                    <Text style={styles.lable}>Today</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.header}>
                     <Text style={styles.lable}>Weekly</Text>
@@ -57,6 +82,7 @@ const Timesheet = () => {
                     <Text style={styles.lable}>Yearly</Text>
                 </TouchableOpacity>
             </View>
+
             <View style={style.container}>
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
                     <Text style={status === 'All' ? style.inactive : style.active}>All {`(${data && data.length})`}</Text>
@@ -74,6 +100,19 @@ const Timesheet = () => {
                     <Text style={status === 'H' ? style.inactive : style.active}>Holiday {`(${data && data.filter(item => item.attendance === 'H').length})`}</Text>
                 </TouchableOpacity>
             </View>
+
+            {loading ? <Loader /> :
+                <ScrollView>
+                    <View style={style.details}>
+                        {filteredData.length > 0 ? filteredData.map((item) => (
+                            <View style={style.card}>
+                                <Text>{moment(item && item.date ? item.date : null).format('DD MMM YYYY')}</Text>
+                                <Text style={styles.lable}>{item && item.attendance ? item.attendance : null}</Text>
+                            </View>
+                        )) : <Text>No Data Found</Text>}
+                    </View>
+                </ScrollView>
+            }
         </>
     )
 }
@@ -82,7 +121,7 @@ export default Timesheet
 
 
 const style = StyleSheet.create({
-    container: {
+    topcontainer: {
         padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -98,10 +137,8 @@ const style = StyleSheet.create({
         alignItems: 'center',
     },
     container: {
-        padding: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        gap: 8
     },
     active: {
         backgroundColor: primaryColor,
@@ -121,4 +158,22 @@ const style = StyleSheet.create({
         color: 'black',
         fontSize: 12,
     },
+    details: {
+        padding: 20,
+        gap: 10,
+    },
+    card: {
+        height: 'fit-content',
+        gap: 7,
+        borderWidth: 1,
+        borderColor: '#D0D5DD',
+        padding: 10,
+        borderRadius: 8,
+        backgroundColor: '#FFF',
+        position: 'relative',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+
 })
