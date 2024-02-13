@@ -242,6 +242,20 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-  }
+  },
   // Launch Cameras and Gallary Bottom Sheet @end
+
+  badge: {
+    position: 'absolute',
+    top: 12,
+    right: 4,
+    minWidth: 15,
+    height: 15,
+    borderRadius: 10,
+    backgroundColor: 'red', // You can customize the badge color
+    color: 'white',
+    fontSize: 10,
+    textAlign: 'center',
+    lineHeight: 15,
+  },
 });

@@ -24,6 +24,10 @@ const Dashboard = () => {
     const [checkinLoading, setcheckinLoading] = useState(false)
     const [checkoutLoading, setcheckoutLoading] = useState(false)
 
+    const [inoutData, setInoutData] = useState(null)
+    const [token, setToken] = useState(null)
+    const [currentUserId, setCurrentUserId] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -36,10 +40,7 @@ const Dashboard = () => {
         return () => clearInterval(timer);
     }, []);
 
-    const [inoutData, setInoutData] = useState(null)
-    const [token, setToken] = useState(null)
-    const [currentUserId, setCurrentUserId] = useState(null)
-    const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
 
@@ -140,7 +141,7 @@ const Dashboard = () => {
 
     // Extracting individual components of the date and time
     const year = date_time.getFullYear();
-    const month = String(date_time.getMonth() + 1).padStart(2, '0'); // Adding 1 to month since it's zero-based
+    const month = String(date_time.getMonth() + 1).padStart(2, '0'); 
     const day = String(date_time.getDate()).padStart(2, '0');
     const hours = String(date_time.getHours()).padStart(2, '0');
     const minutes = String(date_time.getMinutes()).padStart(2, '0');
@@ -148,7 +149,6 @@ const Dashboard = () => {
 
     // Creating the desired string format
     const formatted_date_time = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
-
 
     // GeoLocation @end
     const hanldeCheckin = async () => {

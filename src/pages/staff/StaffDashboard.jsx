@@ -15,6 +15,7 @@ import IconN from 'react-native-vector-icons/MaterialIcons'
 import { useNavigation } from '@react-navigation/native';
 import { currentUser } from '../../utils/currentUser';
 import getApi from '../../redux/slices/utils/getApi';
+import Timesheet from './Timesheet/Timesheet';
 
 const Tab = createBottomTabNavigator();
 
@@ -104,6 +105,18 @@ const StaffDashboard = () => {
             headerRight: () => <Notification />,
             tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons} size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>
+          })}
+        />
+        <Tab.Screen
+          name="Timesheet"
+          component={Timesheet}
+          options={() => ({
+            headerTitle: () => null,
+            headerLeft: () => <HeaderTitle />,
+            // headerRight: () => <UserProfile />,
+            headerRight: () => <Notification />,
+            tabBarIcon: () => <BranchIcon name="timer" style={styles.icons} size={20} />,
+            tabBarLabel: () => <Text style={styles.lable}>Timesheet</Text>
           })}
         />
 

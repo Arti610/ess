@@ -67,16 +67,16 @@ const LateEarly = () => {
         <>
             <View style={style.container}>
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
-                    <Text style={status === 'All' ? style.inactive : style.active}>All</Text>
+                    <Text style={status === 'All' ? style.inactive : style.active}>All {`(${data && data.length })`}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('Approved')}>
-                    <Text style={status === 'Approved' ? style.inactive : style.active}>Approved</Text>
+                    <Text style={status === 'Approved' ? style.inactive : style.active}>Approved {`(${data && data.filter(item => item.status === 'Approved').length })`}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('Pending')}>
-                    <Text style={status === 'Pending' ? style.inactive : style.active}>Pending</Text>
+                    <Text style={status === 'Pending' ? style.inactive : style.active}>Pending {`(${data && data.filter(item => item.status === 'Pending').length })`}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('Declined')}>
-                    <Text style={status === 'Declined' ? style.inactive : style.active}>Declined</Text>
+                    <Text style={status === 'Declined' ? style.inactive : style.active}>Declined {`(${data && data.filter(item => item.status === 'Declined').length })`}</Text>
                 </TouchableOpacity>
             </View>
             {loading ? <Loader /> :
@@ -144,23 +144,26 @@ const style = StyleSheet.create({
     container: {
         padding: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around',
+        gap: 8
     },
     active: {
         backgroundColor: primaryColor,
-        paddingHorizontal: 15,
+        paddingHorizontal: 12,
         marginHorizontal: 4,
         paddingVertical: 10,
         borderRadius: 25,
-        color: 'white'
+        color: 'white',
+        fontSize: 12,
     },
     inactive: {
         backgroundColor: secondaryColor,
-        paddingHorizontal: 15,
+        paddingHorizontal: 12,
         marginHorizontal: 4,
         paddingVertical: 10,
         borderRadius: 25,
-        color: 'black'
+        color: 'black',
+        fontSize: 12,
     },
     details: {
         padding: 20,

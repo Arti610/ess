@@ -23,15 +23,15 @@ const Checkout = () => {
         switch (status) {
             case 'Weekly':
                 const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
-                return data.filter(item => new Date(item.date_time) >= weekStart);
+                return data ?  data.filter(item => new Date(item.date_time) >= weekStart) : [];
             case 'Monthly':
                 const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-                return data.filter(item => new Date(item.date_time) >= monthStart);
+                return  data ? data.filter(item => new Date(item.date_time) >= monthStart) : [];
             case 'Yearly':
                 const yearStart = new Date(today.getFullYear(), 0, 1);
-                return data.filter(item => new Date(item.date_time) >= yearStart);
+                return data ?  data.filter(item => new Date(item.date_time) >= yearStart) : [];
             default:
-                return data;
+                return data ?  data : [];
         }
     };
 
@@ -66,16 +66,16 @@ const Checkout = () => {
         <>
             <View style={style.container}>
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
-                    <Text style={status === 'All' ? style.inactive : style.active}>All</Text>
+                    <Text style={status === 'All' ? style.inactive : style.active}>All ({data ? data.length : []})</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('Weekly')}>
-                    <Text style={status === 'Weekly' ? style.inactive : style.active}>Weekly</Text>
+                    <Text style={status === 'Weekly' ? style.inactive : style.active}>Weekly ({data ? filterData('Weekly', data).length : []})</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('Monthly')}>
-                    <Text style={status === 'Monthly' ? style.inactive : style.active}>Monthly</Text>
+                    <Text style={status === 'Monthly' ? style.inactive : style.active}>Monthly  ({data ? filterData('Monthly', data).length : []})</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('Yearly')}>
-                    <Text style={status === 'Yearly' ? style.inactive : style.active}>Yearly</Text>
+                    <Text style={status === 'Yearly' ? style.inactive : style.active}>Yearly ({data ? filterData('Yearly', data).length : []})</Text>
                 </TouchableOpacity>
             </View>
             {loading ? <Loader /> : 
@@ -111,23 +111,26 @@ const style = StyleSheet.create({
     container: {
         padding: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around',
+        gap: 8
     },
     active: {
         backgroundColor: primaryColor,
-        paddingHorizontal: 15,
+        paddingHorizontal: 12,
         marginHorizontal: 4,
         paddingVertical: 10,
         borderRadius: 25,
-        color: 'white'
+        color: 'white',
+        fontSize: 12,
     },
     inactive: {
         backgroundColor: secondaryColor,
-        paddingHorizontal: 15,
+        paddingHorizontal: 12,
         marginHorizontal: 4,
         paddingVertical: 10,
         borderRadius: 25,
-        color: 'black'
+        color: 'black',
+        fontSize: 12,
     },
     details: {
         padding: 20,
