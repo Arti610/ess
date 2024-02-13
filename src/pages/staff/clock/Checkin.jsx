@@ -61,7 +61,6 @@ const Checkin = () => {
         fetchData()
     }, [])
 
-
     return (
         <>
             <View style={style.container}>

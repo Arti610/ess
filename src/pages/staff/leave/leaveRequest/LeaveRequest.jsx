@@ -63,6 +63,7 @@ const LeaveRequest = () => {
             rbSheet.current.open()
         }
     }
+    
     return (
         <>
             <View style={style.container}>
