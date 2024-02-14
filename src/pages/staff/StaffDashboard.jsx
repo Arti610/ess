@@ -107,7 +107,7 @@ const StaffDashboard = () => {
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>
           })}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Timesheet"
           component={Timesheet}
           options={() => ({
@@ -118,7 +118,7 @@ const StaffDashboard = () => {
             tabBarIcon: () => <BranchIcon name="timer" style={styles.icons} size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Timesheet</Text>
           })}
-        />
+        /> */}
 
 
       </Tab.Navigator>

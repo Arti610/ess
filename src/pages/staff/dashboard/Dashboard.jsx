@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid, ScrollView } from "react-native";
 import { primaryColor, secondaryColor, styles, textColor } from "../../../../style";
 import Icon from 'react-native-vector-icons/AntDesign'
+import IconF from 'react-native-vector-icons/FontAwesome'
+import IconM from 'react-native-vector-icons/MaterialIcons';
+import IconE from 'react-native-vector-icons/Entypo'
 import getApi from "../../../redux/slices/utils/getApi";
 import { currentUser } from "../../../utils/currentUser";
 import moment from "moment";
@@ -23,7 +26,7 @@ const Dashboard = () => {
     const [branchLongitude, setBranchLongitude] = useState(null);
     const [checkinLoading, setcheckinLoading] = useState(false)
     const [checkoutLoading, setcheckoutLoading] = useState(false)
-
+    const [attendence, setAttendence] = useState(null)
     const [inoutData, setInoutData] = useState(null)
     const [token, setToken] = useState(null)
     const [currentUserId, setCurrentUserId] = useState(null)
@@ -39,8 +42,6 @@ const Dashboard = () => {
 
         return () => clearInterval(timer);
     }, []);
-
-
 
     useEffect(() => {
 
@@ -69,6 +70,20 @@ const Dashboard = () => {
             }
         };
         fetchData()
+
+        const fetchUser = async () => {
+            try {
+                const res = await getApi.getIndividualUser(currentUserId && currentUserId.id)
+                if (res) {
+                    setAttendence(res.data)
+                }
+            } catch (error) {
+                console.log('error during fetching user data for attendence in dashboard', error);
+            }
+        }
+        fetchUser()
+
+
     }, [])
     // Get BranInformation\
 
@@ -132,7 +147,6 @@ const Dashboard = () => {
         }
     };
 
-
     useEffect(() => {
         requestLocationPermission();
     }, [])
@@ -141,7 +155,7 @@ const Dashboard = () => {
 
     // Extracting individual components of the date and time
     const year = date_time.getFullYear();
-    const month = String(date_time.getMonth() + 1).padStart(2, '0'); 
+    const month = String(date_time.getMonth() + 1).padStart(2, '0');
     const day = String(date_time.getDate()).padStart(2, '0');
     const hours = String(date_time.getHours()).padStart(2, '0');
     const minutes = String(date_time.getMinutes()).padStart(2, '0');
@@ -175,7 +189,7 @@ const Dashboard = () => {
 
                 try {
                     setLoading(true)
-                  
+
                     const res = await createApi.createCheckin(payload);
                     if (res.status === 201 || res.status === 200) {
                         Toast.show({
@@ -185,9 +199,9 @@ const Dashboard = () => {
                             autoHide: 3000
                         });
                         setcheckinLoading(false)
-                     
+
                         getApi.getAllCheckinoutList(token);
-                      
+
                     }
                 } catch (error) {
                     setcheckinLoading(false)
@@ -312,7 +326,7 @@ const Dashboard = () => {
                     }
                 </TouchableOpacity>
             </View>
-                  
+
             {/*Header @end */}
             {/*Body @start */}
             <View style={style.body}>
@@ -320,12 +334,13 @@ const Dashboard = () => {
                     <Text style={styles.textSubHeading}>Explore</Text>
                     {/* <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity> */}
                 </View>
-                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: 'center', gap: 10 }}>
-                    <View style={style.card}><Text>Hello</Text></View>
-                    <View style={style.card}><Text>Hello</Text></View>
-                    <View style={style.card}><Text>Hello</Text></View>
-                    <View style={style.card}><Text>Hello</Text></View>
-                </View>
+               
+                    <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: 'center', gap: 10 }}>
+                        <View style={style.exploreCard}><IconE name = 'calendar' style={{color : 'red', fontSize: 30}}/><Text  style={styles.lable}>{attendence && attendence.check_in ? attendence.check_in : 0}</Text><Text>Attendence</Text></View>
+                        <View style={style.exploreCard}><IconM name="featured-play-list"  style={{color : 'pink', fontSize: 30}}/><Text style={styles.lable}>{attendence && attendence.leaves ? attendence.leaves : 0}</Text><Text>Leave</Text></View>
+                        <View style={style.exploreCard}><IconF name = 'money' style={{color : 'green', fontSize: 30}}/><Text style={styles.lable}>{attendence && attendence.monthly_salary[0].total_salary ? attendence.monthly_salary[0].total_salary : 0}</Text><Text>Salary</Text></View>
+                    </View>
+                
             </View>
             {/*Body @end */}
             {/*Footer @start */}
@@ -376,7 +391,6 @@ const style = StyleSheet.create({
         width: '100%',
         height: '100%',
         padding: 10
-
     },
     header: {
         flex: 1,
@@ -386,7 +400,6 @@ const style = StyleSheet.create({
     },
     body: {
         flex: 3,
-
     },
     footer: {
         flex: 2,
@@ -403,9 +416,18 @@ const style = StyleSheet.create({
         padding: 15,
         alignItems: 'start',
         justifyContent: 'space-between',
-
     },
-
+    exploreCard: {
+        width: 105,
+        height: 100,
+        borderRadius: 8,
+        elevation: 1,
+        backgroundColor: 'white',
+        borderColor: textColor,
+        padding: 15,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
     userIcon: {
         fontSize: 25,
         textAlign: 'center',

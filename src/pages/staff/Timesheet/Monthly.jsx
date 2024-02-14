@@ -45,18 +45,16 @@ const Monthly = () => {
         fetchData()
     }, [])
 
-    useEffect(() => {
-        filterData(status);
-    }, [status, data]);
 
 
     const filterData = (status) => {
         let newData;
         const currentMonth = moment().month();
-
+   console.log('currentMonth',currentMonth);
         if (status === 'All') {
             newData = data.filter(item => moment(item.date).month() === currentMonth);
-
+          
+          
         } else {
             newData = data.filter(item => item.attendance === status && moment(item.date).month() === currentMonth);
         }
@@ -68,11 +66,13 @@ const Monthly = () => {
     const handleFilterData = (status) => {
         setStatus(status);
     }
+    
+    useEffect(() => {
+        filterData(status);
+    }, [status]);
 
     return (
-        <>
-
-       
+        <>       
             <View style={style.container}>
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
                     <Text style={status === 'All' ? style.inactive : style.active}>All {`(${data && data.filter(item => moment(item.date).month() === moment().month() ).length})`}</Text>

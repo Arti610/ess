@@ -45,15 +45,12 @@ const Yearly = () => {
         fetchData()
     }, [])
 
-    useEffect(() => {
-        filterData(status);
-    }, [status, data]);
 
 
     const filterData = (status) => {
         let newData;
         const currentYear = moment().year();
-      
+
         if (status === 'All') {
             newData = data.filter(item => moment(item.date).year() === currentYear);
 
@@ -65,6 +62,11 @@ const Yearly = () => {
 
     }
 
+
+    useEffect(() => {
+        filterData(status);
+    }, [status]);
+    
     const handleFilterData = (status) => {
         setStatus(status);
     }
@@ -72,10 +74,10 @@ const Yearly = () => {
     return (
         <>
 
-       
+
             <View style={style.container}>
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
-                    <Text style={status === 'All' ? style.inactive : style.active}>All {`(${data && data.filter(item => moment(item.date).year() === moment().year() ).length})`}</Text>
+                    <Text style={status === 'All' ? style.inactive : style.active}>All {`(${data && data.filter(item => moment(item.date).year() === moment().year()).length})`}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('P')}>
                     <Text style={status === 'P' ? style.inactive : style.active}>Present {`(${data && data.filter(item => item.attendance === 'P' && moment(item.date).year() === moment().year()).length})`}</Text>

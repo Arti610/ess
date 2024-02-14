@@ -14,6 +14,7 @@ const Weekly = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
 
+       
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -35,10 +36,13 @@ const Weekly = () => {
             try {
                 setLoading(true);
                 const res = await getApi.getTimeSheetList(branchId)
-                setData(res.data)
-                setLoading(false);
+                console.log('res',res.data);
+                if(res){
+                    setData(res.data)
+                    setLoading(false);
+                }
             } catch (error) {
-                console.log(error.response.data, 'error during fetching timesheet');
+                console.log(error.response, 'error during fetching timesheet');
                 setLoading(false);
             }
         }
@@ -47,13 +51,13 @@ const Weekly = () => {
 
     useEffect(() => {
         filterData(status);
-    }, [status, data]);
+    }, [status]);
 
 
     const filterData = (status) => {
         let newData;
         const currentWeek = moment().week();
-        console.log('currentWeek',currentWeek);
+      
         if (status === 'All') {
             newData = data.filter(item => moment(item.date).week() === currentWeek);
 
