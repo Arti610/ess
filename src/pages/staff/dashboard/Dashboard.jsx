@@ -31,6 +31,7 @@ const Dashboard = () => {
     const [token, setToken] = useState(null)
     const [currentUserId, setCurrentUserId] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [totalWorkingHours, setTotalWorkingHours] = useState("")
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -38,8 +39,32 @@ const Dashboard = () => {
             const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             const formattedTime = currentDate.toLocaleTimeString('en-US', options);
             setCurrentTime(formattedTime);
-        }, 1000);
 
+            const calculateWorkinHours = () => {
+                const currentDate = new Date().toLocaleDateString();
+
+                const filteredData = inoutData && inoutData.check_in && inoutData.check_in.filter(item => {
+                    const itemDate = new Date(item.date_time)
+                    const itemDateOnly = itemDate.toLocaleDateString()
+                    const matchDate = itemDateOnly === currentDate
+                    return matchDate
+                }
+                );
+
+                const date_time_string = filteredData && filteredData.length >= 0 && filteredData[0].date_time;
+                const date_time = new Date(date_time_string);
+                const date_time_milliseconds = date_time.getTime();
+                const currentTime = new Date().getTime();
+                const timeDifference = currentTime - date_time_milliseconds;
+                const differenceDate = new Date(timeDifference);
+                const formattedDifference = differenceDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).split(':');
+                console.log('formattedDifference',formattedDifference);
+
+                setTotalWorkingHours(formattedDifference)
+            }
+            calculateWorkinHours()
+
+        }, 1000);
         return () => clearInterval(timer);
     }, []);
 
@@ -66,6 +91,7 @@ const Dashboard = () => {
                     setInoutData(res.data);
                 }
             } catch (error) {
+                setLoading(false)
                 console.log('error during getting all checkin/checkout', error.response);
             }
         };
@@ -96,8 +122,9 @@ const Dashboard = () => {
                     const res = await getApi.getBranchsBranchInfo(branchId);
 
                     if (res.data) {
-                        setBranchLatitude(res.data[0].latitude ? res.data[0].latitude : null)
-                        setBranchLongitude(res.data[0].longitude ? res.data[0].longitude : null)
+
+                        setBranchLatitude(res.data[0] && res.data[0].latitude ? res.data[0].latitude : null)
+                        setBranchLongitude(res.data[0] && res.data[0].longitude ? res.data[0].longitude : null)
                     }
                 }
 
@@ -106,7 +133,7 @@ const Dashboard = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [currentUserId])
 
     const getCurrentLocation = () => {
         Geolocation.getCurrentPosition(
@@ -153,6 +180,7 @@ const Dashboard = () => {
 
     const date_time = new Date();
 
+
     // Extracting individual components of the date and time
     const year = date_time.getFullYear();
     const month = String(date_time.getMonth() + 1).padStart(2, '0');
@@ -169,14 +197,13 @@ const Dashboard = () => {
         getCurrentLocation()
         const enableResult = await promptForEnableLocationIfNeeded();
 
-
         const payload = {
             checkin_checkout: 'CheckIn',
             date_time: formatted_date_time ? formatted_date_time : new Date(),
             user: currentUserId && currentUserId.id ? currentUserId.id : null,
             branch: currentUserId && currentUserId.branch && currentUserId.branch.id ? currentUserId.branch.id : null,
         };
-
+        console.log([enableResult, latitude, longitude, branchLongitude, branchLatitude]);
         if (enableResult && latitude && longitude && branchLongitude && branchLatitude) {
 
             // Calculate distance between user and branch
@@ -188,7 +215,7 @@ const Dashboard = () => {
             if (distance <= thresholdDistance) {
 
                 try {
-                    setLoading(true)
+                    setcheckinLoading(true)
 
                     const res = await createApi.createCheckin(payload);
                     if (res.status === 201 || res.status === 200) {
@@ -199,9 +226,7 @@ const Dashboard = () => {
                             autoHide: 3000
                         });
                         setcheckinLoading(false)
-
                         getApi.getAllCheckinoutList(token);
-
                     }
                 } catch (error) {
                     setcheckinLoading(false)
@@ -253,15 +278,16 @@ const Dashboard = () => {
     };
 
     const handleCheckout = async () => {
+
         const payload = {
             checkin_checkout: 'CheckOut',
             date_time: formatted_date_time ? formatted_date_time : new Date(),
             user: currentUserId && currentUserId.id ? currentUserId.id : null,
             branch: currentUserId && currentUserId.branch && currentUserId.branch.id ? currentUserId.branch.id : null,
-        }
+        };
 
         try {
-            setcheckoutLoading(true)
+            setcheckoutLoading(true);
             const res = await createApi.createCheckout(payload);
 
             if (res.status === 201) {
@@ -271,11 +297,11 @@ const Dashboard = () => {
                     text2: 'Congratulations, you have checked out successfully',
                     autoHide: 3000
                 });
-                setcheckoutLoading(false)
+                setcheckoutLoading(false);
                 getApi.getAllCheckinoutList(token);
                 getApi.getAllCheckinoutList(token);
             } else {
-                setcheckoutLoading(false)
+                setcheckoutLoading(false);
                 Toast.show({
                     type: "error",
                     text1: res.data,
@@ -284,7 +310,7 @@ const Dashboard = () => {
                 });
             }
         } catch (error) {
-            setcheckoutLoading(false)
+            setcheckoutLoading(false);
             console.log('Error during check-in', error.response);
             Toast.show({
                 type: "error",
@@ -293,7 +319,11 @@ const Dashboard = () => {
                 autoHide: 3000
             });
         }
-    }
+
+
+    };
+
+
 
     return (
         loading ? <Loader /> : <View style={style.container}>
@@ -326,21 +356,20 @@ const Dashboard = () => {
                     }
                 </TouchableOpacity>
             </View>
-
+            <View style={style.card}><Text>{totalWorkingHours}</Text></View>
             {/*Header @end */}
             {/*Body @start */}
             <View style={style.body}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={styles.textSubHeading}>Explore</Text>
-                    {/* <TouchableOpacity onPress={() => navigation.navigate('Clock')}><Text style={{ fontSize: 12, fontWeight: 'bold' }}>View All</Text></TouchableOpacity> */}
                 </View>
-               
-                    <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: 'center', gap: 10 }}>
-                        <View style={style.exploreCard}><IconE name = 'calendar' style={{color : 'red', fontSize: 30}}/><Text  style={styles.lable}>{attendence && attendence.check_in ? attendence.check_in : 0}</Text><Text>Attendence</Text></View>
-                        <View style={style.exploreCard}><IconM name="featured-play-list"  style={{color : 'pink', fontSize: 30}}/><Text style={styles.lable}>{attendence && attendence.leaves ? attendence.leaves : 0}</Text><Text>Leave</Text></View>
-                        <View style={style.exploreCard}><IconF name = 'money' style={{color : 'green', fontSize: 30}}/><Text style={styles.lable}>{attendence && attendence.monthly_salary[0].total_salary ? attendence.monthly_salary[0].total_salary : 0}</Text><Text>Salary</Text></View>
-                    </View>
-                
+
+                <View style={{ flexDirection: 'row', flexWrap: "wrap", justifyContent: 'center', gap: 10 }}>
+                    <View style={style.exploreCard}><IconE name='calendar' style={{ color: 'red', fontSize: 30 }} /><Text style={styles.lable}>{attendence && attendence.check_in ? attendence.check_in : 0}</Text><Text>Attendence</Text></View>
+                    <View style={style.exploreCard}><IconM name="featured-play-list" style={{ color: 'pink', fontSize: 30 }} /><Text style={styles.lable}>{attendence && attendence.leaves ? attendence.leaves : 0}</Text><Text>Leave</Text></View>
+                    <View style={style.exploreCard}><IconF name='money' style={{ color: 'green', fontSize: 30 }} /><Text style={styles.lable}>  {attendence && attendence.monthly_salary && attendence.monthly_salary.length > 0 ? attendence.monthly_salary[0].total_salary : 0}</Text><Text>Salary</Text></View>
+                </View>
+
             </View>
             {/*Body @end */}
             {/*Footer @start */}
