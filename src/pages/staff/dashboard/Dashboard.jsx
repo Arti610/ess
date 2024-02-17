@@ -36,6 +36,7 @@ import {
 import {useDispatch} from 'react-redux';
 
 const Dashboard = () => {
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [currentTime, setCurrentTime] = useState('');
@@ -105,10 +106,7 @@ const Dashboard = () => {
   // Get BranInformation\
 
   useEffect(() => {
-    const branchId =
-      currentUserId && currentUserId.branch && currentUserId.branch.id
-        ? currentUserId.branch.id
-        : null;
+    const branchId = currentUserId && currentUserId.branch && currentUserId.branch.id ? currentUserId.branch.id : null;
     const fetchData = async () => {
       try {
         if (branchId) {
@@ -223,7 +221,7 @@ const Dashboard = () => {
     };
   }
   const localcurrentTime = new Date();
-  
+
   useEffect(() => {
     if (inoutData) {
       const formattedDate = dateTime.toLocaleDateString();
@@ -249,7 +247,6 @@ const Dashboard = () => {
               const matchDate = itemDateOnly === formattedDate;
               return matchDate;
             });
-
           const checkout_time = new Date(
             filteredCheckoutData &&
               filteredCheckoutData.length > 0 &&
@@ -264,6 +261,7 @@ const Dashboard = () => {
 
           if (filteredCheckoutData.length > 0) {
             const timeDifferenceCheckout = checkout_time - checkin_time;
+
             const differenceTimecheckout = new Date(timeDifferenceCheckout);
             // Get the time components
             const hours = differenceTimecheckout.getUTCHours();
@@ -274,10 +272,9 @@ const Dashboard = () => {
             const time = `${hours.toString().padStart(2, '0')}:${minutes
               .toString()
               .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            console.log(time);
 
             setTotalWorkingHours(time.split(':'));
-          } else {
+          } else if (filteredData.length > 0) {
             const checkintime = new Date(checkin_time);
 
             const checkinhour = checkintime.getUTCHours();
@@ -293,8 +290,10 @@ const Dashboard = () => {
               timeToMilliseconds(checkinhour, checkinminut, checkinsecond);
 
             let hours = millisecondsToTime(differenceInMiliSecond);
-        
+
             setTotalWorkingHours([hours.hours, hours.minutes, hours.seconds]);
+          } else {
+            setTotalWorkingHours(['00', '00', '00']);
           }
         } catch (error) {
           console.log('error', error);
@@ -303,8 +302,7 @@ const Dashboard = () => {
 
       return () => clearInterval(intervalId);
     }
-  }, [ inoutData, totalWorkingHours]);
-  
+  }, [inoutData, totalWorkingHours]);
 
   const date_time = new Date();
 
@@ -521,24 +519,27 @@ const Dashboard = () => {
           </TouchableOpacity>
         </View>
         {/*Header @end */}
-        <View style={style.progressTimer}>
+        <View >
+          <Text  style={styles.textSubHeading}>Total Working Hours</Text>
+          <View style={style.progressTimer}>
           <View style={style.timerBox}>
-            <Text style={styles.textHeading}>{totalWorkingHours[0]}</Text>
-            <Text style={style.text}>Hours</Text>
-          </View>
-          <View style={{alignItems: 'start', height: '70%'}}>
-            <Text style={styles.textHeading}>:</Text>
-          </View>
-          <View style={style.timerBox}>
-            <Text style={styles.textHeading}>{totalWorkingHours[1]}</Text>
-            <Text style={style.text}>Minuts</Text>
-          </View>
-          <View style={{alignItems: 'start', height: '70%'}}>
-            <Text style={styles.textHeading}>:</Text>
-          </View>
-          <View style={style.timerBox}>
-            <Text style={styles.textHeading}>{totalWorkingHours[2]}</Text>
-            <Text style={style.text}>Seconds</Text>
+              <Text style={styles.textHeading}>{totalWorkingHours[0]}</Text>
+              <Text style={style.text}>Hours</Text>
+            </View>
+            <View style={{alignItems: 'start', height: '70%'}}>
+              <Text style={styles.textHeading}>:</Text>
+            </View>
+            <View style={style.timerBox}>
+              <Text style={styles.textHeading}>{totalWorkingHours[1]}</Text>
+              <Text style={style.text}>Minuts</Text>
+            </View>
+            <View style={{alignItems: 'start', height: '70%'}}>
+              <Text style={styles.textHeading}>:</Text>
+            </View>
+            <View style={style.timerBox}>
+              <Text style={styles.textHeading}>{totalWorkingHours[2]}</Text>
+              <Text style={style.text}>Seconds</Text>
+            </View>
           </View>
         </View>
 
