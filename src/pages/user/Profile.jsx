@@ -70,6 +70,8 @@ const Profile = () => {
         const token = await AsyncStorage.getItem('token');
         if (token !== null) {
           setToken(token)
+          console.log("token -=-=-=--=-=-=-",token)
+
         } else {
           console.log('Token not found during logout AsyncStorage');
         }
@@ -90,6 +92,7 @@ const Profile = () => {
           if (res && res.data) {
             setCurrentUser(res.data);
           }
+          console.log("res =========",res)
         } else {
           console.log('No user data found in AsyncStorage');
         }
@@ -149,7 +152,7 @@ const Profile = () => {
           </View> */}
        
           <View style={pStyles.userFooter}>
-            <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserDetailScreen', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile name='user-edit' style={pStyles.logoutUserIcon} />
