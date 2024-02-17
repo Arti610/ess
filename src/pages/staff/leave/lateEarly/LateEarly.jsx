@@ -33,6 +33,7 @@ const LateEarly = () => {
             };
             fetchData();
         } catch (error) {
+            setLoading(false)
             console.log(error);
         }
     }, []);

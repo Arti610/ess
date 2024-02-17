@@ -87,8 +87,7 @@ const ApplyLE = () => {
         fData.append('time', formValues.time ? moment(formValues.time).format('HH:mm:ss') : null)
         fData.append('reason', values.reason ? values.reason : null)
         document ? fData.append('attachment', document ? document : null) : null
-        console.log('fData', fData);
-
+     
         try {
             setIsLoading(true)
             const res = await createApi.createLateEarly(fData, {
@@ -96,11 +95,11 @@ const ApplyLE = () => {
                     'content-type': 'multipart/form-data'
                 }
             })
-            console.log('res', res);
+          
             if (res.status === 201 || 200) {
                 setIsLoading(false)
-                navigation.navigate('Leave')
-                console.log('late/early requested successfully');
+                navigation.navigate('Leave', )
+
                 Toast.show({
                     type: "success",
                     text1: 'Request for late/early submitted successfully',

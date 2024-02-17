@@ -164,9 +164,20 @@ const Dashboard = () => {
     );
   };
 
-  const requestLocationPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
+
+const requestLocationPermission = async () => {
+  try {
+    // Check if permission is already granted
+    const granted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+    );
+    console.log('granted',granted);
+    // If permission is already granted, proceed
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      getCurrentLocation();
+    } else {
+      // If permission is not granted, request it
+      const permissionRequest = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
         {
           title: 'Location Permission',
@@ -176,16 +187,19 @@ const Dashboard = () => {
           buttonPositive: 'OK',
         },
       );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // Permission granted, get the current location
+
+      // Check if the permission request is granted
+      if (permissionRequest === PermissionsAndroid.RESULTS.GRANTED) {
         getCurrentLocation();
       } else {
         console.log('Location permission denied');
       }
-    } catch (err) {
-      console.warn(err);
     }
-  };
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
 
   useEffect(() => {
     requestLocationPermission();
