@@ -17,6 +17,7 @@ const ShowingVlog = () => {
     const navigation = useNavigation();
 
     const refRBSheet = useRef();
+    // console.log("outside video =====>>>>>>>>>>>>",video);
 
     const [image, setImage] = useState(null)
 
@@ -58,26 +59,30 @@ const ShowingVlog = () => {
     }
 
     const uploadVideo = async (values) => {
-        // console.log('values', values);
+        console.log('values', values);
 
+        console.log('video',video.assets[0].uri);
+        console.log('image obj',image);
         const fData = new FormData()
-
-        fData.append('thumbnail', {
-            name: image.assets[0].fileName ? image.assets[0].fileName : '',
-            type: image.assets[0].type ? image.assets[0].type : '',
-            uri: image.assets[0].uri ? image.assets[0].uri : '',
-        });
-
+        if(image != null){
+            fData.append('thumbnail', {
+                name: image == null ? '' : image.assets[0].fileName ,
+                type: image == null ? '' : image.assets[0].type,
+                uri: image == null ? '' : image.assets[0].uri,
+            });
+        }
+        // console.log('video 22222222',video);
         fData.append('video', {
             name: video.assets[0].fileName ? video.assets[0].fileName : '',
             type: video.assets[0].type ? video.assets[0].type : '',
             uri: video.assets[0].uri ? video.assets[0].uri : '',
         });
 
-        fData.append('title', values.title ? values.title : null)
-        fData.append('description', values.description ? values.description : null)
+        fData.append('title', values.title ? values.title : '')
+        fData.append('description', values.description ? values.description : '')
 
         console.log('fData', fData);
+
         try {
             const res = await createApi.uploadTask(fData, {
                 headers: {
@@ -85,7 +90,7 @@ const ShowingVlog = () => {
                 },
             })
             console.log('res', res);
-            if (res.status === '201') {
+            if (res.status === 201) {
                 Toast.show({
                     type: 'success',
                     text1: 'Task uploded successfully',
@@ -137,7 +142,7 @@ const ShowingVlog = () => {
 
                         <View style={styles.inputContainer}>
                             <Text style={styles.lable}>Thumbnail</Text>
-                            {image ? <TouchableOpacity onPress={() => refRBSheet.current.open()}><Image style={[styles.textInput, { height: 150, objectFit: 'cover' }]} source={image !== null ? { uri: image.assets[0].uri ? image.assets[0].uri : null } : null} /></TouchableOpacity> :
+                            {image ? <TouchableOpacity onPress={() => refRBSheet.current.open()}><Image style={[styles.textInput, { height: 150,  }]} source={image !== null ? { uri: image.assets[0].uri ? image.assets[0].uri : null } : null} /></TouchableOpacity> :
 
                                 <TouchableOpacity onPress={() => refRBSheet.current.open()}>
                                     <View style={styles.textInput}><IconF5 name='image' style={{ fontSize: 100, textAlign: 'center' }} /></View>
@@ -171,7 +176,7 @@ const ShowingVlog = () => {
                             <Text style={styles.lable}>Video</Text>
                             {video ? (
                                 <Video
-                                    style={[styles.textInput, { height: 200, objectFit: 'cover' }]}
+                                    style={[styles.textInput, { height: 200, }]}
                                     controls={false}
                                     resizeMode="cover"
                                     autoplay

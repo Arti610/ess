@@ -107,11 +107,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import {SkypeIndicator} from 'react-native-indicators';
 import API_CONFIG from '../../../config/apiConfig';
 import Video from 'react-native-video';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import {launchCamera} from 'react-native-image-picker';
+import { styles } from '../../../../style';
 
 const Vlog = () => {
   const navigation = useNavigation();
@@ -136,7 +135,7 @@ const Vlog = () => {
     };
 
     launchCamera(options, response => {
-      if (response.didCancel) {
+      console.log('response',response);     if (response.didCancel) {
         console.log('User cancelled the camera operation');
       } else if (response.error) {
         console.log('Camera Error:', response.error);
