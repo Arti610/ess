@@ -67,12 +67,14 @@ const UserDetailScreen = ({route}) => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <View>
-          <View
-            style={
-              userData.status == 'Not In Office'
-                ? styles.statusIndicatorRed
-                : styles.statusIndicatorGreen
-            }></View>
+          {userData.user_type == 'Management' ? null : (
+            <View
+              style={
+                userData.status == 'Not In Office'
+                  ? styles.statusIndicatorRed
+                  : styles.statusIndicatorGreen
+              }></View>
+          )}
           <Image
             source={{
               uri:
@@ -360,11 +362,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   header: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 20,
     backgroundColor: secondaryColor,
     borderRadius: 8,
     paddingVertical: 20,
+    paddingHorizontal: 13,
   },
   profileImage: {
     width: 120,
