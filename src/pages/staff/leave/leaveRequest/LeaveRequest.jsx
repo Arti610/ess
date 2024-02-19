@@ -21,6 +21,7 @@ const LeaveRequest = () => {
 
 
     useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {         
         try {
             setLoading(true);
             const fetchData = async () => {
@@ -35,7 +36,10 @@ const LeaveRequest = () => {
         } catch (error) {
             console.log(error);
         }
-    }, []);
+    });
+          
+    return unsubscribe;
+    }, [navigation]);
 
     useEffect(() => {
         filterData(status);
@@ -80,21 +84,23 @@ const LeaveRequest = () => {
                     <Text style={status === 'Declined' ? style.inactive : style.active}>Declined  {`(${data && data.filter(item => item.status === 'Declined').length })`}</Text>
                 </TouchableOpacity>
             </View>
-            {loading ? <Loader /> :
-                <View style={style.details}>
-                    {filteredData.length > 0 ? filteredData.map((item, i) => (
-                        <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
-                            <View>
-                                <Text>{item && item.title ? item.title : null} {`(${item && item.leave_type && item.leave_type.code ? item.leave_type.code : 'CL'})`}</Text>
-                                <Text style={styles.lable}>{moment(item && item.from_date ? item.from_date : null).format('DD MMM YYYY')} - {moment(item && item.to_date ? item.to_date : null).format('DD MMM YYYY')}</Text>
-                            </View>
-                            <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
-                                {item && item.status}
-                            </Text>
-                        </TouchableOpacity>
-                    )) : <Text>No Data Found</Text>}
-                </View>
-            }
+            <ScrollView>
+                {loading ? <Loader /> :
+                    <View style={style.details}>
+                        {filteredData && filteredData.length > 0 ? filteredData.map((item, i) => (
+                            <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
+                                <View>
+                                    <Text>{item && item.title ? item.title : null} {`(${item && item.leave_type && item.leave_type.code ? item.leave_type.code : 'CL'})`}</Text>
+                                    <Text style={styles.lable}>{moment(item && item.from_date ? item.from_date : null).format('DD MMM YYYY')} - {moment(item && item.to_date ? item.to_date : null).format('DD MMM YYYY')}</Text>
+                                </View>
+                                <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
+                                    {item && item.status}
+                                </Text>
+                            </TouchableOpacity>
+                        )) : <Text>No Data Found</Text>}
+                    </View>
+                }
+            </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('ApplyLR')}>
                     <IconAdd name='add' style={styles.addIcon} />

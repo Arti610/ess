@@ -66,7 +66,8 @@ const UserDetailScreen = ({route}) => {
   ) : (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <View>
+      
+        <View style={styles.proImageName}>
           {userData.user_type == 'Management' ? null : (
             <View
               style={
@@ -247,11 +248,15 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
+  proImageName:{
+    alignItems: 'center',
+  },
+
   headerColumnStyle: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    // justifyContent:'flex-start'
+ 
   },
   separatorStyle: {
     fontSize: 20,
@@ -263,7 +268,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'red',
     paddingVertical: 12,
   },
   statusTextStyle: {

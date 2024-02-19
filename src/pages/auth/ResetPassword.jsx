@@ -26,6 +26,7 @@ const ResetPassword = props => {
   const { isLoading } = useSelector(state => state.auth);
 
   const handlePress = async values => {
+    console.log('values',values);
     const storedEmail = await AsyncStorage.getItem('userEmail');
     try {
       dispatch(resetPasswordStart());
@@ -68,7 +69,7 @@ const ResetPassword = props => {
         <Formik
           initialValues={{ password: '', confirm_password: '' }}
           validationSchema={changePasswordSchema}
-          onSubmit={values => handlePress(values)}>
+          onSubmit={values => console.log('values', values)}>
           {({ handleSubmit, handleChange, handleBlur, errors, values }) => (
             <View style={loginStyles.logincontainer}>
               <View style={loginStyles.loginHeader}>

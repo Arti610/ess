@@ -55,7 +55,7 @@ export const OTPSchema = Yup.object({
   otp: validator.otp,
 });
 export const changePasswordSchema = Yup.object({
-  old_password: validator.password,
+
   password: validator.password,
   confirm_password: validator.confirm_password,
 });

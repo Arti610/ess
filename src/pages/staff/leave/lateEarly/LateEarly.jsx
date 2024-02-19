@@ -12,6 +12,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 const LateEarly = () => {
     const navigation = useNavigation();
     const rbSheet = useRef()
+    
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null);
@@ -21,22 +22,29 @@ const LateEarly = () => {
 
 
     useEffect(() => {
-        try {
-            setLoading(true);
-            const fetchData = async () => {
-                const res = await getApi.getAllLateEarly();
 
-                if (res.data) {
-                    setData(res.data);
-                    setLoading(false);
-                }
-            };
-            fetchData();
-        } catch (error) {
-            setLoading(false)
-            console.log(error);
-        }
-    }, []);
+        
+        const unsubscribe = navigation.addListener('focus', () => {           
+            try {
+                setLoading(true);
+                const fetchData = async () => {
+                    console.log(" leave screen");
+                    const res = await getApi.getAllLateEarly();
+    
+                    if (res.data) {
+                        setData(res.data);
+                        setLoading(false);
+                    }
+                };
+                fetchData();
+            } catch (error) {
+                setLoading(false)
+                console.log(error);
+            }
+          });
+          
+        return unsubscribe;
+    }, [navigation]);
 
     useEffect(() => {
         filterData(status);
@@ -80,21 +88,23 @@ const LateEarly = () => {
                     <Text style={status === 'Declined' ? style.inactive : style.active}>Declined {`(${data && data.filter(item => item.status === 'Declined').length })`}</Text>
                 </TouchableOpacity>
             </View>
-            {loading ? <Loader /> :
-                <View style={style.details}>
-                    {filteredData.length > 0 ? filteredData.map((item, i) => (
-                        <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
-                            <View>
-                                <Text>{item && item.late_early ? item.late_early : 'Late/Early'} </Text>
-                                <Text style={styles.lable}>{moment(item && item.date ? item.date : null).format('DD MMM YYYY')}  {(item && item.time ? item.time : null)}</Text>
-                            </View>
-                            <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
-                                {item && item.status}
-                            </Text>
-                        </TouchableOpacity>
-                    )) :  <Text>No Data Found</Text>}
-                </View>
-            }
+            <ScrollView>
+                {loading ? <Loader /> :
+                    <View style={style.details}>
+                        {filteredData && filteredData.length > 0 ? filteredData.map((item) => (
+                                <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
+                                    <View>
+                                        <Text>{item && item.late_early ? item.late_early : 'Late/Early'} </Text>
+                                        <Text style={styles.lable}>{moment(item && item.date ? item.date : null).format('DD MMM YYYY')}  {(item && item.time ? item.time : null)}</Text>
+                                    </View>
+                                    <Text style={{ color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red', fontWeight: 'bold' }}>
+                                        {item && item.status}
+                                    </Text>
+                                </TouchableOpacity>
+                        )) :  <Text>No Data Found</Text>}
+                    </View>
+                }
+            </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('ApplyLE')}>
                     <IconAdd name='add' style={styles.addIcon} />

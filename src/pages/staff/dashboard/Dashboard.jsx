@@ -36,7 +36,6 @@ import {
 import {useDispatch} from 'react-redux';
 
 const Dashboard = () => {
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [currentTime, setCurrentTime] = useState('');
@@ -84,29 +83,31 @@ const Dashboard = () => {
       }
     };
     fetchCurrentUser();
+  }, []);
+  const fetchData = async () => {
+    console.log('called');
+    try {
+      setLoading(true);
+      const res = await getApi.getAllCheckinoutList(token);
 
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await getApi.getAllCheckinoutList(token);
-
-        if (res.data) {
-          setLoading(false);
-          setInoutData(res.data);
-        }
-      } catch (error) {
-        console.log(
-          'error during getting all checkin/checkout',
-          error.response,
-        );
+      if (res.data) {
+        setLoading(false);
+        setInoutData(res.data);
       }
-    };
+    } catch (error) {
+      console.log('error during getting all checkin/checkout', error.response);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, []);
   // Get BranInformation\
 
   useEffect(() => {
-    const branchId = currentUserId && currentUserId.branch && currentUserId.branch.id ? currentUserId.branch.id : null;
+    const branchId =
+      currentUserId && currentUserId.branch && currentUserId.branch.id
+        ? currentUserId.branch.id
+        : null;
     const fetchData = async () => {
       try {
         if (branchId) {
@@ -164,42 +165,40 @@ const Dashboard = () => {
     );
   };
 
-
-const requestLocationPermission = async () => {
-  try {
-    // Check if permission is already granted
-    const granted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
-    );
-    console.log('granted',granted);
-    // If permission is already granted, proceed
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      getCurrentLocation();
-    } else {
-      // If permission is not granted, request it
-      const permissionRequest = await PermissionsAndroid.request(
+  const requestLocationPermission = async () => {
+    try {
+      // Check if permission is already granted
+      const granted = await PermissionsAndroid.check(
         PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
-        {
-          title: 'Location Permission',
-          message: 'App needs access to your location',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
       );
-
-      // Check if the permission request is granted
-      if (permissionRequest === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('granted', granted);
+      // If permission is already granted, proceed
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         getCurrentLocation();
       } else {
-        console.log('Location permission denied');
-      }
-    }
-  } catch (err) {
-    console.warn(err);
-  }
-};
+        // If permission is not granted, request it
+        const permissionRequest = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+          {
+            title: 'Location Permission',
+            message: 'App needs access to your location',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
 
+        // Check if the permission request is granted
+        if (permissionRequest === PermissionsAndroid.RESULTS.GRANTED) {
+          getCurrentLocation();
+        } else {
+          console.log('Location permission denied');
+        }
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   useEffect(() => {
     requestLocationPermission();
@@ -383,7 +382,7 @@ const requestLocationPermission = async () => {
               autoHide: 3000,
             });
             setcheckinLoading(false);
-            getApi.getAllCheckinoutList(token);
+            fetchData();
           }
         } catch (error) {
           setcheckinLoading(false);
@@ -461,8 +460,7 @@ const requestLocationPermission = async () => {
           autoHide: 3000,
         });
         setcheckoutLoading(false);
-        getApi.getAllCheckinoutList(token);
-        getApi.getAllCheckinoutList(token);
+        fetchData();
       } else {
         setcheckoutLoading(false);
         Toast.show({
@@ -533,10 +531,10 @@ const requestLocationPermission = async () => {
           </TouchableOpacity>
         </View>
         {/*Header @end */}
-        <View >
-          <Text  style={styles.textSubHeading}>Total Working Hours</Text>
+        <View>
+          <Text style={styles.textSubHeading}>Total Working Hours</Text>
           <View style={style.progressTimer}>
-          <View style={style.timerBox}>
+            <View style={style.timerBox}>
               <Text style={styles.textHeading}>{totalWorkingHours[0]}</Text>
               <Text style={style.text}>Hours</Text>
             </View>

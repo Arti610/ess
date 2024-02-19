@@ -49,10 +49,13 @@ const Profile = () => {
           autoHide: true,
         });
         try {
+    
           await AsyncStorage.removeItem('currentUser');
           await AsyncStorage.removeItem('userEmail');
+          await AsyncStorage.removeItem('token');
 
-          console.log('AsyncStorage data cleared successfully');
+          await AsyncStorage.clear();
+      
         } catch (error) {
           console.log('Error clearing AsyncStorage data:', error);
         }
