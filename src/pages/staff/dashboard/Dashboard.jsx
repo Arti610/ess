@@ -85,7 +85,7 @@ const Dashboard = () => {
     fetchCurrentUser();
   }, []);
   const fetchData = async () => {
-    console.log('called');
+
     try {
       setLoading(true);
       const res = await getApi.getAllCheckinoutList(token);

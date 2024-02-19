@@ -17,7 +17,7 @@ const HeaderTitle = () => {
     const fetchUserData = async () => {
       try {
         const userDataString = await AsyncStorage.getItem('currentUser');
-      console.log('userDataString',userDataString);
+    
         if (userDataString) {
           const userData = JSON.parse(userDataString);
           setCurrentUser(userData);

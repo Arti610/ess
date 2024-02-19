@@ -24,7 +24,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useState(null)
-  const [data, setData] = useState(null);
+  // const [data, setData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
   const handleModalVisible = () => {
@@ -73,7 +73,6 @@ const Profile = () => {
         const token = await AsyncStorage.getItem('token');
         if (token !== null) {
           setToken(token)
-          console.log("token -=-=-=--=-=-=-",token)
 
         } else {
           console.log('Token not found during logout AsyncStorage');
@@ -89,17 +88,20 @@ const Profile = () => {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
+        setIsLoading(true)
         const resString = await AsyncStorage.getItem('currentUser');
         if (resString) {
           const res = JSON.parse(resString);
           if (res && res.data) {
             setCurrentUser(res.data);
+            setIsLoading(false)
           }
-          console.log("res =========",res)
+        
         } else {
           console.log('No user data found in AsyncStorage');
         }
       } catch (error) {
+        setIsLoading(false)
         console.error('Error fetching user data:', error);
       }
     };
@@ -107,55 +109,27 @@ const Profile = () => {
     fetchCurrentUser();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true)
-        if (currentUser) {
-          const res = await userApi.getUserById(currentUser.id);
-          if (res.data) {
-            setData(res.data);
-            setIsLoading(false)
-          }
-        }
-      } catch (error) {
-        setIsLoading(false)
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [currentUser]);
-
+ 
   return (
     <>
       {isLoading ? <Loader /> :
         <View style={pStyles.container}>
+        { currentUser ?
           <View style={pStyles.userHeader}>
-            {data && data.profile_image ? (
-              <Image source={{ uri: `${API_CONFIG.imageUrl}${data.profile_image ? data.profile_image : null}` }} style={pStyles.image} />
+            {currentUser && currentUser.profile_image ? (
+              <Image source={{ uri: `${API_CONFIG.imageUrl}${currentUser &&  currentUser.profile_image ? currentUser.profile_image : null}` }} style={pStyles.image} />
             ) : (
               <Image source={require('../../assests/userProfile.webp')} style={pStyles.image} />
             )}
             <View>
-              <Text style={styles.textHeading}>{`${data && data.first_name ? data.first_name : 'User'} ${data && data.last_name ? data.last_name : "Name"}`}</Text>
-              {/* <Text style={styles.lable}>{`${data && data.user_type ? data.user_type : 'Guest User'}`} </Text> */}
+            
+              <Text style={styles.textHeading}>{`${currentUser && currentUser.first_name ? currentUser.first_name : 'User'} ${currentUser && currentUser.last_name ? currentUser.last_name : "Name"}`}</Text>
             </View>
 
-          </View>
-          {/* <View style={pStyles.userBody}>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.email ? data.email : null}</Text></View>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.gender ? data.gender : null}</Text></View>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.address ? data.address : null}</Text></View>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.designation.name ? data.designation.name : null}</Text></View>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.department.name ? data.department.name : null}</Text></View>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.manager.first_name ? data.manager.first_name : null}</Text></View>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.phone_number ? data.phone_number : null}</Text></View>
-            <View style={{ fontSize: 14, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'flex-start' }}><IconLogout name='tags' style={pStyles.iconStyles} /><Text>{data && data.date_joined ? data.date_joined : null}</Text></View>
-          </View> */}
-       
+          </View> : null}
+        
           <View style={pStyles.userFooter}>
-            <TouchableOpacity onPress={() => navigation.navigate('UserDetailScreen', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserDetailScreen', { userId: currentUser && currentUser.id ? currentUser.id : currentUser.id })} style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile name='user-edit' style={pStyles.logoutUserIcon} />
@@ -164,7 +138,7 @@ const Profile = () => {
                   <IconEdit name='chevron-right' style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
+            <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { userId: currentUser && currentUser.id ? currentUser.id : currentUser.id })} style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile name='user-edit' style={pStyles.logoutUserIcon} />
@@ -174,7 +148,7 @@ const Profile = () => {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate('ChangePassword', { userId: data && data.id ? data.id : currentUser.id })} style={pStyles.footerText}>
+              <TouchableOpacity onPress={() => navigation.navigate('ChangePassword', { userId: currentUser && currentUser.id ? currentUser.id : currentUser.id })} style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile name='user-edit' style={pStyles.logoutUserIcon} />
