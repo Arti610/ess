@@ -84,8 +84,8 @@ const Dashboard = () => {
     };
     fetchCurrentUser();
   }, []);
+  
   const fetchData = async () => {
-
     try {
       setLoading(true);
       const res = await getApi.getAllCheckinoutList(token);
@@ -98,6 +98,7 @@ const Dashboard = () => {
       console.log('error during getting all checkin/checkout', error.response);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -481,7 +482,6 @@ const Dashboard = () => {
       });
     }
   };
-
 
   return loading ? (
     <Loader />
