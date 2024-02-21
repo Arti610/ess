@@ -66,38 +66,39 @@ const UserDetailScreen = ({route}) => {
   ) : (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-      
-        <View style={styles.proImageName}>
-          {userData.user_type == 'Management' ? null : (
-            <View
-              style={
-                userData.status == 'Not In Office'
-                  ? styles.statusIndicatorRed
-                  : styles.statusIndicatorGreen
-              }></View>
-          )}
-          <Image
-            source={{
-              uri:
-                userData.profile_image == null
-                  ? 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg'
-                  : `${API_CONFIG.imageUrl}${userData.profile_image}`,
-            }}
-            style={styles.profileImage}
-          />
-        </View>
-        {/* <View style={styles.statusBadge}> </View> */}
-        <Text style={styles.name}>
-          {userData.first_name} {userData.last_name}
-        </Text>
-        <View style={styles.statusUserTypeStyle}>
-          <Text style={styles.statusTextStyle}> {userData.status}</Text>
-          <Text style={styles.separatorStyle}> | </Text>
-          <Text style={styles.statusTextStyle}> {userData.user_type}</Text>
-          <Text style={styles.separatorStyle}> | </Text>
-          <Text style={styles.statusTextStyle}>
-            {formatDate(userData.date_joined)}
+        <View style={styles.makeItCenter}>
+          <View style={styles.proImageName}>
+            {userData.user_type == 'Management' ? null : (
+              <View
+                style={
+                  userData.status == 'Not In Office'
+                    ? styles.statusIndicatorRed
+                    : styles.statusIndicatorGreen
+                }></View>
+            )}
+            <Image
+              source={{
+                uri:
+                  userData.profile_image == null
+                    ? 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg'
+                    : `${API_CONFIG.imageUrl}${userData.profile_image}`,
+              }}
+              style={styles.profileImage}
+            />
+          </View>
+          {/* <View style={styles.statusBadge}> </View> */}
+          <Text style={styles.name}>
+            {userData.first_name} {userData.last_name}
           </Text>
+          <View style={styles.statusUserTypeStyle}>
+            <Text style={styles.statusTextStyle}> {userData.status}</Text>
+            <Text style={styles.separatorStyle}> | </Text>
+            <Text style={styles.statusTextStyle}> {userData.user_type}</Text>
+            <Text style={styles.separatorStyle}> | </Text>
+            <Text style={styles.statusTextStyle}>
+              {formatDate(userData.date_joined)}
+            </Text>
+          </View>
         </View>
 
         <View style={styles.headerColumnStyle}>
@@ -248,7 +249,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
-  proImageName:{
+  proImageName: {
+    alignItems: 'center',
+  },
+
+  makeItCenter: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
   },
 
@@ -256,7 +264,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
- 
   },
   separatorStyle: {
     fontSize: 20,
