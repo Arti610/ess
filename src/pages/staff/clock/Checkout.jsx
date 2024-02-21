@@ -63,7 +63,7 @@ const Checkout = () => {
 
 
     return (
-        <>
+        loading ? <Loader /> :   <>
             <View style={style.container}>
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
                     <Text style={status === 'All' ? style.inactive : style.active}>All ({data ? data.length : []})</Text>
@@ -78,7 +78,7 @@ const Checkout = () => {
                     <Text style={status === 'Yearly' ? style.inactive : style.active}>Yearly ({data ? filterData('Yearly', data).length : []})</Text>
                 </TouchableOpacity>
             </View>
-            {loading ? <Loader /> : 
+           
                 <View style={style.containercard}>
                    {data ?  <FlatList
                         data={filterData(status, data)}
@@ -100,7 +100,7 @@ const Checkout = () => {
                         keyExtractor={(item, index) => index.toString()}
                     /> : <Text>No Data Found</Text>}
                 </View>
-           }
+           
         </>
     )
 }

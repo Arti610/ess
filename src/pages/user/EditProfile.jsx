@@ -22,6 +22,7 @@ import { getAllBranch } from "../../redux/slices/branch/branchApi";
 const EditProfile = ({ route }) => {
     const refRBSheet = useRef();
     const { userId } = route.params;
+    console.log('userId',userId);
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState(false);

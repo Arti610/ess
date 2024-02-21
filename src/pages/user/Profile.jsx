@@ -166,7 +166,7 @@ const Profile = () => {
                   <IconEdit name='chevron-right' style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Timesheet')} style={pStyles.footerText}>
+              <TouchableOpacity onPress={() => navigation.navigate('checkin')} style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile name='user-edit' style={pStyles.logoutUserIcon} />
