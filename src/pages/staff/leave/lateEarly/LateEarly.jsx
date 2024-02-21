@@ -72,8 +72,9 @@ const LateEarly = () => {
             rbSheet.current.open();
         }
     }
+
     return (
-        <>
+        loading ? <Loader /> :   <>
             <View style={style.container}>
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
                     <Text style={status === 'All' ? style.inactive : style.active}>All {`(${data && data.length })`}</Text>
@@ -89,7 +90,7 @@ const LateEarly = () => {
                 </TouchableOpacity>
             </View>
             <ScrollView>
-                {loading ? <Loader /> :
+              
                     <View style={style.details}>
                         {filteredData && filteredData.length > 0 ? filteredData.map((item) => (
                                 <TouchableOpacity style={style.card} key={item.id} onPress={() => handleOpenRBSheet(item.id)}>
@@ -103,7 +104,7 @@ const LateEarly = () => {
                                 </TouchableOpacity>
                         )) :  <Text>No Data Found</Text>}
                     </View>
-                }
+                
             </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('ApplyLE')}>

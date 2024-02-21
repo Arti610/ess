@@ -37,6 +37,7 @@ const EditProfile = ({route}) => {
   const {userId} = route.params;
 
   console.log('userID =====', userId);
+  console.log('userId', userId);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
