@@ -110,9 +110,8 @@ const StaffDashboard = () => {
           name="Vlog"
           component={Vlog}
           options={() => ({
-            headerTitle: () => null,
-            headerLeft: () => <HeaderTitle />,
-            headerRight: () => <Notification />,
+            headerShown: false,
+
             tabBarIcon: () => (
               <BranchIcon
                 name="featured-play-list"
@@ -120,7 +119,7 @@ const StaffDashboard = () => {
                 size={20}
               />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>,
+            // tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>,
           })}
         />
         <Tab.Screen

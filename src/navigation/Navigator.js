@@ -109,6 +109,7 @@ const Navigator = () => {
             ),
           }}
         />
+
         <Stack.Screen
           name="EditProfile"
           component={EditProfile}
