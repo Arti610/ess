@@ -3,7 +3,7 @@ import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "reac
 import { styles } from "../../../../style";
 import { Formik } from "formik";
 import { addUserSchema } from "../../../utils/validationSchema";
-import { SelectList } from 'react-native-dropdown-select-list'
+import { SelectList } from 'react-native-dropdown-select-list';
 import getApi from "../../../redux/slices/utils/getApi";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import createApi from "../../../redux/slices/utils/createApi";
@@ -216,8 +216,6 @@ const UserForm = () => {
                     visibilityTime: 4000,
                     autoHide: true
                 });
-                await getApi.getStaffList(id)
-                await  getApi.getStaffList(id)
              
             }
         } catch (error) {

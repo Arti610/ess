@@ -100,9 +100,9 @@ const Profile = () => {
         const resString = await AsyncStorage.getItem('currentUser');
         if (resString) {
           const res = JSON.parse(resString);
-          console.log('res.data',res.data);
+
           if (res && res.data) {
-            setCurrentUser(res.data.branch.id);
+            setCurrentUser(res.data);
             setIsLoading(false);
           }
         } else {
@@ -117,32 +117,33 @@ const Profile = () => {
     fetchCurrentUser();
   }, []);
 
- 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true)
-          
-        if (currentUser) {
-          const res = await getApi.getIndividualUser(currentUser);
-       
-          if (res.data) {
-            setData(res.data);
-            setIsLoading(false);
-          }
+        setIsLoading(true);
+
+        let res;
+        if (currentUser.user_type === 'Management') {
+          res = await getApi.getIndividualUser(currentUser.id);
+        } else {
+          res = await getApi.getIndividualUser(currentUser.branch.id);
         }
+        if (res.data) {
+          setData(res.data);
+        }
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching individual user data:', error);
+        setIsLoading(false);
       }
     };
-  
+
     fetchData();
-  
+
     const unsubscribe = navigation.addListener('focus', fetchData);
-  
+
     return unsubscribe;
   }, [navigation, currentUser]);
-
 
   return (
     <>
@@ -248,34 +249,38 @@ const Profile = () => {
                 <IconEdit name="chevron-right" style={pStyles.iconStyles} />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Leave')}
-              style={pStyles.footerText}>
-              <View style={pStyles.footerTextView}>
-                <View style={pStyles.leftFooterText}>
-                  <IconEditProfile
-                    name="user-edit"
-                    style={pStyles.logoutUserIcon}
-                  />
-                  <Text style={pStyles.lable}>My Leaves</Text>
-                </View>
-                <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('checkin')}
-              style={pStyles.footerText}>
-              <View style={pStyles.footerTextView}>
-                <View style={pStyles.leftFooterText}>
-                  <IconEditProfile
-                    name="user-edit"
-                    style={pStyles.logoutUserIcon}
-                  />
-                  <Text style={pStyles.lable}>My Attendance</Text>
-                </View>
-                <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-              </View>
-            </TouchableOpacity>
+            {currentUser && currentUser.user_type == 'Management' ? null : (
+              <>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Leave')}
+                  style={pStyles.footerText}>
+                  <View style={pStyles.footerTextView}>
+                    <View style={pStyles.leftFooterText}>
+                      <IconEditProfile
+                        name="user-edit"
+                        style={pStyles.logoutUserIcon}
+                      />
+                      <Text style={pStyles.lable}>My Leaves</Text>
+                    </View>
+                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('checkin')}
+                  style={pStyles.footerText}>
+                  <View style={pStyles.footerTextView}>
+                    <View style={pStyles.leftFooterText}>
+                      <IconEditProfile
+                        name="user-edit"
+                        style={pStyles.logoutUserIcon}
+                      />
+                      <Text style={pStyles.lable}>My Attendance</Text>
+                    </View>
+                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
+                  </View>
+                </TouchableOpacity>
+              </>
+            )}
             <TouchableOpacity
               style={pStyles.footerText}
               onPress={handleModalVisible}>

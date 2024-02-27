@@ -5,12 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import SearchableDropdown from 'react-native-searchable-dropdown';
 import { getCountry } from '../../../redux/slices/utils/countryApi';
-import { createBranch, updateBrnach } from '../../../redux/slices/branch/branchApi';
+import { createBranch, getAllBranch, updateBrnach } from '../../../redux/slices/branch/branchApi';
 import API_CONFIG from '../../../config/apiConfig';
 import { styles } from '../../../../style';
-import { loginStyles } from '../../auth/Login';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +16,7 @@ import IconF5 from 'react-native-vector-icons/FontAwesome5'
 import ButtonLoader from '../../../utils/BtnActivityIndicator';
 import { addBranch } from '../../../utils/validationSchema';
 import Loader from '../../../utils/ActivityIndicator';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 const AddBranch = () => {
   const refRBSheet = useRef();
@@ -27,17 +26,15 @@ const AddBranch = () => {
 
   const { isLoading, branchDataById } = useSelector((state) => state.branch);
 
-  const recivedId = route.params?.data || null;
-  const [data, setData] = useState(null);
-  const [loding, setLoading] = useState(false)
-  const [image, setImage] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedCountryName, setSelectedCountryName] = useState(null);
+  useEffect(()=>{
+  
+  },[])
 
-  const onCountrySelect = (item) => {
-    setSelectedCountry(item.id);
-    setSelectedCountryName(item.name);
-  };
+  const recivedId = route.params?.data || null;
+  const [data, setData] = useState([]);
+  const [loding, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
+  const [selectCountry, setSelectCountry] = useState(null);
 
   const initialState = {
     country: '',
@@ -93,12 +90,16 @@ const AddBranch = () => {
           uri: image.assets[0].uri ? image.assets[0].uri : '',
         }) : null)
 
-      form_data.append('country', selectedCountry ? selectedCountry : branchDataById?.country.id);
+      form_data.append('country', selectCountry ? selectCountry : branchDataById?.country.id);
       form_data.append('name', values.name ? values.name : branchDataById.name);
       form_data.append('city', values.city ? values.city : branchDataById.city);
       form_data.append('address', values.address ? values.address : branchDataById.address);
 
-      recivedId ? await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
+    const res =  recivedId ? await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
+    console.log('res', res);
+    if(res.status === 200 || res.status === 201){
+      getAllBranch(dispatch)
+    }
 
     } catch (error) {
       console.log('Error occured during branch creation or updation : ', error);
@@ -112,10 +113,16 @@ const AddBranch = () => {
         setLoading(true)
         const res = await getCountry();
 
-        if (res) {
-          setLoading(false)
-          setData(res.data);
-        } else {
+          if (res.data) {
+            setLoading(false)
+            const transformCountryData = res.data.map(item => ({
+                key: item.id.toString(),
+                value: `${item.name}`
+            }))
+
+            setData(transformCountryData)
+        }
+         else {
           console.error('Invalid data format from getCountry');
         }
       } catch (error) {
@@ -126,10 +133,13 @@ const AddBranch = () => {
     fetchCountry();
   }, []);
 
+  console.log('branchDataById', branchDataById);
+  
   return (
 
     <>
-      {loding ? <Loader /> : <View style={styles.container}>
+     { loding ? <Loader /> : <ScrollView> 
+        <View style={styles.container}>
         <Formik
           initialValues={recivedId ? { ...branchDataById } : initialState}
           validationSchema={addBranch}
@@ -191,36 +201,21 @@ const AddBranch = () => {
                     </View>
                   }
                 </View>
+                
                 <View style={styles.inputContainer}>
                   <Text style={styles.lable}>Country</Text>
-                  <SearchableDropdown
-                    multi={false}
-                    containerStyle={{ padding: 0 }}
-                    itemsContainerStyle={{ maxHeight: 170 }}
-                    itemStyle={{
-                      padding: 10,
-                      marginTop: 2,
-                      backgroundColor: '#ffffff',
-                      borderColor: '#bbb',
-                    }}
-                    items={data?.map(item => ({ ...item, key: item.id }))}
-                    itemTextStyle={{ color: '#000000' }}
-                    onItemSelect={onCountrySelect}
-                    resetValue={false}
-                    textInputProps={{
-                      placeholder: recivedId ? (selectedCountryName === null ? (branchDataById?.country?.name ? branchDataById?.country?.name : null) : selectedCountryName) : (selectedCountryName === null ? 'select country' : selectedCountryName),
-                      placeholderTextColor: '#000',
-                      underlineColorAndroid: 'transparent',
-                      style: styles.textInput,
-
-                    }}
-                    listProps={{
-                      nestedScrollEnabled: true,
-                    }}
+                  <SelectList
+                      boxStyles={styles.textInput}
+                      dropdownStyles={styles.textInput}
+                      setSelected={(val) => setSelectCountry(val)}
+                      data={data}
+                      save="key"
+                      placeholder={'Select Country e.g. (India)'}
+                      notFoundText="Data not found"       
+                      value={selectCountry}
+                      onBlur={handleBlur('country')}
+                      onChangText={handleChange('country')}
                   />
-                  {selectedCountryName === null ? (
-                    <Text style={styles.errorText}>{errors.name}</Text>
-                  ) : null}
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.lable}>Name</Text>
@@ -278,7 +273,8 @@ const AddBranch = () => {
             </View>
           )}
         </Formik>
-      </View>}
+      </View> 
+      </ScrollView>}
       <Toast />
     </>
   );

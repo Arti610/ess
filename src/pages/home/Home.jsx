@@ -16,18 +16,18 @@ const Home = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-  const fetchData = async () => {
-  try {
-    setLoading(true)
-    const res =  await getAllBranch(dispatch);
+    const fetchData = async () => {
+    try {
+      setLoading(true)
+      const res =  await getAllBranch(dispatch);
 
-    if(res.status === 200){
-      setLoading(false)
+      if(res.status === 200){
+        setLoading(false)
+      }
+    } catch (error) {
     }
-  } catch (error) {
-  }
-  };
-  fetchData();
+    };
+    fetchData();
   }, [dispatch]);
 
   return (
@@ -41,7 +41,6 @@ const Home = () => {
           : []}
         </View>
       </ScrollView>
-
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('AddBranch')}>
