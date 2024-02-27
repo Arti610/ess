@@ -474,12 +474,3 @@ const styles = StyleSheet.create({
 });
 
 export default UserDetailScreen;
-
-const CardWithIcon = ({iconSource, text}) => {
-  return (
-    <View style={styles.card}>
-      <Image source={iconSource} style={styles.icon} />
-      <Text style={styles.text}>{text}</Text>
-    </View>
-  );
-};

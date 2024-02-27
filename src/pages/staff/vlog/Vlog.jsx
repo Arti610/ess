@@ -1,7 +1,7 @@
 // // import React from 'react';
 // // import {Text, View} from 'react-native';
 
-import {Text, View} from 'react-native';
+// import {Text, View} from 'react-native';
 
 // // const Vlog = () => {
 // //   const videoList = [
@@ -263,8 +263,8 @@ import {Text, View} from 'react-native';
 //     videoRef.current?.play();
 
 //   };
-//   const [vlogData, setVlogData] = useState(null);
-//   const [loading, setLoading] = useState(false);
+// const [vlogData, setVlogData] = useState(null);
+// const [loading, setLoading] = useState(false);
 //   const [userData, setUserData] = useState({});
 
 //   console.log('vlogData', vlogData);
@@ -289,40 +289,40 @@ import {Text, View} from 'react-native';
 //     });
 //   };
 
-//   useEffect(() => {
-//     const fetchCurrentUser = async () => {
-//       try {
-//         const resString = await AsyncStorage.getItem('currentUser');
-//         if (resString) {
-//           const res = JSON.parse(resString);
-//           if (res && res.data) {
-//             setUserData(res.data);
-//           }
-//           console.log('res =========', res.data.id);
-//           fetchData(res.data.id);
-//         } else {
-//           console.log('No user data found in AsyncStorage');
+// useEffect(() => {
+//   const fetchCurrentUser = async () => {
+//     try {
+//       const resString = await AsyncStorage.getItem('currentUser');
+//       if (resString) {
+//         const res = JSON.parse(resString);
+//         if (res && res.data) {
+//           setUserData(res.data);
 //         }
-//       } catch (error) {
-//         console.error('Error fetching user data:', error);
+//         console.log('res =========', res.data.id);
+//         fetchData(res.data.id);
+//       } else {
+//         console.log('No user data found in AsyncStorage');
 //       }
-//     };
-//     const fetchData = async id => {
-//       setLoading(true);
-//       try {
-//         const res = await getApi.getAllVlog(id);
+//     } catch (error) {
+//       console.error('Error fetching user data:', error);
+//     }
+//   };
+//   const fetchData = async id => {
+//     setLoading(true);
+//     try {
+//       const res = await getApi.getAllVlog(id);
 
-//         if (res.data) {
-//           setVlogData(res.data);
-//           setLoading(false);
-//         }
-//       } catch (error) {
-//         console.log('Vlog cannot be get', error);
+//       if (res.data) {
+//         setVlogData(res.data);
+//         setLoading(false);
 //       }
-//     };
-//     fetchCurrentUser();
-//     // fetchData();
-//   }, []);
+//     } catch (error) {
+//       console.log('Vlog cannot be get', error);
+//     }
+//   };
+//   fetchCurrentUser();
+//   // fetchData();
+// }, []);
 
 //   const [currentIndex, setCurrentIndex] = useState(null);
 //   const videoRefs = useRef(new Array(videos.length).fill(null));
@@ -442,10 +442,291 @@ import {Text, View} from 'react-native';
 
 // export default Vlog;
 
+// import React from 'react';
+// import {View, Text} from 'react-native';
+
+// import {Reels} from '@sayings/react-reels';
+// // import 'node_modules\@sayings/react-reels/dist/index.css';
+// // import '../../../../node_modules/@sayings/react-reels/dist/index.css';
+// import '@sayings/react-reels/dist/index.css';
+
+// const Vlog = () => {
+//   const reels = [
+//     {
+//       id: 1,
+//       reelInfo: {
+//         url: 'https://www.example.com/video1.mp4',
+//         type: 'mp4',
+//         description: 'This is the first video',
+//         postedBy: {
+//           avatar: 'https://www.example.com/avatar1.jpg',
+//           name: 'User 1',
+//         },
+//         likes: {
+//           count: 10,
+//         },
+//         dislikes: {
+//           count: 2,
+//         },
+//         comments: {
+//           count: 5,
+//         },
+//         shares: {
+//           count: 3,
+//         },
+//       },
+//     },
+//     {
+//       id: 2,
+//       reelInfo: {
+//         url: 'https://www.example.com/video2.mp4',
+//         type: 'mp4',
+//         description: 'This is the second video',
+//         postedBy: {
+//           avatar: 'https://www.example.com/avatar2.jpg',
+//           name: 'User 2',
+//         },
+//         likes: {
+//           count: 15,
+//         },
+//         dislikes: {
+//           count: 1,
+//         },
+//         comments: {
+//           count: 8,
+//         },
+//         shares: {
+//           count: 7,
+//         },
+//       },
+//     },
+//     // Add more objects as needed
+//   ];
+//   const reelMetaInfo = {
+//     likes: true,
+//     dislikes: true,
+//     comments: true,
+//     shares: true,
+//     avatar: true,
+//   };
+//   return (
+//     <View>
+//       {/* <Text> hello</Text> */}
+//       <Reels
+//         reels={reels}
+//         reelMetaInfo={reelMetaInfo}
+//         onMenuItemClicked={event => {
+//           console.log(event.value);
+//           // other actions
+//         }}
+//         onLikeClicked={reel => {
+//           console.log(reel); // current Reel Data
+//           // other actions
+//         }}
+//         onDislikeClicked={reel => console.log(reel)}
+//         onCommentClicked={reel => console.log(reel)}
+//         onShareClicked={reel => console.log(reel)}
+//         onAvatarClicked={reel => console.log(reel)}
+//       />
+//     </View>
+//   );
+// };
+
+// import {StatusBar} from 'expo-status-bar';
+// import {View, StyleSheet, FlatList, Text} from 'react-native';
+// import {useCallback, useEffect, useRef, useState} from 'react';
+
+// import VideoPost from './widgets/video_post';
+// import Video from 'react-native-video';
+
+// const dummyPosts = [
+//   {
+//     id: '2',
+//     video:
+//       'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/2.mp4',
+//     caption: 'Caption of the post',
+//   },
+//   {
+//     id: '1',
+//     video:
+//       'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/1.mp4',
+//     caption: 'Hey there',
+//   },
+//   {
+//     id: '3',
+//     video:
+//       'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/3.mp4',
+//     caption: 'Hola',
+//   },
+//   {
+//     id: '4',
+//     video:
+//       'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/4.mp4',
+//     caption: 'Piano practice',
+//   },
+//   {
+//     id: '5',
+//     video:
+//       'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4',
+//     caption: 'Hello World!',
+//   },
+// ];
+
+// const Vlog = () => {
+//   const [activePostId, setActivePostId] = useState(dummyPosts[0].id);
+//   const [posts, setPosts] = useState([]);
+
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//       // fetch posts from the server
+//       setPosts(dummyPosts);
+//     };
+
+//     fetchPosts();
+//   }, []);
+
+//   const viewabilityConfigCallbackPairs = useRef([
+//     {
+//       viewabilityConfig: {itemVisiblePercentThreshold: 50},
+//       onViewableItemsChanged: ({changed, viewableItems}) => {
+//         console.log(' changed-======', changed);
+//         if (viewableItems.length > 0 && viewableItems[0].isViewable) {
+//           setActivePostId(viewableItems[0].item.id);
+//         }
+//       },
+//     },
+//   ]);
+
+//   const onEndReached = () => {
+//     // fetch more posts from database
+//     setPosts(currentPosts => [...currentPosts, ...dummyPosts]);
+//   };
+
+//   return (
+//     <View style={{height: '100%', width: '100%'}}>
+//       {/* <Stack.Screen options={{headerShown: false}} /> */}
+//       {/* <StatusBar style="light" /> */}
+//       {/* <View style={{height: '100%', width: '100%'}}> */}
+//       <Video
+//         // ref={ref => (videoRefs.current[index] = ref)}
+//         source={{
+//           uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4',
+//         }}
+//         resizeMode="cover"
+//         repeat
+//         playInBackground={false}
+//         paused={false}
+//       />
+//       {/* </View> */}
+
+//       {/* <FlatList
+//         data={posts}
+//         renderItem={({item}) => (
+//           // <View style={{backgroundColor: 'red'}}>
+//           //   <Text>{item.caption}</Text>
+//           // </View>
+//           // <VideoPost post={item} activePostId={activePostId} />
+//           <View style={{height: '100%', width: '100%'}}>
+//             <Video
+//               // ref={ref => (videoRefs.current[index] = ref)}
+//               source={{
+//                 uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4',
+//               }}
+//               resizeMode="cover"
+//               repeat
+//               playInBackground={false}
+//               paused={false}
+//             />
+//           </View>
+//         )}
+//         keyExtractor={(item, index) => `${item.id}-${index}`}
+//         pagingEnabled
+//         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+//         showsVerticalScrollIndicator={false}
+//         onEndReached={onEndReached}
+//         onEndReachedThreshold={3}
+//       /> */}
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: 'black',
+//   },
+// });
+
+// export default Vlog;
+
+import React from 'react';
+import {useEffect, useState} from 'react';
+import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import ReelsComponent from './widgets/reels_component';
+import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Vlog = () => {
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const resString = await AsyncStorage.getItem('currentUser');
+        if (resString) {
+          const res = JSON.parse(resString);
+          if (res && res.data) {
+            setCurrentUser(res.data);
+          }
+        } else {
+          console.log('No user data found in AsyncStorage');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
   return (
-    <View>
-      <Text>Vlog</Text>
+    <View
+      style={{
+        width: windowWidth,
+        height: windowHeight,
+        backgroundColor: 'white',
+        position: 'relative',
+        backgroundColor: 'black',
+      }}>
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          zIndex: 1,
+          padding: 10,
+        }}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+          Vlog
+        </Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('UploadVlog', {
+              userId:
+                currentUser && currentUser.id ? currentUser.id : currentUser.id,
+            })
+          }>
+          <Feather name="camera" style={{fontSize: 25, color: 'white'}} />
+        </TouchableOpacity>
+      </View>
+      <ReelsComponent />
     </View>
   );
 };
