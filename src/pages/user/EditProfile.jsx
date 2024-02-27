@@ -107,7 +107,7 @@ const EditProfile = ({route}) => {
   };
 
   const handlePress = async values => {
-    console.log('this is handlePress   ', values);
+   
     try {
       let formData = new FormData();
       image?.assets[0]

@@ -15,7 +15,6 @@ import IconN from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {currentUser} from '../../utils/currentUser';
 import getApi from '../../redux/slices/utils/getApi';
-import Timesheet from './Timesheet/Timesheet';
 
 const Tab = createBottomTabNavigator();
 

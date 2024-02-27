@@ -26,7 +26,7 @@ const Splash = () => {
           const userDataString = await AsyncStorage.getItem('currentUser');
           const parsedUserData = JSON.parse(userDataString)
 
-          const id = parsedUserData?.data.branch.id;
+          const id = parsedUserData && parsedUserData.data && parsedUserData.data.branch && parsedUserData.data.branch.id && parsedUserData.data.branch.id;
 
           if (parsedUserData) {
 

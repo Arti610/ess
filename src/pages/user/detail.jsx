@@ -1,24 +1,19 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
-import userApi from '../../redux/slices/users/userApi';
-import {useEffect, useRef, useState} from 'react';
-
+import {useEffect,  useState} from 'react';
 import Loader from '../../utils/ActivityIndicator';
 import {primaryColor, secondaryColor} from '../../../style';
 import Iconemail from 'react-native-vector-icons/Zocial';
-
 import IconPhone from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconAddress from 'react-native-vector-icons/FontAwesome';
 import IconBranch from 'react-native-vector-icons/Entypo';
 import IconUser from 'react-native-vector-icons/FontAwesome5';
 import IconLocation from 'react-native-vector-icons/Ionicons';
 import IconWeekend from 'react-native-vector-icons/MaterialIcons';
 import API_CONFIG from '../../config/apiConfig';
+import getApi from '../../redux/slices/utils/getApi';
 
 const UserDetailScreen = ({route}) => {
   const {userId} = route.params;
-  //   const { address, branch, phone_number, profile_image, status, user_type, week_off } = data;
-  console.log('userID =====', userId);
 
   const [loading, setLoading] = useState(false);
   var [userData, setUserData] = useState({});
@@ -36,21 +31,12 @@ const UserDetailScreen = ({route}) => {
   useEffect(() => {
     setLoading(true);
     const fetchUser = async () => {
-      console.log('userData-------', userData);
       try {
-        console.log('fetching user ');
-
-        const res = await userApi.getUserById(userId);
+        const res = await getApi.getIndividualUser(userId);
         if (res) {
           let jsonData = res.data.user_data;
-          // setSelectedGender(res?.data?.gender || '');
-          console.log('user data ========', jsonData);
           setUserData(jsonData);
         }
-
-        // setUserData(setUserData = res.user_data);
-
-        // console.log("user data 2 ========",userData);
       } catch (error) {
         console.log(error);
       } finally {

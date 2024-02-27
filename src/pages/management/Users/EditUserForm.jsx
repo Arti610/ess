@@ -13,6 +13,7 @@ import { SelectList } from 'react-native-dropdown-select-list'
 import API_CONFIG from "../../../config/apiConfig";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import ButtonLoader from "../../../utils/BtnActivityIndicator";
+import moment from "moment";
 
 const EditUserForm = () => {
     const route = useRoute();
@@ -46,6 +47,7 @@ const EditUserForm = () => {
     const [departmentData, setDepartmentData] = useState([])
     const [designationData, setDesignationData] = useState([])
     const [weekoffData, setWeekoffData] = useState([])
+    const [shiftTimeData, setShiftTimeData] = useState([])
 
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedUsertype, setSelectedUsertype] = useState(null);
@@ -53,6 +55,8 @@ const EditUserForm = () => {
     const [selectDepartment, setSelectDepartment] = useState(null);
     const [selectDesignation, setSelectDesignation] = useState(null);
     const [selectWeekoff, setSelectWeekoff] = useState(null);
+    const [selectShiftTime, setSelectShiftTime] = useState(null);
+    const [branchInfo, setBranchInfo] = useState(null)
 
     const handleImagePickerResponse = (response) => {
         if (response.didCancel) {
@@ -121,6 +125,23 @@ const EditUserForm = () => {
                     }))
                     setWeekoffData(transformWeeloffData)
                 }
+                const getBranchInfo = await getApi.getBranchsBranchInfo(id)
+          
+                if(getBranchInfo.data){
+                    setLoading(false)
+                    setBranchInfo(getBranchInfo.data[0])
+
+                    const checkInTime = moment(getBranchInfo.data[0].check_in_time, 'HH:mm').format('hh:mm A');
+                    const checkOutTime = moment(getBranchInfo.data[0].check_out_time, 'HH:mm').format('hh:mm A');
+                    
+                    const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
+
+                    const shiftTimeDatakey = [
+                        { key: shiftTimeData, value: shiftTimeData },
+                     
+                    ];
+                      setShiftTimeData(shiftTimeDatakey);
+                }
             } catch (error) {
                 console.log('Error got during get apis', error);
             }
@@ -154,8 +175,7 @@ const EditUserForm = () => {
             fData.append('department', selectDepartment)
             fData.append('designation', selectDesignation)
             fData.append('week_off', selectWeekoff)
-    
-        
+            if(selectShiftTime != null) { fData.append('branch_info', branchInfo.id) }
     
         
             const res = await updateApi.updateUser(userId, fData, {
@@ -198,32 +218,29 @@ const EditUserForm = () => {
             try {
                 setLoading(true);
                 const res = await getApi.getIndividualUser(userId);
-
+  
                 if (res.data) {
-
                     setFormdata({
                         ...formdata,
-                        profile_image: res.data.profile_image, // Adjust based on your API response
-                        first_name: res.data.first_name ? res.data.first_name : null,
-                        last_name: res.data.last_name ? res.data.last_name : null,
-                        email: res.data.email ? res.data.email : null,
-                        phone_number: res.data.phone_number ? res.data.phone_number : null,
-                        gender: res.data.gender ? res.data.gender : null,
-                        manager: res.data.manager ? `${res.data.manager.first_name} ${res.data.manager.last_name}` : null,
-                        department: res.data.department ? res.data.department.name : null,
-                        designation: res.data.designation ? res.data.designation.name : null,
-                        user_type: res.data.user_type ? res.data.user_type : null,
-                        week_off: res.data.week_off ? res.data.week_off.name : null,
-
-                        address: res.data.address,
-                        // Add other fields as needed
+                        profile_image: res.data.profile_image ? res.data.profile_image : null,
+                        first_name: res.data.user_data.first_name ? res.data.user_data.first_name : null,
+                        last_name: res.data.user_data.last_name ? res.data.user_data.last_name : null,
+                        email: res.data.user_data.email ? res.data.user_data.email : null,
+                        phone_number: res.data.user_data.phone_number ? res.data.user_data.phone_number : null,
+                        gender: res.data.user_data.gender ? res.data.user_data.gender : null,
+                        manager: res.data.user_data.manager ? `${res.data.user_data.manager.first_name} ${res.data.user_data.manager.last_name}` : null,
+                        department: res.data.user_data.department ? res.data.user_data.department.name : null,
+                        designation: res.data.user_data.designation ? res.data.user_data.designation.name : null,
+                        user_type: res.data.user_data.user_type ? res.data.user_data.user_type : null,
+                        week_off: res.data.user_data.week_off ? res.data.user_data.week_off.name : null,
+                        address: res.data.user_data.address ?  res.data.user_data.address : null,
                     });
-                    setSelectedGender(res.data.gender ? res.data.gender : null)
-                    setSelectedUsertype(res.data.user_type ? res.data.user_type : null)
-                    setSelectManager(res.data.manager ? res.data.manager.id : null)
-                    setSelectDepartment(res.data.department ? res.data.department.id : null)
-                    setSelectDesignation(res.data.designation ? res.data.designation.id : null)
-                    setSelectWeekoff(res.data.week_off ? res.data.week_off.id : null)
+                    setSelectedGender(res.data.user_data.gender ? res.data.user_data.gender : null)
+                    setSelectedUsertype(res.data.user_data.user_type ? res.data.user_data.user_type : null)
+                    setSelectManager(res.data.user_data.manager ? res.data.user_data.manager.id : null)
+                    setSelectDepartment(res.data.user_data.department ? res.data.user_data.department.id : null)
+                    setSelectDesignation(res.data.user_data.designation ? res.data.user_data.designation.id : null)
+                    setSelectWeekoff(res.data.user_data.week_off ? res.data.user_data.week_off.id : null)
                     setLoading(false);
                 }
             } catch (error) {
@@ -369,6 +386,21 @@ const EditUserForm = () => {
                             notFoundText="Data not found"
                             value={selectDesignation}
                         />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.lable}>Shift Time</Text>
+                        <SelectList
+                            boxStyles={styles.textInput}
+                            dropdownStyles={styles.textInput}
+                            setSelected={(val) => setSelectShiftTime(val)}
+                            data={shiftTimeData || []}
+                            save="key"
+                            placeholder={'SelectShift Time e.g. (10:00 AM to 06:00 PM'}
+                            notFoundText="Data not found"
+                            value={selectShiftTime}
+                           
+                        />
+                               
                     </View>
                     <View style={styles.inputContainer}>
                         <Text style={styles.lable}>Week Off</Text>

@@ -14,6 +14,7 @@ import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Toast from "react-native-toast-message";
 import Loader from "../../../utils/ActivityIndicator";
 import ButtonLoader from "../../../utils/BtnActivityIndicator";
+import moment from "moment";
 
 
 const UserForm = () => {
@@ -35,8 +36,8 @@ const UserForm = () => {
     const [departmentData, setDepartmentData] = useState([])
     const [designationData, setDesignationData] = useState([])
     const [weekoffData, setWeekoffData] = useState([])
+    const [shiftTimeData, setShiftTimeData] = useState([])
     const [imgError, setImgError] = useState(null)
-
 
     const initialState = {
         profile_image: null,
@@ -52,22 +53,27 @@ const UserForm = () => {
         week_off: null,
         address: null,
         password: null,
+        shift_time : null,
         confirm_password: null,
+        shift_time: null
     }
-
+    
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedUsertype, setSelectedUsertype] = useState(null);
     const [selectManager, setSelectManager] = useState(null);
     const [selectDepartment, setSelectDepartment] = useState(null);
     const [selectDesignation, setSelectDesignation] = useState(null);
+    const [selectShiftTime, setSelectShiftTime] = useState(null);
     const [selectWeekoff, setSelectWeekoff] = useState(null);
-
+    const [branchInfo, setBranchInfo] = useState(null)
+  
     useEffect(() => {
         const fetchData = async () => {
             try {
-
+                setLoading(true)
                 const getManagerStaff = await getApi.getManagerStaff(id)
                 if (getManagerStaff.data) {
+                    setLoading(false)
                     const transformManagerData = getManagerStaff.data.map(item => ({
                         key: item.id.toString(),
                         value: `${item.first_name} ${item.last_name}`
@@ -77,6 +83,7 @@ const UserForm = () => {
                 }
                 const getBranchDepartment = await getApi.getBranchDepartment(id)
                 if (getBranchDepartment.data) {
+                    setLoading(false)
                     const transformDepartmentData = getBranchDepartment.data.map(item => ({
                         key: item.id.toString(),
                         value: item.name,
@@ -85,6 +92,7 @@ const UserForm = () => {
                 }
                 const getDesignation = await getApi.getBranchDesignation(id)
                 if (getDesignation.data) {
+                    setLoading(false)
 
                     const transformDesignationData = getDesignation.data.map(item => ({
                         key: item.id.toString(),
@@ -101,7 +109,27 @@ const UserForm = () => {
                     }))
                     setWeekoffData(transformWeeloffData)
                 }
+
+                const getBranchInfo = await getApi.getBranchsBranchInfo(id)
+          
+                if(getBranchInfo.data){
+                    setLoading(false)
+                    setBranchInfo(getBranchInfo.data[0])
+
+                    const checkInTime = moment(getBranchInfo.data[0].check_in_time, 'HH:mm').format('hh:mm A');
+                    const checkOutTime = moment(getBranchInfo.data[0].check_out_time, 'HH:mm').format('hh:mm A');
+                    
+                    const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
+
+                    const shiftTimeDatakey = [
+                        { key: shiftTimeData, value: shiftTimeData },
+                     
+                    ];
+                      setShiftTimeData(shiftTimeDatakey);
+                }
+
             } catch (error) {
+                setLoading(false)
                 console.log('Error got during get apis', error);
             }
         }
@@ -166,6 +194,7 @@ const UserForm = () => {
         fData.append('designation', selectDesignation)
         fData.append('user_type', selectedUsertype)
         fData.append('week_off', selectWeekoff)
+       if(selectShiftTime != null) { fData.append('branch_info', branchInfo.id) }
 
 
         try {
@@ -337,7 +366,7 @@ const UserForm = () => {
                                         save="key"
                                         placeholder={'Select Manager e.g. (John Doe)'}
                                         notFoundText="Data not found"
-                                        // disabled={isManagerFieldDisabled}
+                                    
                                         value={selectManager}
                                         onBlur={handleBlur('manager')}
                                         onChangText={handleChange('manager')}
@@ -376,6 +405,22 @@ const UserForm = () => {
                                     onChangText={handleChange('designation')}
                                 />
                                 {selectDesignation === null && touched.designation && errors.designation ? <Text style={styles.errorText}>{errors.designation}</Text> : null}
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.lable}>Shift Time</Text>
+                                <SelectList
+                                    boxStyles={styles.textInput}
+                                    dropdownStyles={styles.textInput}
+                                    setSelected={(val) => setSelectShiftTime(val)}
+                                    data={shiftTimeData || []}
+                                    save="key"
+                                    placeholder={'SelectShift Time e.g. (10:00 AM to 06:00 PM'}
+                                    notFoundText="Data not found"
+                                    value={selectShiftTime}
+                                    onBlur={handleBlur('shift_time')}
+                                    onChangeText={handleChange('shift_time')}
+                                />
+                               
                             </View>
                             <View style={styles.inputContainer}>
                                 <Text style={styles.lable}>Week Off</Text>
