@@ -666,13 +666,33 @@ import Feather from 'react-native-vector-icons/Feather';
 import ReelsComponent from './widgets/reels_component';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {launchCamera} from 'react-native-image-picker';
+
 const Vlog = () => {
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const [currentUser, setCurrentUser] = useState(null);
 
   const navigation = useNavigation();
+  const handleLaunchCamera = async () => {
+    try {
+      const options = {
+        mediaType: 'video',
+      };
 
+      launchCamera(options, response => {
+        if (response.didCancel) {
+          console.log('User cancelled the camera operation');
+        } else if (response.error) {
+          console.log('Camera Error:', response.error);
+        } else if (response.assets) {
+          navigation.navigate('UploadVlog', {video: response});
+        }
+      });
+    } catch (error) {
+      console.log('hell=========', error);
+    }
+  };
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
@@ -717,11 +737,12 @@ const Vlog = () => {
           Vlog
         </Text>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('UploadVlog', {
-              userId:
-                currentUser && currentUser.id ? currentUser.id : currentUser.id,
-            })
+          onPress={
+            () => handleLaunchCamera()
+            // navigation.navigate('UploadVlog', {
+            //   userId:
+            //     currentUser && currentUser.id ? currentUser.id : currentUser.id,
+            // })
           }>
           <Feather name="camera" style={{fontSize: 25, color: 'white'}} />
         </TouchableOpacity>
