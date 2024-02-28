@@ -31,6 +31,7 @@ import ApplyLR from '../pages/staff/leave/leaveRequest/ApplyLR.jsx';
 import ApplyLE from '../pages/staff/leave/lateEarly/ApplyLE.jsx';
 import Notification from '../pages/staff/Notification/Notification.jsx';
 import UserDetailScreen from '../pages/user/detail.jsx';
+import NotificationDetails from '../pages/staff/Notification/NotificationDetails.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -271,6 +272,17 @@ const Navigator = () => {
         <Stack.Screen
           name="Notification"
           component={Notification}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Notification</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="NotificationDetails"
+          component={NotificationDetails}
           options={{
             headerTitle: () => (
               <View>

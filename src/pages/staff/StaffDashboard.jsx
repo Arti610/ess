@@ -74,6 +74,7 @@ const Notification = () => {
       fetchNotification();
     }
   }, []);
+
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -119,7 +120,7 @@ const StaffDashboard = () => {
                 size={20}
               />
             ),
-            // tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>,
+            tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>,
           })}
         />
         <Tab.Screen
@@ -141,7 +142,6 @@ const StaffDashboard = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            // headerRight: () => <UserProfile />,
             headerRight: () => <Notification />,
             tabBarIcon: () => (
               <BranchIcon
