@@ -19,7 +19,7 @@ const UserCard = ({ item, id }) => {
                         <Text style={[styles.lable, { textAlign: 'center' }]}>{item.first_name && item.last_name ? `${item.first_name} ${item.last_name}` : 'User Name'}</Text>
                         <Text style={style.text}>{item.designation && item.designation.name ? item.designation.name : 'No Designation'}</Text>
                         <Text style={style.text}>{item.user_type && item.user_type ? item.user_type : 'No User Type'}</Text>
-                        <Text style={style.text}>{item.status && item.status ? item.status : 'No User Type'}</Text>
+                        {/* <Text style={style.text}>{item.status && item.status ? item.status : 'No User Type'}</Text> */}
 
                     </TouchableOpacity>
                 )) : <Text>No Data Found</Text>}

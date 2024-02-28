@@ -21,9 +21,7 @@ const LateEarly = () => {
     const [uniqueData, setUniqueData] = useState(null)
 
 
-    useEffect(() => {
-
-        
+    useEffect(() => {   
         const unsubscribe = navigation.addListener('focus', () => {           
             try {
                 setLoading(true);

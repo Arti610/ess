@@ -86,6 +86,7 @@ const EditUserForm = () => {
             launchImageLibrary(options, handleImagePickerResponse);
         }
     }
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -222,7 +223,7 @@ const EditUserForm = () => {
                 if (res.data) {
                     setFormdata({
                         ...formdata,
-                        profile_image: res.data.profile_image ? res.data.profile_image : null,
+                        profile_image: res.data.user_data.profile_image ? res.data.user_data.profile_image : null,
                         first_name: res.data.user_data.first_name ? res.data.user_data.first_name : null,
                         last_name: res.data.user_data.last_name ? res.data.user_data.last_name : null,
                         email: res.data.user_data.email ? res.data.user_data.email : null,
@@ -239,7 +240,7 @@ const EditUserForm = () => {
                     setSelectedUsertype(res.data.user_data.user_type ? res.data.user_data.user_type : null)
                     setSelectManager(res.data.user_data.manager ? res.data.user_data.manager.id : null)
                     setSelectDepartment(res.data.user_data.department ? res.data.user_data.department.id : null)
-                    setSelectDesignation(res.data.user_data.designation ? res.data.user_data.designation.id : null)
+                    setSelectDesignation(res.data.user_data.designation ? res.data.user_data.designation.id : null)    
                     setSelectWeekoff(res.data.user_data.week_off ? res.data.user_data.week_off.id : null)
                     setLoading(false);
                 }
