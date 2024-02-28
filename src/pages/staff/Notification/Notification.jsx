@@ -14,10 +14,10 @@ import Loader from '../../../utils/ActivityIndicator';
 import {primaryColor, secondaryColor, styles} from '../../../../style';
 import moment from 'moment';
 import API_CONFIG from '../../../config/apiConfig';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const Notification = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [id, setId] = useState(null);
@@ -27,7 +27,7 @@ const Notification = () => {
     const fetchData = async () => {
       try {
         const res = await currentUser();
-        console.log('res==>', res);
+
         if (res && res.data && res.data.branch && res.data.branch.id) {
           setId(res.data.branch.id);
         }
@@ -57,18 +57,62 @@ const Notification = () => {
   }, [id]);
 
   const handleFilterData = status => {
-    console.log(status);
-    // data && data.filter(item => item.status === 'Month').length
+    setStatus(status);
   };
+
+  const filterData = (status, data) => {
+    const today = new Date();
+    switch (status) {
+      case 'Today':
+        const todayStart = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate()
+        );
+        return data
+          ? data.filter(
+              item =>
+                new Date(item.created_date) >= todayStart &&
+                new Date(item.created_date) < today
+            )
+          : [];
+      case 'Weekly':
+        const weekStart = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate() - today.getDay(),
+        );
+        return data
+          ? data.filter(item => new Date(item.created_date) >= weekStart)
+          : [];
+      case 'Monthly':
+        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        return data
+          ? data.filter(item => new Date(item.created_date) >= monthStart)
+          : [];
+      case 'Yearly':
+        const yearStart = new Date(today.getFullYear(), 0, 1);
+        return data
+          ? data.filter(item => new Date(item.created_date) >= yearStart)
+          : [];
+      default:
+        return data ? data : [];
+    }
+  };
+
 
   const renderData = ({item}) => {
     return (
       <ScrollView>
-       <TouchableOpacity style={[styles.textInput, style.container]} onPress={() => navigation.navigate('NotificationDetails', {item})}>
-          <View style={style.valueContainer}>
-            {item.branch.image ? (
+        <TouchableOpacity
+          style={[styles.textInput, style.container]}
+          onPress={() => navigation.navigate('NotificationDetails', {item})}>
+          <View>
+            {item.user.profile_image ? (
               <Image
-                source={{uri: `${API_CONFIG.imageUrl}${item.branch.image}`}}
+                source={{
+                  uri: `${API_CONFIG.imageUrl}${item.user.profile_image}`,
+                }}
                 style={style.image}
               />
             ) : (
@@ -78,10 +122,10 @@ const Notification = () => {
               />
             )}
           </View>
-          <View style={style.valueContainer}>
+          <View>
             <Text style={styles.lable}>{item.heading}</Text>
             <Text>
-              {moment(item.created_date).format('DD MMM YYYY, hh : mm A')}
+              {moment(item.created_date).format('DD MMM, YYYY hh : mm A')}
             </Text>
           </View>
         </TouchableOpacity>
@@ -92,52 +136,43 @@ const Notification = () => {
   return loading ? (
     <Loader />
   ) : (
-    <>
+    <View  style={{alignItems: 'center', justifyContent: 'center'}}>
       <View style={style.statusContainer}>
         <TouchableOpacity onPress={() => handleFilterData('All')}>
           <Text style={status === 'All' ? style.inactive : style.active}>
-            All {`(${data && data.length})`}
+            All ({data ? data.length : []})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Today')}>
           <Text style={status === 'Today' ? style.inactive : style.active}>
             Today
-            {`(${
-              data && data.filter(item => item.status === 'Today').length
-            })`}
+            {`(${data && data.filter(item => item.status === 'Today').length})`}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Week')}>
-          <Text style={status === 'Week' ? style.inactive : style.active}>
-            Week
-            {`(${
-              data && data.filter(item => item.status === 'Week').length
-            })`}
+        <TouchableOpacity onPress={() => handleFilterData('Weekly')}>
+          <Text style={status === 'Weekly' ? style.inactive : style.active}>
+            Weekly ({data ? filterData('Weekly', data).length : []})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Month')}>
-          <Text style={status === 'Month' ? style.inactive : style.active}>
-            Month
-            {`(${
-              data && data.filter(item => item.status === 'Month').length
-            })`}
+        <TouchableOpacity onPress={() => handleFilterData('Monthly')}>
+          <Text style={status === 'Monthly' ? style.inactive : style.active}>
+            Monthly ({data ? filterData('Monthly', data).length : []})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Year')}>
-          <Text style={status === 'Year' ? style.inactive : style.active}>
-            Year
-            {`(${
-              data && data.filter(item => item.status === 'Year').length
-            })`}
+        <TouchableOpacity onPress={() => handleFilterData('Yearly')}>
+          <Text style={status === 'Yearly' ? style.inactive : style.active}>
+            Yearly ({data ? filterData('Yearly', data).length : []})
           </Text>
         </TouchableOpacity>
       </View>
+
       <FlatList
-        data={data}
+        data={filterData(status, data)}
         renderItem={renderData}
         keyExtractor={item => item.id.toString()}
+        ListEmptyComponent={<View style={{alignItems: 'center', paddingVertical: 100}}><Image height={20} width={20} source={require('../../../assests/no_notification.png')}/><Text style={styles.textHeading}>No Notification Yet</Text></View>}
       />
-    </>
+    </View>
   );
 };
 
@@ -152,17 +187,16 @@ const style = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     gap: 10,
     marginVertical: 5,
     marginHorizontal: 10,
-    padding: 10,
+    paddingHorizontal: 10,
   },
-  valueContainer: {
-    padding: 3,
-  },
+
   active: {
     backgroundColor: primaryColor,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     marginHorizontal: 4,
     paddingVertical: 10,
     borderRadius: 25,

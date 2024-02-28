@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { primaryColor, secondaryColor, styles, textColor } from "../../../../style";
 import getApi from "../../../redux/slices/utils/getApi";
 import { currentUser } from "../../../utils/currentUser";
@@ -80,7 +80,7 @@ const Checkout = () => {
             </View>
            
                 <View style={style.containercard}>
-                   {data ?  <FlatList
+                     <FlatList
                         data={filterData(status, data)}
                         renderItem={({ item }) => (
                             <View style={style.activityCard}>
@@ -98,7 +98,8 @@ const Checkout = () => {
                             </View>
                         )}
                         keyExtractor={(item, index) => index.toString()}
-                    /> : <Text>No Data Found</Text>}
+                        ListEmptyComponent={<View style={{alignItems: 'center'}}><Image height={20} width={20} source={require('../../../assests/not_found.png')}/><Text style={styles.textHeading}>Data Not Found</Text></View>}
+                    /> 
                 </View>
            
         </>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { primaryColor, secondaryColor, styles } from "../../../../../style";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import IconAdd from 'react-native-vector-icons/MaterialIcons'
@@ -100,7 +100,7 @@ const LateEarly = () => {
                                         {item && item.status}
                                     </Text>
                                 </TouchableOpacity>
-                        )) :  <Text>No Data Found</Text>}
+                        )) : <View style={{alignItems: 'center'}}><Image height={20} width={20} source={require('../../../../assests/not_found.png')}/><Text style={styles.textHeading}>Data Not Found</Text></View>}
                     </View>
                 
             </ScrollView>

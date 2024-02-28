@@ -151,7 +151,7 @@ const LeaveRequest = () => {
               </TouchableOpacity>
             ))
           ) : (
-            <Text>No Data Found</Text>
+            <View style={{alignItems: 'center'}}><Image height={20} width={20} source={require('../../../../assests/not_found.png')}/><Text style={styles.textHeading}>Data Not Found</Text></View>
           )}
         </View>
       </ScrollView>
