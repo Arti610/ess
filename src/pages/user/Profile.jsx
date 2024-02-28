@@ -110,12 +110,13 @@ const Profile = () => {
         }
       } catch (error) {
         setIsLoading(false);
-        console.error('Error fetching user data:', error);
+        console.log('Error fetching user data:', error);
       }
     };
 
     fetchCurrentUser();
   }, []);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -123,17 +124,15 @@ const Profile = () => {
         setIsLoading(true);
 
         let res;
-        if (currentUser.user_type === 'Management') {
-          res = await getApi.getIndividualUser(currentUser.id);
-        } else {
-          res = await getApi.getIndividualUser(currentUser.branch.id);
-        }
+
+        res = await getApi.getIndividualUser(currentUser.id);
+
         if (res.data) {
           setData(res.data);
         }
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching individual user data:', error);
+        console.log('Error fetching individual user data:', error);
         setIsLoading(false);
       }
     };

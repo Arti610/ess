@@ -14,8 +14,10 @@ import Loader from '../../../utils/ActivityIndicator';
 import {primaryColor, secondaryColor, styles} from '../../../../style';
 import moment from 'moment';
 import API_CONFIG from '../../../config/apiConfig';
+import { useNavigation } from '@react-navigation/native';
 
 const Notification = () => {
+  const navigation = useNavigation()
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [id, setId] = useState(null);
@@ -62,7 +64,7 @@ const Notification = () => {
   const renderData = ({item}) => {
     return (
       <ScrollView>
-        <TouchableOpacity style={[styles.textInput, style.container]}>
+       <TouchableOpacity style={[styles.textInput, style.container]} onPress={() => navigation.navigate('NotificationDetails', {item})}>
           <View style={style.valueContainer}>
             {item.branch.image ? (
               <Image
