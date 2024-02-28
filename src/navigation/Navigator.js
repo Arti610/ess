@@ -198,7 +198,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>User Profile</Text>
+                <Text style={styles.textSubHeading}>Vlog</Text>
               </View>
             ),
           }}

@@ -135,6 +135,12 @@ const LeaveRequest = () => {
                       'DD MMM YYYY',
                     )}
                   </Text>
+              
+                {!item.user.user_type == 'Staff' ? null : (  <View style={{flexDirection: 'row'}}>
+                  {  item.status == 'Approved' ? null : <TouchableOpacity><Text  style={style.active}>Approve Leave</Text></TouchableOpacity> }
+                  {  item.status == 'Declined' ? null : <TouchableOpacity ><Text style={style.inactive}>Decline Leave</Text></TouchableOpacity>}
+                </View> )}
+                
                 </View>
                 <Text
                   style={{
@@ -151,7 +157,14 @@ const LeaveRequest = () => {
               </TouchableOpacity>
             ))
           ) : (
-            <View style={{alignItems: 'center'}}><Image height={20} width={20} source={require('../../../../assests/not_found.png')}/><Text style={styles.textHeading}>Data Not Found</Text></View>
+            <View style={{alignItems: 'center'}}>
+              <Image
+                height={20}
+                width={20}
+                source={require('../../../../assests/not_found.png')}
+              />
+              <Text style={styles.textHeading}>Data Not Found</Text>
+            </View>
           )}
         </View>
       </ScrollView>
@@ -277,6 +290,7 @@ const style = StyleSheet.create({
     borderRadius: 25,
     color: 'white',
     fontSize: 12,
+    textAlign: 'center',
   },
   inactive: {
     backgroundColor: secondaryColor,
@@ -292,7 +306,7 @@ const style = StyleSheet.create({
     gap: 10,
   },
   card: {
-    height: 80,
+    height: 'fit-content',
     gap: 7,
     borderWidth: 1,
     borderColor: '#D0D5DD',

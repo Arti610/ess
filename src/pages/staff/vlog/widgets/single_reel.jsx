@@ -6,7 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import API_CONFIG from '../../../../config/apiConfig';
 import Slider from '@react-native-community/slider';
-import Loader from '../../../../utils/ActivityIndicator';
+import {SkypeIndicator} from 'react-native-indicators';
 
 const SingleReel = ({item, index, currentIndex}) => {
   const windowWidth = Dimensions.get('window').width;
@@ -24,15 +24,14 @@ const SingleReel = ({item, index, currentIndex}) => {
   const [mute, setMute] = useState(false);
 
   const [like, setLike] = useState(true);
-  const [videoDuration, setVideoDuration] = useState(0);
+ 
   const [currentPosition, setCurrentPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const handleVideoLoad = data => {
-
     setLoading(false);
-    setVideoDuration(data.duration);
+  
     setDuration(data.duration);
   };
 
@@ -42,7 +41,6 @@ const SingleReel = ({item, index, currentIndex}) => {
   };
 
   const handleSeek = value => {
-  
     setCurrentPosition(value);
 
     if (videoRef.current) {
@@ -95,8 +93,7 @@ const SingleReel = ({item, index, currentIndex}) => {
           muted={false}
           onLoadStart={handleLoadStart}
           onProgress={handleVideoProgress}
-          // controls={true}
-          style={{
+                style={{
             width: '100%',
             height: '100%',
             position: 'absolute',
@@ -104,26 +101,13 @@ const SingleReel = ({item, index, currentIndex}) => {
         />
       </TouchableOpacity>
 
-      {/* <TouchableOpacity onPress={() => setMute(!mute)}>
-          <Ionic
-            name={mute == true ? 'volume-mute' : ''}
-            style={{
-              fontSize: mute ? 20 : 0,
-              color: 'white',
-              position: 'absolute',
-              backgroundColor: 'rgba(52,52,52,0.6)',
-              borderRadius: 100,
-              padding: mute ? 20 : 0,
-            }}
-          />
-        </TouchableOpacity> */}
-      {loading == true ? <Loader></Loader> : null}
+      {loading == true ?  <SkypeIndicator color={'#fff'} size={80} />: null}
       <View
         style={{
           position: 'absolute',
           width: windowWidth,
           zIndex: 1,
-          bottom: 0, //edited
+          bottom: 0, 
           padding: 10,
         }}>
         <View style={{}}>
@@ -166,9 +150,7 @@ const SingleReel = ({item, index, currentIndex}) => {
               </Text>
             </View>
           </TouchableOpacity>
-          <Text style={{color: 'white', fontSize: 14, marginHorizontal: 10}}>
-            {item.description}
-          </Text>
+        
 
           <View
             style={{flexDirection: 'row', paddingRight: 30, paddingTop: 20}}>
@@ -177,28 +159,20 @@ const SingleReel = ({item, index, currentIndex}) => {
               minimumValue={0}
               maximumValue={duration}
               value={currentPosition}
-              // trackClickable={false}
               onSlidingComplete={handleSeekComplete}
               onValueChange={handleSeek}
-              // enabled={false}
-              // tapToSeek={false}
               disabled={false}
             />
             <Text style={{paddingRight: 13}}>
               {formatSecondsToTime(duration)}
             </Text>
-            {/* <Ionic
-              name="ios-musical-note"
-              style={{color: 'white', fontSize: 16}}
-            /> */}
-            {/* <Text style={{color: 'white'}}>Original Audio</Text> */}
           </View>
         </View>
       </View>
       <View
         style={{
           position: 'absolute',
-          bottom: 10, //edited
+          bottom: 10,
           right: 0,
         }}>
         <TouchableOpacity onPress={() => setLike(!like)} style={{padding: 10}}>
@@ -208,43 +182,13 @@ const SingleReel = ({item, index, currentIndex}) => {
           />
           <Text style={{color: 'white'}}>4B</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity style={{padding: 10}}>
-            <Ionic
-              name="ios-chatbubble-outline"
-              style={{color: 'white', fontSize: 25}}
-            />
-          </TouchableOpacity> */}
+
         <TouchableOpacity style={{padding: 10, paddingBottom: 30}}>
           <Ionic
             name="paper-plane-outline"
             style={{color: 'white', fontSize: 25}}
           />
         </TouchableOpacity>
-        {/* <TouchableOpacity style={{padding: 10}}>
-          <Feather
-            name="more-vertical"
-            style={{color: 'white', fontSize: 25}}
-          />
-        </TouchableOpacity> */}
-        {/* <View
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: 10,
-            borderWidth: 2,
-            borderColor: 'white',
-            margin: 10,
-          }}>
-          <Image
-            source={item.postProfile}
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 10,
-              resizeMode: 'cover',
-            }}
-          />
-        </View> */}
       </View>
     </View>
   );

@@ -145,8 +145,7 @@ const Notification = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Today')}>
           <Text style={status === 'Today' ? style.inactive : style.active}>
-            Today
-            {`(${data && data.filter(item => item.status === 'Today').length})`}
+            Today ({data ? filterData('Today', data).length : []})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Weekly')}>

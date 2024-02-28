@@ -1,16 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
-
 import SingleReel from './single_reel';
-import API_CONFIG from '../../../../config/apiConfig';
-import {useNavigation, useRoute} from '@react-navigation/native';
-
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getApi from '../../../../redux/slices/utils/getApi';
-import Loader from '../../../../utils/ActivityIndicator';
-
+import {SkypeIndicator} from 'react-native-indicators';
 const ReelsComponent = () => {
+  
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -20,69 +17,6 @@ const ReelsComponent = () => {
   const handleChangeIndexValue = ({index}) => {
     setCurrentIndex(index);
   };
-
-  const dummyPosts = [
-    {
-      id: '2',
-      video: 'http://192.168.29.155:8000/media/video_upload/5.mp4',
-      description: 'Caption of the post',
-      title: 'title here',
-      likes: '245k',
-      isLike: false,
-
-      user: {
-        profile_image: '/media/profile%20image/IMG_20240220_091232.jpg',
-      },
-    },
-    {
-      id: '1',
-      video: 'http://192.168.29.155:8000/media/video_upload/5.mp4',
-      description:
-        'Hey there gig iu gg ogg igigfigffgigougigggf gigi uigbiu gyufyufuf tudty utcoucyxutyc ty cytcvhg kvku dfytkc kuyfkutdctu',
-      title: 'title here',
-      likes: '245k',
-      isLike: false,
-      user: {
-        profile_image: '/media/profile%20image/IMG_20240220_091232.jpg',
-      },
-    },
-    {
-      id: '3',
-      video:
-        'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/3.mp4',
-      description: 'Hola',
-      title: 'title here',
-      likes: '245k',
-      isLike: false,
-      user: {
-        profile_image: '/media/profile%20image/IMG_20240220_091232.jpg',
-      },
-    },
-    {
-      id: '4',
-      video:
-        'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/4.mp4',
-      description: 'Piano practice',
-      title: 'title here',
-      likes: '245k',
-      isLike: false,
-      user: {
-        profile_image: '/media/profile%20image/IMG_20240220_091232.jpg',
-      },
-    },
-    {
-      id: '5',
-      video:
-        'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/vertical-videos/5.mp4',
-      description: 'Hello World!',
-      title: 'title here',
-      likes: '245k',
-      isLike: false,
-      user: {
-        profile_image: '/media/profile%20image/IMG_20240220_091232.jpg',
-      },
-    },
-  ];
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -94,15 +28,10 @@ const ReelsComponent = () => {
 
           const storage = JSON.parse(resString);
 
-          // setUserData(res.data);
-          // console.log('res =========', res.data.id);
-          // fetchData(res.data.id);
-
           if (storage) {
             const res = await getApi.getAllVlog(storage.data.id);
-            console.log(' user video -===============', storage.data.id);
+
             if (res.data != null) {
-              console.log('length -=-=-=-=-=-=-=-', res.data.length);
               setVlogData(res.data);
             }
             setLoading(false);
@@ -129,9 +58,9 @@ const ReelsComponent = () => {
           style={{
             color: 'white',
             textAlign: 'center',
-            fontSize: 26,
+            fontSize: 18,
           }}>
-          Empty Data
+          Video Not Uploded Yet
         </Text>
       </View>
     ) : (
@@ -146,7 +75,7 @@ const ReelsComponent = () => {
       />
     )
   ) : (
-    <Loader></Loader>
+    <SkypeIndicator color={'#fff'} size={80} />
   );
 };
 
