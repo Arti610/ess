@@ -1,5 +1,5 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   Image,
   ScrollView,
@@ -15,8 +15,10 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF5 from 'react-native-vector-icons/FontAwesome5';
-import Video from 'react-native-video';
+import VideoP from 'react-native-video';
 import Toast from 'react-native-toast-message';
+import Loader from '../../../utils/ActivityIndicator';
+import {Video} from 'react-native-compressor';
 
 const ShowingVlog = () => {
   const route = useRoute();
@@ -27,6 +29,7 @@ const ShowingVlog = () => {
   console.log('outside video =====>>>>>>>>>>>>', video);
 
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const initialState = {
     title: null,
@@ -65,10 +68,17 @@ const ShowingVlog = () => {
   };
 
   const uploadVideo = async values => {
+    setLoading(true);
     console.log('values', values);
 
-    console.log('video', video.assets[0].uri);
-    console.log('image obj', image);
+    const result = await Video.compress(video.assets[0].uri, {}, progress => {
+      console.log('Compression Progress: ', progress);
+    });
+
+    console.log('result -==-=--=-=-=', result);
+
+    // console.log('video', video.assets[0].uri);
+    // console.log('image obj', image);
     const fData = new FormData();
     if (image != null) {
       fData.append('thumbnail', {
@@ -81,7 +91,7 @@ const ShowingVlog = () => {
     fData.append('video', {
       name: video.assets[0].fileName ? video.assets[0].fileName : '',
       type: video.assets[0].type ? video.assets[0].type : '',
-      uri: video.assets[0].uri ? video.assets[0].uri : '',
+      uri: result == null ? '' : result,
     });
 
     fData.append('title', values.title ? values.title : '');
@@ -97,15 +107,18 @@ const ShowingVlog = () => {
       });
       console.log('res', res);
       if (res.status === 201) {
+        setLoading(false);
         Toast.show({
           type: 'success',
           text1: 'Task uploded successfully',
           text2: 'Congratulations, your task have been uploded successfully',
           autoHide: 400,
         });
-        navigation.navigate('Home');
+        navigation.goBack();
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log('error', error.response.data);
       Toast.show({
         type: 'error',
@@ -116,7 +129,7 @@ const ShowingVlog = () => {
     }
   };
 
-  return (
+  return loading == false ? (
     <ScrollView>
       <Formik initialValues={initialState} onSubmit={uploadVideo}>
         {({
@@ -216,7 +229,7 @@ const ShowingVlog = () => {
             <View style={styles.inputContainer}>
               <Text style={styles.lable}>Video</Text>
               {video ? (
-                <Video
+                <VideoP
                   style={[styles.textInput, {height: 200}]}
                   controls={false}
                   resizeMode="cover"
@@ -241,6 +254,8 @@ const ShowingVlog = () => {
         )}
       </Formik>
     </ScrollView>
+  ) : (
+    <Loader></Loader>
   );
 };
 
