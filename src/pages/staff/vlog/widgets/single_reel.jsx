@@ -30,8 +30,10 @@ const SingleReel = ({item, index, currentIndex}) => {
   const [loading, setLoading] = useState(false);
 
   const handleVideoLoad = data => {
-    setVideoDuration(data.duration);
+
     setLoading(false);
+    setVideoDuration(data.duration);
+    setDuration(data.duration);
   };
 
   const handleVideoProgress = data => {
@@ -40,7 +42,7 @@ const SingleReel = ({item, index, currentIndex}) => {
   };
 
   const handleSeek = value => {
-    console.log('value ======', value);
+  
     setCurrentPosition(value);
 
     if (videoRef.current) {

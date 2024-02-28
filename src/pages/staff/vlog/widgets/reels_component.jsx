@@ -19,7 +19,6 @@ const ReelsComponent = () => {
 
   const handleChangeIndexValue = ({index}) => {
     setCurrentIndex(index);
-    console.log('Index -========', index);
   };
 
   const dummyPosts = [
