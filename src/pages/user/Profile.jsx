@@ -59,16 +59,15 @@ const Profile = () => {
           visibilityTime: 4000,
           autoHide: true,
         });
+        dispatch(logoutSuccess());
         try {
-          await AsyncStorage.removeItem('currentUser');
-          await AsyncStorage.removeItem('userEmail');
-          await AsyncStorage.removeItem('token');
-
           await AsyncStorage.clear();
+          // await AsyncStorage.removeItem('currentUser');
+          // await AsyncStorage.removeItem('userEmail');
+          // await AsyncStorage.removeItem('token');
         } catch (error) {
           console.log('Error clearing AsyncStorage data:', error);
         }
-        dispatch(logoutSuccess());
       }
     } catch (error) {
       setLoading(false);
@@ -117,18 +116,28 @@ const Profile = () => {
     fetchCurrentUser();
   }, []);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        const resString = await AsyncStorage.getItem('currentUser');
+        if (resString) {
+          const res = JSON.parse(resString);
+          setIsLoading(true);
 
-        let res;
+          if (res) {
+            setIsLoading(true);
+            setCurrentUser(res.data);
+            const resData = res.data;
 
-        res = await getApi.getIndividualUser(currentUser.id);
+            const id = resData.id;
 
-        if (res.data) {
-          setData(res.data);
+            // // let res;
+            const resDetail = await getApi.getIndividualUser(id);
+            if (resDetail.data) {
+              setData(resDetail.data);
+            }
+          }
         }
         setIsLoading(false);
       } catch (error) {
@@ -142,7 +151,7 @@ const Profile = () => {
     const unsubscribe = navigation.addListener('focus', fetchData);
 
     return unsubscribe;
-  }, [navigation, currentUser]);
+  }, [navigation]);
 
   return (
     <>
