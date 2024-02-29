@@ -34,13 +34,12 @@ const Notification = () => {
   }, [backPressCount]);
 
   const handleBackPress = () => {
-    console.log('hey what is this ');
+
     if (backPressCount === 0) {
       Toast.show({
         type: 'success',
         position: 'top',
         text1: 'Please press again to exit.',
-        // text2: 'congratulation! you are logged in successfully',
         visibilityTime: 4000,
         autoHide: true,
       });
@@ -76,12 +75,13 @@ const Notification = () => {
   }, []);
 
   const navigation = useNavigation();
+
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('Notification')}
       style={style.container}>
       <IconN name="notifications" style={style.icon} />
-      {data > 0 ? (
+      {data >= 0 ? (
         <Text style={style.badge}>{data}</Text>
       ) : (
         <Text style={style.badge}>0</Text>
@@ -153,18 +153,7 @@ const StaffDashboard = () => {
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>,
           })}
         />
-        {/* <Tab.Screen
-          name="Timesheet"
-          component={Timesheet}
-          options={() => ({
-            headerTitle: () => null,
-            headerLeft: () => <HeaderTitle />,
-            // headerRight: () => <UserProfile />,
-            headerRight: () => <Notification />,
-            tabBarIcon: () => <BranchIcon name="timer" style={styles.icons} size={20} />,
-            tabBarLabel: () => <Text style={styles.lable}>Timesheet</Text>
-          })}
-        /> */}
+     
       </Tab.Navigator>
       <Toast />
     </>
