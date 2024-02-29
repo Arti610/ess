@@ -24,14 +24,14 @@ const SingleReel = ({item, index, currentIndex}) => {
   const [mute, setMute] = useState(false);
 
   const [like, setLike] = useState(true);
- 
+
   const [currentPosition, setCurrentPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const handleVideoLoad = data => {
     setLoading(false);
-  
+
     setDuration(data.duration);
   };
 
@@ -93,7 +93,7 @@ const SingleReel = ({item, index, currentIndex}) => {
           muted={false}
           onLoadStart={handleLoadStart}
           onProgress={handleVideoProgress}
-                style={{
+          style={{
             width: '100%',
             height: '100%',
             position: 'absolute',
@@ -101,13 +101,13 @@ const SingleReel = ({item, index, currentIndex}) => {
         />
       </TouchableOpacity>
 
-      {loading == true ?  <SkypeIndicator color={'#fff'} size={80} />: null}
+      {loading == true ? <SkypeIndicator color={'#fff'} size={80} /> : null}
       <View
         style={{
           position: 'absolute',
           width: windowWidth,
           zIndex: 1,
-          bottom: 0, 
+          bottom: 0,
           padding: 10,
         }}>
         <View style={{}}>
@@ -150,7 +150,6 @@ const SingleReel = ({item, index, currentIndex}) => {
               </Text>
             </View>
           </TouchableOpacity>
-        
 
           <View
             style={{flexDirection: 'row', paddingRight: 30, paddingTop: 20}}>
@@ -169,7 +168,7 @@ const SingleReel = ({item, index, currentIndex}) => {
           </View>
         </View>
       </View>
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           bottom: 10,
@@ -189,7 +188,7 @@ const SingleReel = ({item, index, currentIndex}) => {
             style={{color: 'white', fontSize: 25}}
           />
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

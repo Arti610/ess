@@ -49,6 +49,14 @@ const Profile = () => {
       const res = await authApi.Logout({key: token});
 
       if (res.status === 200) {
+        try {
+          await AsyncStorage.removeItem('token');
+          await AsyncStorage.removeItem('currentUser');
+          await AsyncStorage.removeItem('userEmail');
+          await AsyncStorage.clear();
+        } catch (error) {
+          console.log('Error clearing AsyncStorage data:', error);
+        }
         setLoading(false);
         navigation.navigate('Login');
         Toast.show({
@@ -60,14 +68,6 @@ const Profile = () => {
           autoHide: true,
         });
         dispatch(logoutSuccess());
-        try {
-          await AsyncStorage.clear();
-          // await AsyncStorage.removeItem('currentUser');
-          // await AsyncStorage.removeItem('userEmail');
-          // await AsyncStorage.removeItem('token');
-        } catch (error) {
-          console.log('Error clearing AsyncStorage data:', error);
-        }
       }
     } catch (error) {
       setLoading(false);
