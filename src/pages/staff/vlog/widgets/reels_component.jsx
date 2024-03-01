@@ -23,18 +23,20 @@ const ReelsComponent = ({id}) => {
         setLoading(true);
 
         const fetchData = async () => {
-          // const resString = await AsyncStorage.getItem('currentUser');
+          const resString = await AsyncStorage.getItem('currentUser');
 
-          // const storage = JSON.parse(resString);
+          const storage = JSON.parse(resString);
 
-          // if (storage) {
-          const res = await getApi.getAllVlog(id);
+          if (storage) {
+            const res = await getApi.getAllVlog(
+              storage.data.user_type == 'Management' ? id : storage.data.id,
+            );
 
-          if (res.data != null) {
-            setVlogData(res.data);
+            if (res.data != null) {
+              setVlogData(res.data);
+            }
+            setLoading(false);
           }
-          setLoading(false);
-          // }
         };
         fetchData();
       } catch (error) {
