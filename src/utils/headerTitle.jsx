@@ -70,7 +70,7 @@ const HeaderTitle = () => {
     return unsubscribe;
   }, [navigation]);
 
-  return isLoading == false ? (
+  return (
     <View style={{flexDirection: 'row', marginLeft: 10}}>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
         <View style={styles.userName}>
@@ -98,8 +98,6 @@ const HeaderTitle = () => {
         <Text style={{fontSize: 12}}>{formattedDate}</Text>
       </View>
     </View>
-  ) : (
-    <Loader></Loader>
   );
 };
 
