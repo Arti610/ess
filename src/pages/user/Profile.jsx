@@ -38,6 +38,14 @@ const Profile = () => {
       const res = await authApi.Logout({key: token});
 
       if (res.status === 200) {
+        try {
+          await AsyncStorage.removeItem('token');
+          await AsyncStorage.removeItem('currentUser');
+          await AsyncStorage.removeItem('userEmail');
+          await AsyncStorage.clear();
+        } catch (error) {
+          console.log('Error clearing AsyncStorage data:', error);
+        }
         setLoading(false);
         navigation.navigate('Login');
         Toast.show({
@@ -48,15 +56,6 @@ const Profile = () => {
           visibilityTime: 4000,
           autoHide: true,
         });
-        try {
-          await AsyncStorage.removeItem('currentUser');
-          await AsyncStorage.removeItem('userEmail');
-          await AsyncStorage.removeItem('token');
-
-          await AsyncStorage.clear();
-        } catch (error) {
-          console.log('Error clearing AsyncStorage data:', error);
-        }
         dispatch(logoutSuccess());
       }
     } catch (error) {
@@ -110,13 +109,24 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        const resString = await AsyncStorage.getItem('currentUser');
+        if (resString) {
+          const res = JSON.parse(resString);
+          setIsLoading(true);
 
-        let res;
+          if (res) {
+            setIsLoading(true);
+            setCurrentUser(res.data);
+            const resData = res.data;
 
-        res = await getApi.getIndividualUser(currentUser.id);
+            const id = resData.id;
 
-        if (res.data) {
-          setData(res.data);
+            // // let res;
+            const resDetail = await getApi.getIndividualUser(id);
+            if (resDetail.data) {
+              setData(resDetail.data);
+            }
+          }
         }
         setIsLoading(false);
       } catch (error) {
@@ -130,7 +140,7 @@ const Profile = () => {
     const unsubscribe = navigation.addListener('focus', fetchData);
 
     return unsubscribe;
-  }, [navigation, currentUser]);
+  }, [navigation]);
 
   return (
     <>
