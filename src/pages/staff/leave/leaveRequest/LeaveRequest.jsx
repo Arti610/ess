@@ -149,7 +149,7 @@ const LeaveRequest = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Approved')}>
           <Text style={status === 'Approved' ? style.inactive : style.active}>
-            Approved{' '}
+            Approved
             {`(${
               data && data.filter(item => item.status === 'Approved').length
             })`}
@@ -157,7 +157,7 @@ const LeaveRequest = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Pending')}>
           <Text style={status === 'Pending' ? style.inactive : style.active}>
-            Pending{' '}
+            Pending
             {`(${
               data && data.filter(item => item.status === 'Pending').length
             })`}
@@ -165,7 +165,7 @@ const LeaveRequest = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Declined')}>
           <Text style={status === 'Declined' ? style.inactive : style.active}>
-            Declined{' '}
+            Declined
             {`(${
               data && data.filter(item => item.status === 'Declined').length
             })`}
@@ -179,33 +179,31 @@ const LeaveRequest = () => {
               <View style={style.card} key={item.id}>
                 <View>
                   {currentUserData &&
-                  currentUserData.user_type === 'Staff' ? null : (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        gap: 5,
-                        alignItems: 'center',
-                        marginBottom: 10,
-                      }}>
-                      <Image
-                        style={style.image}
-                        source={{
-                          uri: `${API_CONFIG.imageUrl}${
-                            item.user.profile_image
-                              ? item.user.profile_image
-                              : null
-                          }`,
-                        }}
-                      />
-                      <Text style={styles.lable}>
-                        {item && item.user && item.user.first_name
-                          ? item.user.first_name
-                          : 'User'}
-                        {item && item.user && item.user.last_name
-                          ? item.user.last_name
-                          : 'User'}
-                      </Text>
-                    </View>
+                    currentUserData.user_type === 'Staff' ? null : (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          gap: 5,
+                          alignItems: 'center',
+                          marginBottom: 10,
+                        }}>
+                        <Image
+                          style={style.image}
+                          source={{
+                            uri: `${API_CONFIG.imageUrl}${
+                              item.user.profile_image
+                                ? item.user.profile_image
+                                : null
+                            }`,
+                          }}
+                        />
+                        <Text style={styles.lable}>
+                          {item && item.user && item.user.first_name
+                            ? `${item.user.first_name} ${item.user.last_name}`
+                            : 'User'}
+                         
+                        </Text>
+                      </View>
                   )}
 
                   <Text>
@@ -298,11 +296,11 @@ const LeaveRequest = () => {
           )}
         </View>
       </ScrollView>
-      <View style={styles.buttonContainer}>
+      {currentUserData && currentUserData.user_type === 'Staff' ?  <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('ApplyLR')}>
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
-      </View>
+      </View> : null }
 
       {uniqueData ? (
         <RBSheet

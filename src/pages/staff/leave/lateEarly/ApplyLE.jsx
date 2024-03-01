@@ -17,7 +17,7 @@ import moment from "moment";
 
 const ApplyLE = () => {
     const navigation = useNavigation()
-    const [id, setId] = useState(null);
+    // const [id, setId] = useState(null);
     const lateEarly = [{ key: 'Late', value: 'Late' }, { key: 'Early', value: 'Early' }]
     const [selectLateEarly, setSelectLateEarly] = useState(null);
     const [showFromDatePicker, setShowFromDatePicker] = useState(false);
@@ -27,20 +27,20 @@ const ApplyLE = () => {
     const [formValues, setFormValues] = useState({ date: null }, { time: null })
 
 
-    useEffect(() => {
-        // Fetch user data
-        const fetchData = async () => {
-            try {
-                const userData = await currentUser();
-                if (userData) {
-                    setId(userData.data.branch.id);
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            }
-        };
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     // Fetch user data
+    //     const fetchData = async () => {
+    //         try {
+    //             const userData = await currentUser();
+    //             if (userData) {
+    //                 setId(userData.data.branch.id);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching user data:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
 
 
     const handleDateChange = (selectedDate) => {
