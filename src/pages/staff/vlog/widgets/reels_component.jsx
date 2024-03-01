@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getApi from '../../../../redux/slices/utils/getApi';
 import {SkypeIndicator} from 'react-native-indicators';
-const ReelsComponent = () => {
+const ReelsComponent = ({id}) => {
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -23,20 +23,18 @@ const ReelsComponent = () => {
         setLoading(true);
 
         const fetchData = async () => {
-          const resString = await AsyncStorage.getItem('currentUser');
+          // const resString = await AsyncStorage.getItem('currentUser');
 
-          const storage = JSON.parse(resString);
-          console.log('Loader =====', storage);
-          console.log('Loader id =====', storage.data.id);
+          // const storage = JSON.parse(resString);
 
-          if (storage) {
-            const res = await getApi.getAllVlog(storage.data.id);
+          // if (storage) {
+          const res = await getApi.getAllVlog(id);
 
-            if (res.data != null) {
-              setVlogData(res.data);
-            }
-            setLoading(false);
+          if (res.data != null) {
+            setVlogData(res.data);
           }
+          setLoading(false);
+          // }
         };
         fetchData();
       } catch (error) {

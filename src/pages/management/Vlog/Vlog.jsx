@@ -7,11 +7,14 @@ import ReelsComponent from '../../staff/vlog/widgets/reels_component';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchCamera} from 'react-native-image-picker';
+import {useRoute} from '@react-navigation/native';
 
 const Vlog = () => {
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const [currentUser, setCurrentUser] = useState(null);
+  const route = useRoute();
+  const {id} = route.params;
 
   const navigation = useNavigation();
   const handleLaunchCamera = async () => {
@@ -87,7 +90,7 @@ const Vlog = () => {
           <Feather name="camera" style={{fontSize: 25, color: 'white'}} />
         </TouchableOpacity>
       </View>
-      <ReelsComponent />
+      <ReelsComponent id={id} />
     </View>
   );
 };
