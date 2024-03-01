@@ -27,7 +27,6 @@ import Toast from 'react-native-toast-message';
 import Geolocation from '@react-native-community/geolocation';
 import {promptForEnableLocationIfNeeded} from 'react-native-android-location-enabler';
 import {SkypeIndicator} from 'react-native-indicators';
-import userApi from '../../../redux/slices/users/userApi';
 import {
   getUserFailed,
   getUserStart,
@@ -84,7 +83,7 @@ const Dashboard = () => {
     };
     fetchCurrentUser();
   }, []);
-  
+
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -136,16 +135,13 @@ const Dashboard = () => {
 
     const fetchUser = async () => {
       try {
-        dispatch(getUserStart());
-
-        const res = await userApi.getUserById(currentUserId.id);
+        const res = await getApi.getIndividualUser(currentUserId.id);
         if (res) {
           setAttendence(res.data);
         }
-        dispatch(getUserSuccess());
       } catch (error) {
         console.log(error);
-        dispatch(getUserFailed());
+        console.log(error);
       }
     };
 

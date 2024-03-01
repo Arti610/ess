@@ -36,7 +36,7 @@ const ApplyLR = () => {
     from_date: null,
     to_date: null,
   });
-  console.log('formValues', formValues);
+
 
   useEffect(() => {
     // Fetch user data
@@ -114,7 +114,7 @@ const ApplyLR = () => {
     }
   };
 
-  console.log('document', document);
+
   const handlePress = async values => {
     const fData = new FormData();
     fData.append('title', values.title ? values.title : null);

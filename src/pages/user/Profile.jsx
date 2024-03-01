@@ -2,13 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  IconColor,
-  primaryColor,
-  secondaryColor,
-  styles,
-  textColor,
-} from '../../../style';
+import {primaryColor, styles, textColor} from '../../../style';
 import API_CONFIG from '../../config/apiConfig';
 import IconEditProfile from 'react-native-vector-icons/FontAwesome5';
 import IconLogoutUser from 'react-native-vector-icons/FontAwesome5';
@@ -16,13 +10,8 @@ import {useNavigation} from '@react-navigation/native';
 import IconLogout from 'react-native-vector-icons/AntDesign';
 import IconEdit from 'react-native-vector-icons/Entypo';
 import Toast from 'react-native-toast-message';
-import userApi from '../../redux/slices/users/userApi';
 import {useDispatch} from 'react-redux';
-import {
-  logoutFailure,
-  logoutStart,
-  logoutSuccess,
-} from '../../redux/slices/auth/authSlice';
+import {  logoutFailure,  logoutStart,  logoutSuccess,} from '../../redux/slices/auth/authSlice';
 import authApi from '../../redux/slices/auth/authApi';
 import LogoutModal from '../../utils/LogoutModal';
 import Loader from '../../utils/ActivityIndicator';
@@ -116,7 +105,6 @@ const Profile = () => {
 
     fetchCurrentUser();
   }, []);
-
 
   useEffect(() => {
     const fetchData = async () => {

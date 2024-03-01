@@ -9,13 +9,6 @@ import {
   View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {
-  getUserFailed,
-  getUserStart,
-  getUserSuccess,
-  updateUserSuccess,
-} from '../../redux/slices/users/userSlice';
-import userApi from '../../redux/slices/users/userApi';
 import {styles} from '../../../style';
 import {Formik} from 'formik';
 import {Picker} from '@react-native-picker/picker';
@@ -31,13 +24,12 @@ import API_CONFIG from '../../config/apiConfig';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {getAllBranch} from '../../redux/slices/branch/branchApi';
+import getApi from '../../redux/slices/utils/getApi';
 
 const EditProfile = ({route}) => {
   const refRBSheet = useRef();
   const {userId} = route.params;
 
-  console.log('userID =====', userId);
-  console.log('userId', userId);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
@@ -47,28 +39,21 @@ const EditProfile = ({route}) => {
   const [selectedGender, setSelectedGender] = useState('');
 
   useEffect(() => {
-    // console.log(' hey is this edit profile,,,,', userId);
-
     const fetchUser = async () => {
       try {
-        dispatch(getUserStart());
+    
         setIsLoading(true);
-        const res = await userApi.getUserById(userId);
+        const res = await getApi.getIndividualUser(userId);
         if (res) {
-          console.log('res.data in edit profile------', res.data);
-          //   console.log('ressssssssssssssss===========', res.data);
           setUserData(res?.data);
           setSelectedGender(res?.data?.gender || '');
 
-          //   initialState.first_name = res.data.user_data.first_name;
           setSelectedGender(res.data.user_data.gender);
-
-          console.log('first name -========', res.data.user_data.first_name);
         }
-        dispatch(getUserSuccess());
+       
       } catch (error) {
         console.log(error);
-        dispatch(getUserFailed());
+       
       } finally {
         setIsLoading(false);
       }
@@ -107,7 +92,6 @@ const EditProfile = ({route}) => {
   };
 
   const handlePress = async values => {
-   
     try {
       let formData = new FormData();
       image?.assets[0]
@@ -146,14 +130,14 @@ const EditProfile = ({route}) => {
       dispatch(updateBranchStart());
       setUpdateLoading(true);
 
-      const res = await userApi.updateUser(userId, formData, {
+      const res = await getApi.getIndividualUser(userId, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
       if (res.status === 200 || res.status === 201) {
-        dispatch(updateUserSuccess(res.data));
+       
         setUpdateLoading(false);
         navigation.navigate('Profile');
         Toast.show({

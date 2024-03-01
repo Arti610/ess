@@ -1,12 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
+   TouchableOpacity,
   View,
 } from 'react-native';
 import {primaryColor, secondaryColor, styles} from '../../../../../style';
@@ -16,23 +14,40 @@ import getApi from '../../../../redux/slices/utils/getApi';
 import moment from 'moment';
 import Loader from '../../../../utils/ActivityIndicator';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {currentUser} from '../../../../utils/currentUser';
+import { CustomeModal } from '../../../../utils/Modal';
 
 const LeaveRequest = () => {
   const navigation = useNavigation();
   const rbSheet = useRef();
+  const route = useRoute();
+  const {id} = route.params;
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [currentUserData, setcurrentUserData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [status, setStatus] = useState('All');
   const [uniqueData, setUniqueData] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false)
 
+  const handleModalVisible = () => {
+    setModalVisible(!modalVisible)
+  }
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       try {
         setLoading(true);
         const fetchData = async () => {
-          const res = await getApi.getAllLeaveRequest();
+          let res;
+     
+          if (currentUserData === 'Staff') {
+            res = await getApi.getAllLeaveRequest();
+          
+          } else {
+            res = await getApi.getLeaveList(id);
+            
+          }
 
           if (res.data) {
             setData(res.data);
@@ -74,6 +89,27 @@ const LeaveRequest = () => {
     }
   };
 
+  const handleApproval = async(status) => {
+    console.log('status',status);
+  // {status: "Approved"}
+  // status : "Approved"
+
+  // const payload = {status : status};
+  // console.log('payload=>', payload);
+
+  }
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const data = await currentUser();
+        setcurrentUserData(data.data.user_type);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return loading ? (
     <Loader />
   ) : (
@@ -118,8 +154,11 @@ const LeaveRequest = () => {
                 key={item.id}
                 onPress={() => handleOpenRBSheet(item.id)}>
                 <View>
+                  {currentUserData === 'Staff' ? null : <Text style={styles.lable}>
+                    {item.user.first_name} {item.user.last_name}
+                  </Text>}
                   <Text>
-                    {item && item.title ? item.title : null}{' '}
+                    {item && item.title ? item.title : null}
                     {`(${
                       item && item.leave_type && item.leave_type.code
                         ? item.leave_type.code
@@ -129,18 +168,27 @@ const LeaveRequest = () => {
                   <Text style={styles.lable}>
                     {moment(
                       item && item.from_date ? item.from_date : null,
-                    ).format('DD MMM YYYY')}{' '}
-                    -{' '}
+                    ).format('DD MMM YYYY')}
+                    -
                     {moment(item && item.to_date ? item.to_date : null).format(
                       'DD MMM YYYY',
                     )}
                   </Text>
-              
-                {!item.user.user_type == 'Staff' ? null : (  <View style={{flexDirection: 'row'}}>
-                  {  item.status == 'Approved' ? null : <TouchableOpacity><Text  style={style.active}>Approve Leave</Text></TouchableOpacity> }
-                  {  item.status == 'Declined' ? null : <TouchableOpacity ><Text style={style.inactive}>Decline Leave</Text></TouchableOpacity>}
-                </View> )}
-                
+
+                  {currentUserData === 'Staff' ? null :  (
+                    <View style={{flexDirection: 'row'}}>
+                      {item.status == 'Approved' ? null : (
+                        <TouchableOpacity onPress={()=> handleModalVisible('Approved')}>
+                          <Text style={style.active}>Approve Leave</Text>
+                        </TouchableOpacity>
+                      )}
+                      {item.status == 'Declined' ? null : (
+                        <TouchableOpacity onPress={()=> handleModalVisible('Declined')}>
+                          <Text style={style.inactive}>Decline Leave</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  )}
                 </View>
                 <Text
                   style={{
@@ -269,6 +317,8 @@ const LeaveRequest = () => {
           </View>
         </RBSheet>
       ) : null}
+
+      <CustomeModal modalVisible= {modalVisible} handleModalVisible={handleModalVisible} text = {status} handlePress = {handleApproval}/>
     </>
   );
 };
