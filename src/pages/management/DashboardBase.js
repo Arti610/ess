@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 import Vlog from './Vlog/Vlog';
+import LeaveBase from '../staff/leave/LeaveBase';
 
 const Tab = createBottomTabNavigator();
 
@@ -79,7 +80,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconFa name="home" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>,
+            tabBarLabel: () => <Text style={styles.lable}>Vlogs</Text>,
           }}
         />
         <Tab.Screen
@@ -104,8 +105,8 @@ const DashboardBase = () => {
           }}
         />
         <Tab.Screen
-          name="Document"
-          component={Document}
+          name="Leave"
+          component={LeaveBase}
           initialParams={{id: id}}
           options={{
             headerTitle: () => (
@@ -115,14 +116,13 @@ const DashboardBase = () => {
                   style={tStyles.icon}>
                   <Icon name="arrowleft" style={styles.textSubHeading} />
                 </Text>
-                <Text style={styles.textSubHeading}>Document</Text>
+                <Text style={styles.textSubHeading}>Leave</Text>
               </View>
             ),
-            // headerTitle: () =>  <View onPress={() => navigation.navigate('Base')}><Text style={styles.textSubHeading}>Documents</Text></View>,
             tabBarIcon: () => (
               <IconMCI name="file-document" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Documents</Text>,
+            tabBarLabel: () => <Text style={styles.lable}>Leaves</Text>,
           }}
         />
       </Tab.Navigator>

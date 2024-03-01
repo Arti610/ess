@@ -2,9 +2,10 @@ import React from 'react';
 import { Alert, Modal,  Text, Pressable, View, StyleSheet } from 'react-native';
 import {   secondaryColor, styles } from '../../style';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import ButtonLoader from './BtnActivityIndicator';
 
 
-const CustomeModal = ({ modalVisible, handleModalVisible,  text, handlePress }) => {
+const CustomeModal = ({ modalVisible, handleModalVisible,  text, handlePress, loading }) => {
  
     return(
         <View style={style.centeredView}>
@@ -18,8 +19,8 @@ const CustomeModal = ({ modalVisible, handleModalVisible,  text, handlePress }) 
                 }}>
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
-                        <Icon name='delete' style={[styles.icon, style.icon]}/>
-                        <Text style={styles.textHeading}>{`Are you sure ?`}</Text>
+                        {/* <Icon name='delete' style={[styles.icon, style.icon]}/> */}
+                        <Text style={styles.textHeading}>{`${text} Leave`}</Text>
                         <Text style={styles.textDesc}>{`Are you sure you want to ${text}  this Leave ?`}</Text>
                         <View style={style.buttonContainer}>
                             <Pressable
@@ -30,7 +31,7 @@ const CustomeModal = ({ modalVisible, handleModalVisible,  text, handlePress }) 
                             <Pressable
                                 style={styles.ModalPrimaryButton}
                                 onPress={handlePress}>
-                                <Text style={styles.buttonText}>Yes</Text>
+                             {  loading ? <ButtonLoader/> : <Text style={styles.buttonText}>Yes</Text>}
                             </Pressable>
                         </View>
                     </View>

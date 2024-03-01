@@ -4,7 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-   TouchableOpacity,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {primaryColor, secondaryColor, styles} from '../../../../../style';
@@ -15,7 +15,10 @@ import moment from 'moment';
 import Loader from '../../../../utils/ActivityIndicator';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {currentUser} from '../../../../utils/currentUser';
-import { CustomeModal } from '../../../../utils/Modal';
+import {CustomeModal} from '../../../../utils/Modal';
+import updateApi from '../../../../redux/slices/utils/updateApi';
+import Toast from 'react-native-toast-message';
+import API_CONFIG from '../../../../config/apiConfig';
 
 const LeaveRequest = () => {
   const navigation = useNavigation();
@@ -29,31 +32,37 @@ const LeaveRequest = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [status, setStatus] = useState('All');
   const [uniqueData, setUniqueData] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [leaveTypeStatus, setLeaveTypeStatus] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [btnLoading, setBtnLoading] = useState(false);
 
-  const handleModalVisible = () => {
-    setModalVisible(!modalVisible)
-  }
+  const handleModalVisible = (itemId, status) => {
+    setUserId(itemId);
+    setLeaveTypeStatus(status);
+    setModalVisible(!modalVisible);
+  };
+
+  const fetchData = async () => {
+    let res;
+
+    if (currentUserData && currentUserData.user_type === 'Staff') {
+      res = await getApi.getAllLeaveRequest();
+    } else {
+      res = await getApi.getLeaveList(id);
+    }
+
+    if (res.data) {
+      setData(res.data);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       try {
         setLoading(true);
-        const fetchData = async () => {
-          let res;
-     
-          if (currentUserData === 'Staff') {
-            res = await getApi.getAllLeaveRequest();
-          
-          } else {
-            res = await getApi.getLeaveList(id);
-            
-          }
 
-          if (res.data) {
-            setData(res.data);
-            setLoading(false);
-          }
-        };
         fetchData();
       } catch (error) {
         console.log(error);
@@ -89,27 +98,45 @@ const LeaveRequest = () => {
     }
   };
 
-  const handleApproval = async(status) => {
-    console.log('status',status);
-  // {status: "Approved"}
-  // status : "Approved"
+  const handleApproval = async () => {
+    const payload = {status: leaveTypeStatus};
 
-  // const payload = {status : status};
-  // console.log('payload=>', payload);
+    try {
+      setBtnLoading(true);
+      const res = await updateApi.leaveApproval(userId, payload);
 
-  }
+      if (res.status === 200) {
+        setModalVisible(false);
+        setBtnLoading(false);
+        fetchData();
+        Toast.show({
+          type: 'success',
+          autoHide: true,
+          text1: `Leave ${leaveTypeStatus} successfully`,
+        });
+      }
+    } catch (error) {
+      setBtnLoading(false);
+      Toast.show({
+        type: 'error',
+        autoHide: true,
+        text1: 'The leave has not been approved.',
+      });
+    }
+  };
 
   useEffect(() => {
     try {
       const fetchData = async () => {
         const data = await currentUser();
-        setcurrentUserData(data.data.user_type);
+        setcurrentUserData(data.data);
       };
       fetchData();
     } catch (error) {
       console.log(error);
     }
   }, []);
+
   return loading ? (
     <Loader />
   ) : (
@@ -149,14 +176,38 @@ const LeaveRequest = () => {
         <View style={style.details}>
           {filteredData && filteredData.length > 0 ? (
             filteredData.map((item, i) => (
-              <TouchableOpacity
-                style={style.card}
-                key={item.id}
-                onPress={() => handleOpenRBSheet(item.id)}>
+              <View style={style.card} key={item.id}>
                 <View>
-                  {currentUserData === 'Staff' ? null : <Text style={styles.lable}>
-                    {item.user.first_name} {item.user.last_name}
-                  </Text>}
+                  {currentUserData &&
+                  currentUserData.user_type === 'Staff' ? null : (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        gap: 5,
+                        alignItems: 'center',
+                        marginBottom: 10,
+                      }}>
+                      <Image
+                        style={style.image}
+                        source={{
+                          uri: `${API_CONFIG.imageUrl}${
+                            item.user.profile_image
+                              ? item.user.profile_image
+                              : null
+                          }`,
+                        }}
+                      />
+                      <Text style={styles.lable}>
+                        {item && item.user && item.user.first_name
+                          ? item.user.first_name
+                          : 'User'}
+                        {item && item.user && item.user.last_name
+                          ? item.user.last_name
+                          : 'User'}
+                      </Text>
+                    </View>
+                  )}
+
                   <Text>
                     {item && item.title ? item.title : null}
                     {`(${
@@ -165,44 +216,75 @@ const LeaveRequest = () => {
                         : 'CL'
                     })`}
                   </Text>
-                  <Text style={styles.lable}>
-                    {moment(
-                      item && item.from_date ? item.from_date : null,
-                    ).format('DD MMM YYYY')}
-                    -
-                    {moment(item && item.to_date ? item.to_date : null).format(
-                      'DD MMM YYYY',
-                    )}
-                  </Text>
 
-                  {currentUserData === 'Staff' ? null :  (
-                    <View style={{flexDirection: 'row'}}>
-                      {item.status == 'Approved' ? null : (
-                        <TouchableOpacity onPress={()=> handleModalVisible('Approved')}>
-                          <Text style={style.active}>Approve Leave</Text>
-                        </TouchableOpacity>
-                      )}
-                      {item.status == 'Declined' ? null : (
-                        <TouchableOpacity onPress={()=> handleModalVisible('Declined')}>
-                          <Text style={style.inactive}>Decline Leave</Text>
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                  )}
+                  <View style={{flexDirection: 'row', gap: 5}}>
+                    <Text>From</Text>
+                    <Text style={styles.lable}>
+                      {moment(
+                        item && item.from_date ? item.from_date : null,
+                      ).format('DD MMM YYYY')}
+                    </Text>
+                    <Text>To</Text>
+                    <Text style={styles.lable}>
+                      {moment(
+                        item && item.to_date ? item.to_date : null,
+                      ).format('DD MMM YYYY')}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'start',
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => handleOpenRBSheet(item.id)}>
+                      <Text style={style.active}>View Details</Text>
+                    </TouchableOpacity>
+
+                    {currentUserData &&
+                      currentUserData.user_type === 'Staff' ? (
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            borderRadius: 20,
+                            padding: 8,
+                            color: 'white',
+                            backgroundColor:
+                              item && item.status === 'Pending'
+                                ? 'gold'
+                                : item && item.status === 'Approved'
+                                ? 'green'
+                                : 'red',
+                            fontWeight: 'bold',
+                          }}>
+                          {item && item.status}
+                      </Text>
+                    ) : null}
+                    {currentUserData &&
+                    currentUserData.user_type === 'Staff' ? null : (
+                      <>
+                        {item.status == 'Approved' ? null : (
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleModalVisible(item.id, 'Approved')
+                            }>
+                            <Text style={style.active}>Approve Leave</Text>
+                          </TouchableOpacity>
+                        )}
+                        {item.status == 'Declined' ? null : (
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleModalVisible(item.id, 'Declined')
+                            }>
+                            <Text style={style.inactive}>Decline Leave</Text>
+                          </TouchableOpacity>
+                        )}
+                      </>
+                    )}
+                  </View>
                 </View>
-                <Text
-                  style={{
-                    color:
-                      item && item.status === 'Pending'
-                        ? 'gold'
-                        : item && item.status === 'Approved'
-                        ? 'green'
-                        : 'red',
-                    fontWeight: 'bold',
-                  }}>
-                  {item && item.status}
-                </Text>
-              </TouchableOpacity>
+              </View>
             ))
           ) : (
             <View style={{alignItems: 'center'}}>
@@ -246,7 +328,7 @@ const LeaveRequest = () => {
                 uniqueData.leave_type &&
                 uniqueData.leave_type.name
                   ? uniqueData.leave_type.name
-                  : 'Common Leave'}{' '}
+                  : 'Common Leave'}
                 {`(${
                   uniqueData &&
                   uniqueData.leave_type &&
@@ -318,7 +400,13 @@ const LeaveRequest = () => {
         </RBSheet>
       ) : null}
 
-      <CustomeModal modalVisible= {modalVisible} handleModalVisible={handleModalVisible} text = {status} handlePress = {handleApproval}/>
+      <CustomeModal
+        modalVisible={modalVisible}
+        handleModalVisible={handleModalVisible}
+        text={leaveTypeStatus}
+        handlePress={handleApproval}
+        loading={btnLoading}
+      />
     </>
   );
 };
@@ -334,7 +422,7 @@ const style = StyleSheet.create({
   },
   active: {
     backgroundColor: primaryColor,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     marginHorizontal: 4,
     paddingVertical: 10,
     borderRadius: 25,
@@ -344,7 +432,7 @@ const style = StyleSheet.create({
   },
   inactive: {
     backgroundColor: secondaryColor,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     marginHorizontal: 4,
     paddingVertical: 10,
     borderRadius: 25,
@@ -365,7 +453,14 @@ const style = StyleSheet.create({
     backgroundColor: '#FFF',
     position: 'relative',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'end',
     flexDirection: 'row',
+  },
+  image: {
+    borderRadius: 50,
+    width: 25,
+    height: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
