@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { getCountry } from '../../../redux/slices/utils/countryApi';
 import { createBranch, getAllBranch, updateBrnach } from '../../../redux/slices/branch/branchApi';
 import API_CONFIG from '../../../config/apiConfig';
 import { styles } from '../../../../style';
@@ -17,6 +16,7 @@ import ButtonLoader from '../../../utils/BtnActivityIndicator';
 import { addBranch } from '../../../utils/validationSchema';
 import Loader from '../../../utils/ActivityIndicator';
 import { SelectList } from 'react-native-dropdown-select-list';
+import getApi from '../../../redux/slices/utils/getApi';
 
 const AddBranch = () => {
   const refRBSheet = useRef();
@@ -111,7 +111,7 @@ const AddBranch = () => {
     const fetchCountry = async () => {
       try {
         setLoading(true)
-        const res = await getCountry();
+        const res = await getApi.getCountry();
 
           if (res.data) {
             setLoading(false)

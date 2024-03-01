@@ -4,7 +4,8 @@ export default {
 
     updateUser: async (id, payload, option) => { return await apiService.put(`updateuser/${id}`, payload, option) },
    
-    changePassword: async (payload, option) => { return await apiService.put(`change_password`, payload, option) }
+    changePassword: async (payload, option) => { return await apiService.put(`change_password`, payload, option) },
 
+    leaveApproval : async (id, payload) => {return await apiService.put(`leave_approve_decline/${id}`, payload)}
 
 }

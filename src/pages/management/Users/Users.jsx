@@ -1,20 +1,12 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import IconAdd from 'react-native-vector-icons/MaterialIcons';
-import {secondaryColor, styles, textColor} from '../../../../style';
+import {styles} from '../../../../style';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
-import userApi from '../../../redux/slices/users/userApi';
-import API_CONFIG from '../../../config/apiConfig';
 import Toast from 'react-native-toast-message';
 import Loader from '../../../utils/ActivityIndicator';
 import UserCard from '../../../utils/UserCard';
+import getApi from '../../../redux/slices/utils/getApi';
 
 const Users = () => {
   const navigation = useNavigation();
@@ -28,7 +20,7 @@ const Users = () => {
       try {
         setIsLoading(true);
         const fetchusers = async () => {
-          const res = await userApi.getBranchUsers(id);
+          const res = await getApi.getStaffList(id);
           if (res.status === 200) {
             setData(res.data);
             setIsLoading(false);
@@ -39,7 +31,7 @@ const Users = () => {
         setIsLoading(false);
       }
     });
-    return unsubscribe
+    return unsubscribe;
   }, [navigation]);
 
   return isLoading ? (

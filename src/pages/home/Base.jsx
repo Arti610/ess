@@ -38,7 +38,6 @@ const Base = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            headerRight: () => <UserProfile />,
             tabBarIcon: () => <BranchIcon name="featured-play-list" style={styles.icons}  size={20} />,
             tabBarLabel: () => <Text style={styles.lable}>Branch</Text>
           })}
@@ -50,7 +49,6 @@ const Base = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            headerRight: () => <UserProfile />,
             tabBarIcon: () => <Icon name="code-branch"  style={styles.icons} size={20}/>,
             tabBarLabel: () => <Text style={styles.lable}>BranchInfo</Text>
           })}

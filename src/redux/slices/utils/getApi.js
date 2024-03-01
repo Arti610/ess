@@ -7,7 +7,6 @@ export default {
 
     getAllUserList: (id) => apiService.get(`all_details_user/${id}`),
     getIndividualUser: (id) => apiService.get(`get_user/${id}`),
-    // getIndividualUser: (id) => console.log(id),
     getVlog: (id) => apiService.get(`/${id}`),
 
     // utils
@@ -22,9 +21,8 @@ export default {
     // VLog
     getAllVlog: (id) => apiService.get(`get_task_list/${id}`),
 
-
-
     // Single Get API @start
+    getCountry: () => apiService.get(`all_countries`),
     getAllLeaveRequest: () => apiService.get(`get_leaverequest_list`),
     getAllLateEarly: () => apiService.get(`get_LateEarly_list`),
     getAllCheckinoutList: (token) => apiService.get(`check_in_out_list`, {
@@ -32,17 +30,11 @@ export default {
             Authorization: `token ${token}`
         }
     }),
-    // getAllCheckinoutList : (option) => console.log(option, 'tokenjjjj'),
+
     getIndividualLeaveRequest: (id) => apiService.get(`get_leaverequest/${id}`),
     getIndividualLateEarly: (id) => apiService.get(`get_lateEarly/${id}`),
     getTimeSheetList: (id) => apiService.get(`list_time_sheet/${id}`),
     // Single Get API @end
-
-
-
-
-
-
 
 
     getNotification: (id) => apiService.get(`list_notice/${id}`),

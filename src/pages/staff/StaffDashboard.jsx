@@ -21,7 +21,7 @@ const Tab = createBottomTabNavigator();
 const Notification = () => {
   const [branchId, setBranchId] = useState(null);
   const [data, setData] = useState(0);
-
+  console.log('branchId', branchId);
   const [backPressCount, setBackPressCount] = useState(0);
 
   useEffect(() => {
@@ -34,7 +34,6 @@ const Notification = () => {
   }, [backPressCount]);
 
   const handleBackPress = () => {
-
     if (backPressCount === 0) {
       Toast.show({
         type: 'success',
@@ -139,6 +138,7 @@ const StaffDashboard = () => {
         <Tab.Screen
           name="Leave"
           component={LeaveBase}
+          initialParams={{id : null}}
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
@@ -153,7 +153,6 @@ const StaffDashboard = () => {
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>,
           })}
         />
-     
       </Tab.Navigator>
       <Toast />
     </>
