@@ -136,7 +136,7 @@ const ApplyLR = () => {
         },
       });
 
-      if (res.status === 201 || 200) {
+      if (res.status === 201 || res.status === 200) {
         setIsLoading(false);
         navigation.navigate('Leave');
         console.log('leave requested successfully');

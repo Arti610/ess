@@ -21,7 +21,7 @@ const Tab = createBottomTabNavigator();
 const Notification = () => {
   const [branchId, setBranchId] = useState(null);
   const [data, setData] = useState(0);
-  console.log('branchId', branchId);
+  console.log('data notice count',data);
   const [backPressCount, setBackPressCount] = useState(0);
 
   useEffect(() => {

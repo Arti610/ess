@@ -195,7 +195,7 @@ const Profile = () => {
               <View style={pStyles.footerTextView}>
                 <View style={pStyles.leftFooterText}>
                   <IconEditProfile
-                    name="user-edit"
+                    name="user-check"
                     style={pStyles.logoutUserIcon}
                   />
                   <Text style={pStyles.lable}>My Profile</Text>
@@ -216,7 +216,7 @@ const Profile = () => {
               <View style={pStyles.footerTextView}>
                 <View style={pStyles.leftFooterText}>
                   <IconEditProfile
-                    name="user-edit"
+                    name="pen"
                     style={pStyles.logoutUserIcon}
                   />
                   <Text style={pStyles.lable}>Edit Profile</Text>
@@ -238,7 +238,7 @@ const Profile = () => {
               <View style={pStyles.footerTextView}>
                 <View style={pStyles.leftFooterText}>
                   <IconEditProfile
-                    name="user-edit"
+                    name="key"
                     style={pStyles.logoutUserIcon}
                   />
                   <Text style={pStyles.lable}>Change Password</Text>
@@ -254,7 +254,7 @@ const Profile = () => {
                   <View style={pStyles.footerTextView}>
                     <View style={pStyles.leftFooterText}>
                       <IconEditProfile
-                        name="user-edit"
+                        name="th-list"
                         style={pStyles.logoutUserIcon}
                       />
                       <Text style={pStyles.lable}>My Leaves</Text>
@@ -263,7 +263,7 @@ const Profile = () => {
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('checkin')}
+                  onPress={() => navigation.navigate('Clock')}
                   style={pStyles.footerText}>
                   <View style={pStyles.footerTextView}>
                     <View style={pStyles.leftFooterText}>

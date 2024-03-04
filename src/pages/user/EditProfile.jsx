@@ -25,6 +25,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {getAllBranch} from '../../redux/slices/branch/branchApi';
 import getApi from '../../redux/slices/utils/getApi';
+import updateApi from '../../redux/slices/utils/updateApi';
 
 const EditProfile = ({route}) => {
   const refRBSheet = useRef();
@@ -41,7 +42,6 @@ const EditProfile = ({route}) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-    
         setIsLoading(true);
         const res = await getApi.getIndividualUser(userId);
         if (res) {
@@ -50,10 +50,8 @@ const EditProfile = ({route}) => {
 
           setSelectedGender(res.data.user_data.gender);
         }
-       
       } catch (error) {
         console.log(error);
-       
       } finally {
         setIsLoading(false);
       }
@@ -94,6 +92,7 @@ const EditProfile = ({route}) => {
   const handlePress = async values => {
     try {
       let formData = new FormData();
+
       image?.assets[0]
         ? formData.append('profile_image', {
             name: image.assets[0].fileName ? image.assets[0].fileName : '',
@@ -101,43 +100,24 @@ const EditProfile = ({route}) => {
             uri: image.assets[0].uri ? image.assets[0].uri : '',
           })
         : null;
-      formData.append(
-        'first_name',
-        values.first_name ? values?.first_name : userData?.first_name,
-      );
-      formData.append(
-        'last_name',
-        values.last_name ? values?.last_name : userData?.last_name,
-      );
+      formData.append('first_name', values.first_name ? values?.first_name : userData?.first_name);
+      formData.append('last_name', values.last_name ? values?.last_name : userData?.last_name);
       formData.append('email', values.email ? values?.email : userData?.email);
-      formData.append(
-        'phone_number',
-        values.phone_number ? values?.phone_number : userData?.phone_number,
-      );
-      formData.append(
-        'phone_number',
-        values.phone_number ? values?.phone_number : userData?.phone_number,
-      );
-
+      formData.append('phone_number', values.phone_number ? values?.phone_number : userData?.phone_number);
+      formData.append('phone_number', values.phone_number ? values?.phone_number : userData?.phone_number);
       formData.append('gender', selectedGender || userData?.gender);
+      formData.append('address', values.address ? values?.address : userData?.address);
 
-      formData.append(
-        'address',
-        values.address ? values?.address : userData?.address,
-      );
-
-      const id = userData.id;
-      dispatch(updateBranchStart());
       setUpdateLoading(true);
 
-      const res = await getApi.getIndividualUser(userId, formData, {
+      // const res = await getApi.getIndividualUser(userId, formData, {
+      const res = await updateApi.updateUser(userId, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
       if (res.status === 200 || res.status === 201) {
-       
         setUpdateLoading(false);
         navigation.navigate('Profile');
         Toast.show({
@@ -148,8 +128,6 @@ const EditProfile = ({route}) => {
           visibilityTime: 4000,
           autoHide: true,
         });
-
-        getAllBranch(dispatch);
       } else {
         Toast.show({
           type: 'error',
@@ -178,14 +156,12 @@ const EditProfile = ({route}) => {
       <View style={styles.container}>
         <Formik
           //   initialValues={userId ? {...userData} : initialState}
-
           initialValues={{
             first_name: userData == null ? null : userData.user_data.first_name,
             last_name: userData == null ? null : userData.user_data.last_name,
             email: userData == null ? null : userData.user_data.email,
             // gender: userData == null ? null : userData.user_data.gender,
-            phone_number:
-              userData == null ? null : userData.user_data.phone_number,
+            phone_number: userData == null ? null : userData.user_data.phone_number,
             address: userData == null ? null : userData.user_data.address,
           }}
           // validationSchema={addUserSchema}

@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import IconFa6 from 'react-native-vector-icons/FontAwesome6'
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
 
-
 const Home = () => {
   const navigation = useNavigation()
   const route = useRoute()
@@ -54,7 +53,7 @@ const Home = () => {
       inActiveStaffs++;
     }
   }
-
+  
   for (let i = 0; i < staff.length; i++) {
     totalStaffs++;
   }
@@ -70,6 +69,7 @@ const Home = () => {
       pendingLateEarly++;
     }
   }
+
   return (
     <>
       <ScrollView  >

@@ -103,7 +103,7 @@ const Notification = () => {
 
   const renderData = ({item}) => {
     return (
-      <ScrollView>
+      
         <TouchableOpacity
           style={[styles.textInput, style.container]}
           onPress={() => navigation.navigate('NotificationDetails', {item})}>
@@ -129,14 +129,14 @@ const Notification = () => {
             </Text>
           </View>
         </TouchableOpacity>
-      </ScrollView>
+      
     );
   };
 
   return loading ? (
     <Loader />
   ) : (
-    <View  style={{alignItems: 'center', justifyContent: 'center'}}>
+    <View  style={{alignItems: 'center', justifyContent: 'center', width: '100%'}}>
       <View style={style.statusContainer}>
         <TouchableOpacity onPress={() => handleFilterData('All')}>
           <Text style={status === 'All' ? style.inactive : style.active}>
@@ -186,10 +186,9 @@ const style = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    width: '100%',
     gap: 10,
-    marginVertical: 5,
-    marginHorizontal: 10,
     paddingHorizontal: 10,
   },
 

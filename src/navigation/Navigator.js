@@ -32,6 +32,8 @@ import ApplyLE from '../pages/staff/leave/lateEarly/ApplyLE.jsx';
 import Notification from '../pages/staff/Notification/Notification.jsx';
 import UserDetailScreen from '../pages/user/detail.jsx';
 import NotificationDetails from '../pages/staff/Notification/NotificationDetails.jsx';
+import LeaveRequest from '../pages/staff/leave/leaveRequest/LeaveRequest.jsx';
+import LateEarly from '../pages/staff/leave/lateEarly/LateEarly.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -262,6 +264,28 @@ const Navigator = () => {
           name="ApplyLE"
           component={ApplyLE}
           options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Late/Early Request</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="LeaveRequest"
+          component={LeaveRequest}
+            options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Leave Request</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="LateEarly"
+          component={LateEarly}
+            options={{
             headerTitle: () => (
               <View>
                 <Text style={styles.textSubHeading}>Late/Early Request</Text>

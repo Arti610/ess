@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -23,14 +23,14 @@ import API_CONFIG from '../../../../config/apiConfig';
 const LeaveRequest = () => {
   const navigation = useNavigation();
   const rbSheet = useRef();
+
   const route = useRoute();
   const {id} = route.params;
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [currentUserData, setcurrentUserData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [status, setStatus] = useState('All');
+  const [status, setStatus] = useState('Today');
   const [uniqueData, setUniqueData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [leaveTypeStatus, setLeaveTypeStatus] = useState(null);
@@ -76,14 +76,77 @@ const LeaveRequest = () => {
     filterData(status);
   }, [status, data]);
 
-  const filterData = status => {
-    let newData;
-    if (status === 'All') {
-      newData = data;
-    } else {
-      newData = data.filter(item => item.status === status);
+  //   const filterData = (status, data) => {
+  //     const today = new Date();
+  //     switch (status) {
+  //         case 'Weekly':
+  //             const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+  //             return  data ? data.filter(item => new Date(item.date_time) >= weekStart): [];
+  //         case 'Monthly':
+  //             const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  //             return  data ? data.filter(item => new Date(item.date_time) >= monthStart): [];
+  //         case 'Yearly':
+  //             const yearStart = new Date(today.getFullYear(), 0, 1);
+  //             return  data ? data.filter(item => new Date(item.date_time) >= yearStart): [];
+  //         default:
+  //             return  data ? data: [];
+  //     }
+  // };
+
+  //   const filterData = status => {
+  //     const today = new Date();
+
+  //     let newData;
+  //     if (status === 'All') {
+  //       newData = data;
+  //     } else {
+  //       newData = data.filter(item => item.status === status);
+  //     }
+  //     setFilteredData(newData);
+  //   };
+
+  const filterData = (status, data) => {
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const todayEnd = new Date(todayStart);
+    todayEnd.setDate(todayEnd.getDate() + 1);
+
+    switch (status) {
+      case 'Today':
+        return data
+          ? data.filter(item => {
+              const itemDate = new Date(item.from_date);
+              return itemDate >= todayStart && itemDate < todayEnd;
+            })
+          : [];
+      case 'Weekly':
+        const weekStart = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate() - today.getDay(),
+        );
+        return data
+          ? data.filter(item => new Date(item.from_date) >= weekStart)
+          : [];
+      case 'Monthly':
+        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        return data
+          ? data.filter(item => new Date(item.from_date) >= monthStart)
+          : [];
+      case 'Yearly':
+        const yearStart = new Date(today.getFullYear(), 0, 1);
+        return data
+          ? data.filter(item => new Date(item.from_date) >= yearStart)
+          : [];
+      case 'All':
+        return data ? data : [];
+      default:
+        return data ? data.filter(item => item.status === status) : [];
     }
-    setFilteredData(newData);
   };
 
   const handleFilterData = status => {
@@ -141,166 +204,206 @@ const LeaveRequest = () => {
     <Loader />
   ) : (
     <>
-      <View style={style.container}>
-        <TouchableOpacity onPress={() => handleFilterData('All')}>
-          <Text style={status === 'All' ? style.inactive : style.active}>
-            All {`(${data && data.length})`}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Approved')}>
-          <Text style={status === 'Approved' ? style.inactive : style.active}>
-            Approved
-            {`(${
-              data && data.filter(item => item.status === 'Approved').length
-            })`}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Pending')}>
-          <Text style={status === 'Pending' ? style.inactive : style.active}>
-            Pending
-            {`(${
-              data && data.filter(item => item.status === 'Pending').length
-            })`}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Declined')}>
-          <Text style={status === 'Declined' ? style.inactive : style.active}>
-            Declined
-            {`(${
-              data && data.filter(item => item.status === 'Declined').length
-            })`}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView>
-        <View style={style.details}>
-          {filteredData && filteredData.length > 0 ? (
-            filteredData.map((item, i) => (
-              <View style={style.card} key={item.id}>
-                <View>
-                  {currentUserData &&
-                    currentUserData.user_type === 'Staff' ? null : (
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          gap: 5,
-                          alignItems: 'center',
-                          marginBottom: 10,
-                        }}>
-                        <Image
-                          style={style.image}
-                          source={{
-                            uri: `${API_CONFIG.imageUrl}${
-                              item.user.profile_image
-                                ? item.user.profile_image
-                                : null
-                            }`,
-                          }}
-                        />
-                        <Text style={styles.lable}>
-                          {item && item.user && item.user.first_name
-                            ? `${item.user.first_name} ${item.user.last_name}`
-                            : 'User'}
-                         
-                        </Text>
-                      </View>
-                  )}
+      {currentUserData && currentUserData.user_type === 'Staff' ? (
+        <View style={style.container}>
+          {/* <TouchableOpacity onPress={() => handleFilterData('All')}>
+            <Icon name="filter" style={{color: primaryColor, fontSize: 20}} />
+          </TouchableOpacity> */}
+          <TouchableOpacity onPress={() => handleFilterData('Today')}>
+            <Text style={status === 'Today' ? style.inactive : style.active}>
+              Today ({data ? filterData('Today', data).length : []})
+            </Text>
+          </TouchableOpacity>
 
-                  <Text>
-                    {item && item.title ? item.title : null}
-                    {`(${
-                      item && item.leave_type && item.leave_type.code
-                        ? item.leave_type.code
-                        : 'CL'
-                    })`}
-                  </Text>
+          <TouchableOpacity onPress={() => handleFilterData('All')}>
+            <Text style={status === 'All' ? style.inactive : style.active}>
+              All ({data ? filterData('All', data).length : []})
+            </Text>
+          </TouchableOpacity>
 
-                  <View style={{flexDirection: 'row', gap: 5}}>
-                    <Text>From</Text>
-                    <Text style={styles.lable}>
-                      {moment(
-                        item && item.from_date ? item.from_date : null,
-                      ).format('DD MMM YYYY')}
-                    </Text>
-                    <Text>To</Text>
-                    <Text style={styles.lable}>
-                      {moment(
-                        item && item.to_date ? item.to_date : null,
-                      ).format('DD MMM YYYY')}
-                    </Text>
-                  </View>
+          <TouchableOpacity onPress={() => handleFilterData('Approved')}>
+            <Text style={status === 'Approved' ? style.inactive : style.active}>
+              Approved ({data ? filterData('Approved', data).length : []})
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilterData('Pending')}>
+            <Text style={status === 'Pending' ? style.inactive : style.active}>
+              Pending ({data ? filterData('Pending', data).length : []})
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilterData('Declined')}>
+            <Text style={status === 'Declined' ? style.inactive : style.active}>
+              Declined ({data ? filterData('Declined', data).length : []})
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={style.container}>
+          <TouchableOpacity onPress={() => handleFilterData('All')}>
+            <Text style={status === 'All' ? style.inactive : style.active}>
+              All ({data ? filterData('All', data).length : []})
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => handleFilterData('Today')}>
+            <Text style={status === 'Today' ? style.inactive : style.active}>
+              Today ({data ? filterData('Today', data).length : []})
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilterData('Weekly')}>
+            <Text style={status === 'Weekly' ? style.inactive : style.active}>
+              Weekly ({data ? filterData('Weekly', data).length : []})
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilterData('Monthly')}>
+            <Text style={status === 'Monthly' ? style.inactive : style.active}>
+              Monthly ({data ? filterData('Monthly', data).length : []})
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilterData('Yearly')}>
+            <Text style={status === 'Yearly' ? style.inactive : style.active}>
+              Yearly ({data ? filterData('Yearly', data).length : []})
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <View style={style.details}>
+        <FlatList
+          data={filterData(status, data)}
+          renderItem={({item}) => (
+            <View style={style.card} key={item.id}>
+              <View>
+                {currentUserData &&
+                currentUserData.user_type === 'Staff' ? null : (
                   <View
                     style={{
                       flexDirection: 'row',
+                      gap: 5,
                       alignItems: 'center',
-                      justifyContent: 'start',
+                      marginBottom: 10,
                     }}>
-                    <TouchableOpacity
-                      onPress={() => handleOpenRBSheet(item.id)}>
-                      <Text style={style.active}>View Details</Text>
-                    </TouchableOpacity>
-
-                    {currentUserData &&
-                      currentUserData.user_type === 'Staff' ? (
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            borderRadius: 20,
-                            padding: 8,
-                            color: 'white',
-                            backgroundColor:
-                              item && item.status === 'Pending'
-                                ? 'gold'
-                                : item && item.status === 'Approved'
-                                ? 'green'
-                                : 'red',
-                            fontWeight: 'bold',
-                          }}>
-                          {item && item.status}
-                      </Text>
-                    ) : null}
-                    {currentUserData &&
-                    currentUserData.user_type === 'Staff' ? null : (
-                      <>
-                        {item.status == 'Approved' ? null : (
-                          <TouchableOpacity
-                            onPress={() =>
-                              handleModalVisible(item.id, 'Approved')
-                            }>
-                            <Text style={style.active}>Approve Leave</Text>
-                          </TouchableOpacity>
-                        )}
-                        {item.status == 'Declined' ? null : (
-                          <TouchableOpacity
-                            onPress={() =>
-                              handleModalVisible(item.id, 'Declined')
-                            }>
-                            <Text style={style.inactive}>Decline Leave</Text>
-                          </TouchableOpacity>
-                        )}
-                      </>
-                    )}
+                    <Image
+                      style={style.image}
+                      source={{
+                        uri: `${API_CONFIG.imageUrl}${
+                          item.user.profile_image
+                            ? item.user.profile_image
+                            : null
+                        }`,
+                      }}
+                    />
+                    <Text style={styles.lable}>
+                      {item && item.user && item.user.first_name
+                        ? `${item.user.first_name} ${item.user.last_name}`
+                        : 'User'}
+                    </Text>
                   </View>
+                )}
+
+                <Text>
+                  {item && item.title ? item.title : null}
+                  {`(${
+                    item && item.leave_type && item.leave_type.code
+                      ? item.leave_type.code
+                      : 'CL'
+                  })`}
+                </Text>
+
+                <View style={{flexDirection: 'row', gap: 5}}>
+                  <Text>From</Text>
+                  <Text style={styles.lable}>
+                    {moment(
+                      item && item.from_date ? item.from_date : null,
+                    ).format('DD MMM YYYY')}
+                  </Text>
+                  <Text>To</Text>
+                  <Text style={styles.lable}>
+                    {moment(item && item.to_date ? item.to_date : null).format(
+                      'DD MMM YYYY',
+                    )}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent:
+                      currentUserData.user_type === 'Staff'
+                        ? 'space-between'
+                        : 'start',
+                    width: '100%',
+                  }}>
+                  <TouchableOpacity onPress={() => handleOpenRBSheet(item.id)}>
+                    <Text style={style.active}>View Details</Text>
+                  </TouchableOpacity>
+
+                  {currentUserData && currentUserData.user_type === 'Staff' ? (
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        borderRadius: 20,
+                        padding: 8,
+                        color:
+                          item && item.status === 'Pending'
+                            ? 'gold'
+                            : item && item.status === 'Approved'
+                            ? 'green'
+                            : 'red',
+                        fontWeight: 'bold',
+                      }}>
+                      {item && item.status}
+                    </Text>
+                  ) : null}
+                  {currentUserData &&
+                  currentUserData.user_type === 'Staff' ? null : (
+                    <>
+                      {item.status == 'Approved' ? null : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleModalVisible(item.id, 'Approved')
+                          }>
+                          <Text style={style.active}>Approve Leave</Text>
+                        </TouchableOpacity>
+                      )}
+                      {item.status == 'Declined' ? null : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleModalVisible(item.id, 'Declined')
+                          }>
+                          <Text style={style.inactive}>Decline Leave</Text>
+                        </TouchableOpacity>
+                      )}
+                    </>
+                  )}
                 </View>
               </View>
-            ))
-          ) : (
+            </View>
+          )}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
             <View style={{alignItems: 'center'}}>
               <Image
                 height={20}
                 width={20}
                 source={require('../../../../assests/not_found.png')}
               />
-              <Text style={styles.textHeading}>Data Not Found</Text>
+              <Text style={styles.lable}>
+                No leave requests have been applied yet
+              </Text>
             </View>
-          )}
+          }
+        />
+      </View>
+
+      {currentUserData && currentUserData.user_type === 'Staff' ? (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('ApplyLR')}>
+            <IconAdd name="add" style={styles.addIcon} />
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-      {currentUserData && currentUserData.user_type === 'Staff' ?  <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('ApplyLR')}>
-          <IconAdd name="add" style={styles.addIcon} />
-        </TouchableOpacity>
-      </View> : null }
+      ) : null}
 
       {uniqueData ? (
         <RBSheet
@@ -416,13 +519,14 @@ const style = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
     gap: 8,
   },
   active: {
     backgroundColor: primaryColor,
-    paddingHorizontal: 10,
+    paddingHorizontal: 6,
     marginHorizontal: 4,
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderRadius: 25,
     color: 'white',
     fontSize: 12,
@@ -430,19 +534,23 @@ const style = StyleSheet.create({
   },
   inactive: {
     backgroundColor: secondaryColor,
-    paddingHorizontal: 10,
+    paddingHorizontal: 6,
     marginHorizontal: 4,
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderRadius: 25,
     color: 'black',
     fontSize: 12,
   },
   details: {
-    padding: 20,
-    gap: 10,
+    width: '100%',
+    height: '100%',
+    padding: 10,
+    paddingBottom: 80,
   },
   card: {
     height: 'fit-content',
+    marginBottom: 10,
+    width: '100%',
     gap: 7,
     borderWidth: 1,
     borderColor: '#D0D5DD',
