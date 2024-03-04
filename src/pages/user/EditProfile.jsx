@@ -276,20 +276,17 @@ const EditProfile = ({route}) => {
 
               <View style={styles.inputContainer}>
                 <Text style={styles.lable}>First Name</Text>
-                {/* <Text style={styles.lable}>
-                  {console.log('data===== ', userData)}
-                </Text> */}
-
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="First Name (e.g., Steve)"
-                  onBlur={handleBlur('first_name')}
-                  onChangeText={handleChange('first_name')}
-                  value={values.first_name}
-                />
-                {touched.first_name && errors.first_name ? (
-                  <Text style={styles.errorText}>{errors.first_name}</Text>
-                ) : null}
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="First Name (e.g., Steve)"
+                    onBlur={handleBlur('first_name')}
+                    onChangeText={handleChange('first_name')}
+                    value={values.first_name}
+                    readOnly
+                  />
+                  {touched.first_name && errors.first_name ? (
+                    <Text style={styles.errorText}>{errors.first_name}</Text>
+                  ) : null}
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.lable}>Last Name</Text>
@@ -299,6 +296,7 @@ const EditProfile = ({route}) => {
                   onBlur={handleBlur('last_name')}
                   onChangeText={handleChange('last_name')}
                   value={values.last_name}
+                  readOnly
                 />
                 {touched.last_name && errors.last_name ? (
                   <Text style={styles.errorText}>{errors.last_name}</Text>
@@ -322,6 +320,7 @@ const EditProfile = ({route}) => {
                 <Picker
                   style={styles.picker}
                   selectedValue={selectedGender}
+                  enabled={false}
                   onValueChange={itemValue =>
                     setSelectedGender(itemValue ? itemValue : userData.gender)
                   }>

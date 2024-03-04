@@ -81,6 +81,7 @@ const Checkin = () => {
                 <View style={style.containercard}>
                     <FlatList
                         data={filterData(status, data)}
+                        showsVerticalScrollIndicator= {false}
                         renderItem={({ item }) => (
                             <View style={style.activityCard}>
                                 <View style={{flexDirection: 'row',justifyContent: 'start', alignItems : 'flex-start', gap: 20}}>

@@ -1,12 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  Dimensions,
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -39,7 +36,7 @@ const LateEarly = () => {
   const [userId, setUserId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
-
+  console.log('uniqueData',uniqueData);
   const handleModalVisible = (itemId, status) => {
     setUserId(itemId);
     setLeaveTypeStatus(status);
@@ -90,16 +87,6 @@ const LateEarly = () => {
     filterData(status);
   }, [status, data]);
 
-  // const filterData = status => {
-  //   let newData;
-  //   if (status === 'All') {
-  //     newData = data;
-  //   } else {
-  //     newData = data.filter(item => item.status === status);
-  //   }
-  //   setFilteredData(newData);
-  // };
-
   const filterData = (status, data) => {
     const today = new Date();
     const todayStart = new Date(
@@ -114,7 +101,7 @@ const LateEarly = () => {
       case 'Today':
         return data
           ? data.filter(item => {
-              const itemDate = new Date(item.from_date);
+              const itemDate = new Date(item.date);
               return itemDate >= todayStart && itemDate < todayEnd;
             })
           : [];
@@ -189,9 +176,7 @@ const LateEarly = () => {
     <>
       {currentUserData && currentUserData.user_type === 'Staff' ? (
         <View style={style.container}>
-          {/* <TouchableOpacity onPress={() => handleFilterData('All')}>
-            <Icon name="filter" style={{color: primaryColor, fontSize: 20}} />
-          </TouchableOpacity> */}
+
             <TouchableOpacity onPress={() => handleFilterData('Today')}>
             <Text style={status === 'Today' ? style.inactive : style.active}>
               Today ({data ? filterData('Today', data).length : []})
@@ -254,6 +239,7 @@ const LateEarly = () => {
         <FlatList
           data={filterData(status, data)}
           renderItem={({item}) => (
+        
             <View
               style={style.card}
               key={item.id}
@@ -287,7 +273,7 @@ const LateEarly = () => {
                 )}
                 <View>
                   <Text>
-                    {item && item.late_early ? item.late_early : 'Late/Early'}{' '}
+                    {item && item.late_early ? item.late_early : 'Late/Early'}
                   </Text>
                   <Text style={styles.lable}>
                     {moment(item && item.date ? item.date : null).format(
@@ -357,7 +343,7 @@ const LateEarly = () => {
                 source={require('../../../../assests/not_found.png')}
               />
               <Text style={styles.lable}>
-                No leave requests have been applied yet
+                No late/early requests have been applied yet
               </Text>
             </View>
           }
@@ -391,18 +377,7 @@ const LateEarly = () => {
             <View
               style={{flexDirection: 'row', gap: 120, alignItems: 'center'}}>
               <Text style={styles.lable}>
-                {uniqueData &&
-                uniqueData.leave_type &&
-                uniqueData.leave_type.name
-                  ? uniqueData.leave_type.name
-                  : 'Leave Name'}{' '}
-                {`(${
-                  uniqueData &&
-                  uniqueData.leave_type &&
-                  uniqueData.leave_type.code
-                    ? uniqueData.leave_type.code
-                    : 'LN'
-                })`}
+               Late/Early Request
               </Text>
               <Text
                 style={{
@@ -423,10 +398,7 @@ const LateEarly = () => {
             </View>
             <View>
               <Text style={{color: 'black', fontSize: 12, padding: 5}}>
-                Late/Early :{' '}
-                {uniqueData && uniqueData.late_early
-                  ? uniqueData.late_early
-                  : null}
+                Late/Early : {uniqueData && uniqueData.late_early ? uniqueData.late_early : null}
               </Text>
               <Text style={{color: 'black', fontSize: 12, padding: 5}}>
                 Date :{' '}

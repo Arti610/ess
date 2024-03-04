@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { primaryColor, styles } from "../../../../../style";
-import { currentUser } from "../../../../utils/currentUser";
-import getApi from "../../../../redux/slices/utils/getApi";
 import { SelectList } from "react-native-dropdown-select-list";
-import Loader from "../../../../utils/ActivityIndicator";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik } from "formik";
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -17,7 +14,6 @@ import moment from "moment";
 
 const ApplyLE = () => {
     const navigation = useNavigation()
-    // const [id, setId] = useState(null);
     const lateEarly = [{ key: 'Late', value: 'Late' }, { key: 'Early', value: 'Early' }]
     const [selectLateEarly, setSelectLateEarly] = useState(null);
     const [showFromDatePicker, setShowFromDatePicker] = useState(false);
@@ -25,23 +21,6 @@ const ApplyLE = () => {
     const [document, setDocument] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [formValues, setFormValues] = useState({ date: null }, { time: null })
-
-
-    // useEffect(() => {
-    //     // Fetch user data
-    //     const fetchData = async () => {
-    //         try {
-    //             const userData = await currentUser();
-    //             if (userData) {
-    //                 setId(userData.data.branch.id);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error fetching user data:", error);
-    //         }
-    //     };
-    //     fetchData();
-    // }, []);
-
 
     const handleDateChange = (selectedDate) => {
         setShowFromDatePicker(false);
@@ -53,9 +32,7 @@ const ApplyLE = () => {
         }));
     };
 
-    const handleTimeChange = (selectTime) => {
-    
-      
+    const handleTimeChange = (selectTime) => {      
         setShowTime(false);
         setFormValues({ ...formValues, time: selectTime });
     };
@@ -82,7 +59,7 @@ const ApplyLE = () => {
     const handlePress = async (values) => {
         const fData = new FormData()
 
-        fData.append('leaveType', selectLateEarly ? selectLateEarly : null)
+        fData.append('late_early', selectLateEarly ? selectLateEarly : null)
         fData.append('date', formValues.date ? formValues.date : null)
         fData.append('time', formValues.time ? moment(formValues.time).format('HH:mm:ss') : null)
         fData.append('reason', values.reason ? values.reason : null)
@@ -111,14 +88,14 @@ const ApplyLE = () => {
             setIsLoading(false)
             console.log(`Request for late/early failed`, error.response.data);
         }
-
+    console.log('fData==>', fData);
     }
 
     return (
         <ScrollView>
             <Formik
                 initialValues={{
-                    late_early: null,
+                    late_early: "",
                     date: "",
                     time: "",
                     reason: "",
