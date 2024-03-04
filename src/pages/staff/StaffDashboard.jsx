@@ -3,6 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import BranchIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconFa from 'react-native-vector-icons/FontAwesome';
+import DocIcon from 'react-native-vector-icons/Ionicons';
 import HeaderTitle from '../../utils/headerTitle';
 import Toast from 'react-native-toast-message';
 import {primaryColor, styles} from '../../../style';
@@ -15,6 +16,7 @@ import IconN from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {currentUser} from '../../utils/currentUser';
 import getApi from '../../redux/slices/utils/getApi';
+import Documents from '../documents/Documents';
 
 const Tab = createBottomTabNavigator();
 
@@ -151,6 +153,24 @@ const StaffDashboard = () => {
               />
             ),
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>,
+          })}
+        />
+        <Tab.Screen
+          name="Documents"
+          component={Documents}
+          initialParams={{id : null}}
+          options={() => ({
+            headerTitle: () => null,
+            headerLeft: () => <HeaderTitle />,
+            headerRight: () => <Notification />,
+            tabBarIcon: () => (
+              <DocIcon
+                name="documents"
+                style={styles.icons}
+                size={20}
+              />
+            ),
+            tabBarLabel: () => <Text style={styles.lable}>Documents</Text>,
           })}
         />
       </Tab.Navigator>
