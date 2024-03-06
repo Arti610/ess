@@ -136,7 +136,8 @@ const Notification = () => {
   return loading ? (
     <Loader />
   ) : (
-    <View  style={{alignItems: 'center', justifyContent: 'center'}}>
+   
+    <>
       <View style={style.statusContainer}>
         <TouchableOpacity onPress={() => handleFilterData('All')}>
           <Text style={status === 'All' ? style.inactive : style.active}>
@@ -164,16 +165,18 @@ const Notification = () => {
           </Text>
         </TouchableOpacity>
       </View>
+      
+        <FlatList
+          data={filterData(status, data)}
+          style={{ paddingHorizontal: 10}}
+          renderItem={renderData}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={item => item.id.toString()}
+          ListEmptyComponent={<View style={{alignItems: 'center', paddingVertical: 100}}><Image height={20} width={20} source={require('../../../assests/no_notification.png')}/><Text style={styles.textHeading}>No Notification Yet</Text></View>}
+          />
+     
 
-      <FlatList
-        data={filterData(status, data)}
-        style={{ paddingHorizontal: 10}}
-        renderItem={renderData}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={item => item.id.toString()}
-        ListEmptyComponent={<View style={{alignItems: 'center', paddingVertical: 100}}><Image height={20} width={20} source={require('../../../assests/no_notification.png')}/><Text style={styles.textHeading}>No Notification Yet</Text></View>}
-      />
-    </View>
+</>
   );
 };
 
@@ -188,7 +191,10 @@ const style = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    marginBottom: 10
+    marginBottom: 10,
+    gap : 10,
+    padding : 10,
+    width : '100%'
   },
 
   active: {

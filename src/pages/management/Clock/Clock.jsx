@@ -1,5 +1,5 @@
 import { Text, View } from "react-native"
-import ShowingVlog from "../Vlog/ShwongVlog"
+
 
 const Clock = ()=>{
     return(

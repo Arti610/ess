@@ -79,15 +79,15 @@ const Home = () => {
             <View><Text style={styles.textHeading}>{inActiveStaffs && totalStaffs ? (totalStaffs - inActiveStaffs) : 0}</Text></View>
             <View><Text style={styles.lable}>Active Staffs</Text></View>
           </TouchableOpacity>
-          <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('CheckInUser', {id : id})}>
+          <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('CheckInUser')}>
             <View><IconFa6 name='clock-rotate-left' style={style.checkinIcon} /></View>
             <View><Text style={styles.textHeading}>{checkinCount ? checkinCount : 0}</Text></View>
-            <View><Text style={styles.lable}>Check In</Text></View>
+            <View><Text style={styles.lable}>In Office</Text></View>
           </TouchableOpacity>
-          <TouchableOpacity style={style.card}  onPress={()=> navigation.navigate('NotCheckInUser', {id : id})}>
+          <TouchableOpacity style={style.card}  onPress={()=> navigation.navigate('NotCheckInUser')}>
             <View><IconFa6 name='clock-rotate-left' style={style.checkoutIcon} /></View>
             <View><Text style={styles.textHeading}>{checkoutCount ? checkoutCount : 0}</Text></View>
-            <View><Text style={styles.lable}>Not Check In</Text></View>
+            <View><Text style={styles.lable}>Not In Office</Text></View>
           </TouchableOpacity>
           <TouchableOpacity style={style.card}  onPress={()=> navigation.navigate('LeaveRequest', {id : id})}>
             <View><IconM name='calendar-alert' style={style.leaveRequest} /></View>
@@ -118,7 +118,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: 'center',
-    justifyContent: 'start'
+    justifyContent: 'center'
   },
 
   card: {

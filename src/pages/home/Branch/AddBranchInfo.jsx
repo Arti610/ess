@@ -33,26 +33,20 @@ const AddBranchInfo = () => {
     branch: null
   })
 
-
-
   const onChangeCheckin = (event, selectedDate) => {
-
     setCheckinShow(false);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      check_in_time: selectedDate ? selectedDate : prevFormData.check_in_time, // should be checkin
+      check_in_time: selectedDate ? selectedDate : prevFormData.check_in_time, 
     }));
-
   };
 
   const onChangeCheckout = (event, selectedDate) => {
-
     setCheckoutShow(false);
     setFormData((prevFormData) => ({
       ...prevFormData,
       check_out_time: selectedDate ? selectedDate : prevFormData.check_out_time,
     }));
-
   };
 
   const handleChange = (name, value) => {

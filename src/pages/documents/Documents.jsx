@@ -32,7 +32,7 @@ const Documents = () => {
       if (id) {
         const fetchData = async () => {
           const res = await getApi.getAllUserList(id);
-          console.log(res.data.docs);
+         
           if (res && res.data && res.data.docs) {
             setData(res.data.docs);
           }

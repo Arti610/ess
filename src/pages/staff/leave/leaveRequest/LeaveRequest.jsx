@@ -76,34 +76,7 @@ const LeaveRequest = () => {
     filterData(status);
   }, [status, data]);
 
-  //   const filterData = (status, data) => {
-  //     const today = new Date();
-  //     switch (status) {
-  //         case 'Weekly':
-  //             const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
-  //             return  data ? data.filter(item => new Date(item.date_time) >= weekStart): [];
-  //         case 'Monthly':
-  //             const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-  //             return  data ? data.filter(item => new Date(item.date_time) >= monthStart): [];
-  //         case 'Yearly':
-  //             const yearStart = new Date(today.getFullYear(), 0, 1);
-  //             return  data ? data.filter(item => new Date(item.date_time) >= yearStart): [];
-  //         default:
-  //             return  data ? data: [];
-  //     }
-  // };
 
-  //   const filterData = status => {
-  //     const today = new Date();
-
-  //     let newData;
-  //     if (status === 'All') {
-  //       newData = data;
-  //     } else {
-  //       newData = data.filter(item => item.status === status);
-  //     }
-  //     setFilteredData(newData);
-  //   };
 
   const filterData = (status, data) => {
     const today = new Date();

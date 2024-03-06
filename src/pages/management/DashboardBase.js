@@ -4,7 +4,6 @@ import {
 } from '@react-navigation/bottom-tabs';
 import React, {useEffect} from 'react';
 import Users from './Users/Users';
-import Clock from './Clock/Clock';
 import Home from './Home/Home';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StyleSheet, Text, View} from 'react-native';
@@ -15,6 +14,7 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 import Vlog from './Vlog/Vlog';
 import LeaveBase from '../staff/leave/LeaveBase';
+import Clock from '../staff/clock/clock';
 
 const Tab = createBottomTabNavigator();
 
@@ -101,7 +101,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconFa name="clock-o" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Clock</Text>,
+            tabBarLabel: () => <Text style={styles.lable}>Clock</Text>
           }}
         />
         <Tab.Screen

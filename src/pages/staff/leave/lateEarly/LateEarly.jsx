@@ -349,6 +349,7 @@ const LateEarly = () => {
           }
         />
       </View>
+      
       {currentUserData && currentUserData.user_type === 'Staff' ? (
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('ApplyLE')}>

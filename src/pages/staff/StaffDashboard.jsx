@@ -23,7 +23,7 @@ const Tab = createBottomTabNavigator();
 const Notification = () => {
   const [branchId, setBranchId] = useState(null);
   const [data, setData] = useState(0);
-  console.log('data notice count',data);
+
   const [backPressCount, setBackPressCount] = useState(0);
 
   useEffect(() => {
@@ -155,7 +155,7 @@ const StaffDashboard = () => {
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>,
           })}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Documents"
           component={Documents}
           initialParams={{id : null}}
@@ -172,7 +172,7 @@ const StaffDashboard = () => {
             ),
             tabBarLabel: () => <Text style={styles.lable}>Documents</Text>,
           })}
-        />
+        /> */}
       </Tab.Navigator>
       <Toast />
     </>
@@ -188,7 +188,7 @@ const style = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 20,
-    position: 'relative', // Necessary for positioning the badge
+    position: 'relative', 
   },
   icon: {
     fontSize: 25,
@@ -201,7 +201,7 @@ const style = StyleSheet.create({
     minWidth: 15,
     height: 15,
     borderRadius: 10,
-    backgroundColor: 'red', // You can customize the badge color
+    backgroundColor: 'red', 
     color: 'white',
     fontSize: 10,
     textAlign: 'center',

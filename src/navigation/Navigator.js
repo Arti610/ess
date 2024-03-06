@@ -222,7 +222,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Check In Staffs</Text>
+                <Text style={styles.textSubHeading}>In Office</Text>
               </View>
             ),
           }}
@@ -233,7 +233,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Not Check In Staffs</Text>
+                <Text style={styles.textSubHeading}>Not In Office</Text>
               </View>
             ),
           }}
@@ -315,6 +315,7 @@ const Navigator = () => {
             ),
           }}
         />
+      
       </Stack.Navigator>
     </NavigationContainer>
   );
