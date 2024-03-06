@@ -1,28 +1,20 @@
-import {useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import getApi from '../../../redux/slices/utils/getApi';
 import UserCard from '../../../utils/UserCard';
 import Loader from '../../../utils/ActivityIndicator';
+import { currentUser } from '../../../utils/currentUser';
+import { useRoute } from '@react-navigation/native';
 
 const CheckInUser = () => {
 
+  const route = useRoute()
+  const {id} = route.params
+console.log('id',id);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [id, setId] = useState(null);
 
-  useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const res = await currentUser();
-       
-        setId(res.data.id);
-      };
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+
 
   useEffect(() => {
     const fetchData = async () => {

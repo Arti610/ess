@@ -9,8 +9,10 @@ import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const Home = () => {
   const navigation = useNavigation()
+
   const route = useRoute()
   const { id } = route.params;
+
   const [staff, setStaff] = useState([])
   const [leaveRequest, setLeaveRequest] = useState([])
   const [lateEarly, setLateEarly] = useState([])
@@ -79,12 +81,12 @@ const Home = () => {
             <View><Text style={styles.textHeading}>{inActiveStaffs && totalStaffs ? (totalStaffs - inActiveStaffs) : 0}</Text></View>
             <View><Text style={styles.lable}>Active Staffs</Text></View>
           </TouchableOpacity>
-          <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('CheckInUser')}>
+          <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('CheckInUser', {id : id})}>
             <View><IconFa6 name='clock-rotate-left' style={style.checkinIcon} /></View>
             <View><Text style={styles.textHeading}>{checkinCount ? checkinCount : 0}</Text></View>
             <View><Text style={styles.lable}>In Office</Text></View>
           </TouchableOpacity>
-          <TouchableOpacity style={style.card}  onPress={()=> navigation.navigate('NotCheckInUser')}>
+          <TouchableOpacity style={style.card}  onPress={()=> navigation.navigate('NotCheckInUser', {id : id})}>
             <View><IconFa6 name='clock-rotate-left' style={style.checkoutIcon} /></View>
             <View><Text style={styles.textHeading}>{checkoutCount ? checkoutCount : 0}</Text></View>
             <View><Text style={styles.lable}>Not In Office</Text></View>

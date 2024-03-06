@@ -5,10 +5,14 @@ import {useEffect, useState} from 'react';
 import {currentUser} from '../../../utils/currentUser';
 import CheckInUser from '../../management/Home/CheckInUser';
 import NotCheckInUser from '../../management/Home/NotCheckInUser';
+import { useRoute } from '@react-navigation/native';
 
 
 const Tab = createMaterialTopTabNavigator();
 const Clock = () => {
+  const route = useRoute()
+  const {id} = route.params
+
   const [currentUserData, setCurrentUserData] = useState(null);
 
   useEffect(() => {
@@ -32,8 +36,8 @@ const Clock = () => {
     </Tab.Navigator>
   ) : (
     <Tab.Navigator>
-      <Tab.Screen name="In Office" component={CheckInUser} />
-      <Tab.Screen name="Not In Office" component={NotCheckInUser} />
+      <Tab.Screen name="In Office" component={(CheckInUser, {id : id})} />
+      <Tab.Screen name="Not In Office" component={(NotCheckInUser, {id : id})} />
     </Tab.Navigator>
   );
 };

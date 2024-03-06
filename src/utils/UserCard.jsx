@@ -11,7 +11,7 @@ const UserCard = ({item, id}) => {
   const handleNavigate = user => {
     navigation.navigate('UserProfile', {userData: user, id: id});
   };
-  
+
   return (
     <View style={style.container}>
       {item ? (
@@ -50,7 +50,7 @@ const UserCard = ({item, id}) => {
           </TouchableOpacity>
         ))
       ) : (
-       <NotFound title='Data not available'/>
+       <NotFound title='No information found.'/>
       )}
     </View>
   );

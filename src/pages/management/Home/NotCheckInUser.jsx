@@ -8,23 +8,12 @@ import {currentUser} from '../../../utils/currentUser';
 
 const NotCheckInUser = () => {
 
+  const route = useRoute()
+  const {id} = route.params
+
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [id, setId] = useState(null);
-
-  useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const res = await currentUser();
-
-        setId(res.data.id);
-      };
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -102,9 +102,7 @@ const StaffDashboard = () => {
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
             headerRight: () => <Notification />,
-            tabBarIcon: () => (
-              <Icon name="code-branch" style={styles.icons} size={20} />
-            ),
+            tabBarIcon: () => (<Icon name="code-branch" style={styles.icons} size={20} />),
             tabBarLabel: () => <Text style={styles.lable}>Home</Text>,
           })}
         />
@@ -113,7 +111,6 @@ const StaffDashboard = () => {
           component={Vlog}
           options={() => ({
             headerShown: false,
-
             tabBarIcon: () => (
               <BranchIcon
                 name="featured-play-list"
