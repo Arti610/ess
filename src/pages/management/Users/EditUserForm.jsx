@@ -188,7 +188,7 @@ const EditUserForm = () => {
             if (res.status === 200 || res.status === 201) {
                 setIsLoading(false);
 
-                navigation.navigate('Users');
+                navigation.navigate('UserProfile', {userData : res.data});
                 Toast.show({
                     type: 'success',
                     position: 'top',

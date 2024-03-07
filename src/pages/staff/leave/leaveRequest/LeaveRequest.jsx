@@ -49,8 +49,10 @@ const LeaveRequest = () => {
     let res;
 
     if (currentUserData && currentUserData.user_type === 'Staff') {
+   
       res = await getApi.getAllLeaveRequest();
     } else {
+    
       res = await getApi.getLeaveList(id);
     }
 

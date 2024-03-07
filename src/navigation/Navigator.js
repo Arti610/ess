@@ -34,6 +34,11 @@ import UserDetailScreen from '../pages/user/detail.jsx';
 import NotificationDetails from '../pages/staff/Notification/NotificationDetails.jsx';
 import LeaveRequest from '../pages/staff/leave/leaveRequest/LeaveRequest.jsx';
 import LateEarly from '../pages/staff/leave/lateEarly/LateEarly.jsx';
+import CheckinChekout from '../pages/management/Users/CheckinChekout.jsx';
+import Leaves from '../pages/management/Users/Leaves.jsx';
+import LateEarlys from '../pages/management/Users/LateEarlys.jsx';
+import Documents from '../pages/management/Users/Documents.jsx';
+import Vlog from '../pages/management/Users/Vlog.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -289,6 +294,61 @@ const Navigator = () => {
             headerTitle: () => (
               <View>
                 <Text style={styles.textSubHeading}>Late/Early Request</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name='CheckinCheckout'
+          component={CheckinChekout}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Checkin/Checkout</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name='Leaves'
+          component={Leaves}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Leave</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name='LateEarlys'
+          component={LateEarlys}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Late/Early</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name='Documents'
+          component={Documents}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Document</Text>
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name='Vlogs'
+          component={Vlog}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Vlog</Text>
               </View>
             ),
           }}

@@ -9,7 +9,7 @@ const UserCard = ({item, id}) => {
   const navigation = useNavigation();
 
   const handleNavigate = user => {
-    navigation.navigate('UserProfile', {userData: user, id: id});
+    navigation.navigate('UserProfile', {userData: user, id : id});
   };
 
   return (
