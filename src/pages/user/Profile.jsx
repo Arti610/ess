@@ -47,6 +47,7 @@ const Profile = () => {
           console.log('Error clearing AsyncStorage data:', error);
         }
         setLoading(false);
+        setModalVisible(false);
         navigation.navigate('Login');
         Toast.show({
           type: 'success',

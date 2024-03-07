@@ -3,24 +3,22 @@ import {ScrollView} from 'react-native';
 import getApi from '../../../redux/slices/utils/getApi';
 import UserCard from '../../../utils/UserCard';
 import Loader from '../../../utils/ActivityIndicator';
-import { currentUser } from '../../../utils/currentUser';
 import { useRoute } from '@react-navigation/native';
 
 const CheckInUser = () => {
 
   const route = useRoute()
   const {id} = route.params
-console.log('id',id);
+
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const res = await getApi.getStaffList(id);
+
         if (res.status === 200) {
           const filteredUserData = res.data.filter(
             user => user.status === 'In Office',

@@ -5,13 +5,13 @@ import {useEffect, useState} from 'react';
 import {currentUser} from '../../../utils/currentUser';
 import CheckInUser from '../../management/Home/CheckInUser';
 import NotCheckInUser from '../../management/Home/NotCheckInUser';
-import { useRoute } from '@react-navigation/native';
-
+import {useRoute} from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
 const Clock = () => {
-  const route = useRoute()
-  const {id} = route.params
+  const route = useRoute();
+  const {id} = route.params;
+  console.log('id  clock', id);
 
   const [currentUserData, setCurrentUserData] = useState(null);
 
@@ -36,8 +36,18 @@ const Clock = () => {
     </Tab.Navigator>
   ) : (
     <Tab.Navigator>
-      <Tab.Screen name="In Office" component={(CheckInUser, {id : id})} />
-      <Tab.Screen name="Not In Office" component={(NotCheckInUser, {id : id})} />
+      <Tab.Screen
+        name="In Office"
+        component={CheckInUser}
+        options={{tabBarLabel: 'In Office'}}
+        initialParams={{id: id}}
+      />
+      <Tab.Screen
+        name="Not In Office"
+        component={NotCheckInUser}
+        options={{tabBarLabel: 'Not In Office'}}
+        initialParams={{id: id}}
+      />
     </Tab.Navigator>
   );
 };

@@ -10,7 +10,7 @@ const NotFound = ({title}) => {
         width={20}
         source={require('../assests/not_found.png')}
       />
-      <Text style={styles.lable}>{title}</Text>
+      <Text style={styles.lable}>{title ? title : 'Information not found'}</Text>
     </View>
   );
 };

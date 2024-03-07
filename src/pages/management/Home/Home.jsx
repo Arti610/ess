@@ -72,13 +72,15 @@ const Home = () => {
     }
   }
 
+  const activeStaff = (totalStaffs - inActiveStaffs);
+
   return (
     <>
-      <ScrollView  >
+      <ScrollView>
         <View style={style.container}>
           <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('ActiveUser', {id : id})}>
             <View><Icon name='users' style={style.userIcon} /></View>
-            <View><Text style={styles.textHeading}>{inActiveStaffs && totalStaffs ? (totalStaffs - inActiveStaffs) : 0}</Text></View>
+            <View><Text style={styles.textHeading}>{inActiveStaffs && totalStaffs ? activeStaff : 0}</Text></View>
             <View><Text style={styles.lable}>Active Staffs</Text></View>
           </TouchableOpacity>
           <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('CheckInUser', {id : id})}>

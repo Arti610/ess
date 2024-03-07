@@ -11,7 +11,7 @@ import {primaryColor, secondaryColor, styles} from '../../../../../style';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import IconAdd from 'react-native-vector-icons/MaterialIcons';
 import getApi from '../../../../redux/slices/utils/getApi';
-0
+0;
 import moment from 'moment';
 import Loader from '../../../../utils/ActivityIndicator';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -20,6 +20,7 @@ import {CustomeModal} from '../../../../utils/Modal';
 import updateApi from '../../../../redux/slices/utils/updateApi';
 import Toast from 'react-native-toast-message';
 import API_CONFIG from '../../../../config/apiConfig';
+import NotFound from '../../../../utils/NotFound';
 
 const LeaveRequest = () => {
   const navigation = useNavigation();
@@ -31,7 +32,7 @@ const LeaveRequest = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [currentUserData, setcurrentUserData] = useState([]);
-  const [status, setStatus] = useState('Today');
+  const [status, setStatus] = useState('Pending');
   const [uniqueData, setUniqueData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [leaveTypeStatus, setLeaveTypeStatus] = useState(null);
@@ -77,8 +78,6 @@ const LeaveRequest = () => {
     filterData(status);
   }, [status, data]);
 
-
-
   const filterData = (status, data) => {
     const today = new Date();
     const todayStart = new Date(
@@ -97,25 +96,25 @@ const LeaveRequest = () => {
               return itemDate >= todayStart && itemDate < todayEnd;
             })
           : [];
-      case 'Weekly':
-        const weekStart = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate() - today.getDay(),
-        );
-        return data
-          ? data.filter(item => new Date(item.from_date) >= weekStart)
-          : [];
-      case 'Monthly':
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        return data
-          ? data.filter(item => new Date(item.from_date) >= monthStart)
-          : [];
-      case 'Yearly':
-        const yearStart = new Date(today.getFullYear(), 0, 1);
-        return data
-          ? data.filter(item => new Date(item.from_date) >= yearStart)
-          : [];
+      // case 'Weekly':
+      //   const weekStart = new Date(
+      //     today.getFullYear(),
+      //     today.getMonth(),
+      //     today.getDate() - today.getDay(),
+      //   );
+      //   return data
+      //     ? data.filter(item => new Date(item.from_date) >= weekStart)
+      //     : [];
+      // case 'Monthly':
+      //   const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      //   return data
+      //     ? data.filter(item => new Date(item.from_date) >= monthStart)
+      //     : [];
+      // case 'Yearly':
+      //   const yearStart = new Date(today.getFullYear(), 0, 1);
+      //   return data
+      //     ? data.filter(item => new Date(item.from_date) >= yearStart)
+      //     : [];
       case 'All':
         return data ? data : [];
       default:
@@ -178,69 +177,33 @@ const LeaveRequest = () => {
     <Loader />
   ) : (
     <>
-      {currentUserData && currentUserData.user_type === 'Staff' ? (
-        <View style={style.container}>
-          {/* <TouchableOpacity onPress={() => handleFilterData('All')}>
-            <Icon name="filter" style={{color: primaryColor, fontSize: 20}} />
-          </TouchableOpacity> */}
-          <TouchableOpacity onPress={() => handleFilterData('Today')}>
-            <Text style={status === 'Today' ? style.inactive : style.active}>
-              Today ({data ? filterData('Today', data).length : []})
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => handleFilterData('All')}>
-            <Text style={status === 'All' ? style.inactive : style.active}>
-              All ({data ? filterData('All', data).length : []})
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => handleFilterData('Approved')}>
-            <Text style={status === 'Approved' ? style.inactive : style.active}>
-              Approved ({data ? filterData('Approved', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Pending')}>
-            <Text style={status === 'Pending' ? style.inactive : style.active}>
-              Pending ({data ? filterData('Pending', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Declined')}>
-            <Text style={status === 'Declined' ? style.inactive : style.active}>
-              Declined ({data ? filterData('Declined', data).length : []})
-            </Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={style.container}>
-          <TouchableOpacity onPress={() => handleFilterData('All')}>
-            <Text style={status === 'All' ? style.inactive : style.active}>
-              All ({data ? filterData('All', data).length : []})
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => handleFilterData('Today')}>
-            <Text style={status === 'Today' ? style.inactive : style.active}>
-              Today ({data ? filterData('Today', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Weekly')}>
-            <Text style={status === 'Weekly' ? style.inactive : style.active}>
-              Weekly ({data ? filterData('Weekly', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Monthly')}>
-            <Text style={status === 'Monthly' ? style.inactive : style.active}>
-              Monthly ({data ? filterData('Monthly', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Yearly')}>
-            <Text style={status === 'Yearly' ? style.inactive : style.active}>
-              Yearly ({data ? filterData('Yearly', data).length : []})
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <View style={style.container}>
+        <TouchableOpacity onPress={() => handleFilterData('All')}>
+          <Text style={status === 'All' ? style.inactive : style.active}>
+            All ({data ? filterData('All', data).length : []})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Today')}>
+          <Text style={status === 'Today' ? style.inactive : style.active}>
+            Today ({data ? filterData('Today', data).length : []})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Approved')}>
+          <Text style={status === 'Approved' ? style.inactive : style.active}>
+            Approved ({data ? filterData('Approved', data).length : []})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Pending')}>
+          <Text style={status === 'Pending' ? style.inactive : style.active}>
+            Pending ({data ? filterData('Pending', data).length : []})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Declined')}>
+          <Text style={status === 'Declined' ? style.inactive : style.active}>
+            Declined ({data ? filterData('Declined', data).length : []})
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <View style={style.details}>
         <FlatList
@@ -356,18 +319,7 @@ const LeaveRequest = () => {
           )}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={
-            <View style={{alignItems: 'center'}}>
-              <Image
-                height={20}
-                width={20}
-                source={require('../../../../assests/not_found.png')}
-              />
-              <Text style={styles.lable}>
-                No leave requests have been applied yet
-              </Text>
-            </View>
-          }
+          ListEmptyComponent={<NotFound />}
         />
       </View>
 

@@ -11,7 +11,7 @@ const LeaveBase = () => {
     
     const route = useRoute();
     const { id } = route.params;
-
+console.log('id', id);
     return (
         <>
             <Tab.Navigator>

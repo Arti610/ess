@@ -19,6 +19,7 @@ import API_CONFIG from '../../../../config/apiConfig';
 import {CustomeModal} from '../../../../utils/Modal';
 import updateApi from '../../../../redux/slices/utils/updateApi';
 import Toast from 'react-native-toast-message';
+import NotFound from '../../../../utils/NotFound';
 
 const LateEarly = () => {
   const navigation = useNavigation();
@@ -29,14 +30,14 @@ const LateEarly = () => {
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [status, setStatus] = useState('Today');
+  const [status, setStatus] = useState('Pending');
   const [uniqueData, setUniqueData] = useState(null);
   const [currentUserData, setcurrentUserData] = useState([]);
   const [leaveTypeStatus, setLeaveTypeStatus] = useState(null);
   const [userId, setUserId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
-  console.log('uniqueData',uniqueData);
+
   const handleModalVisible = (itemId, status) => {
     setUserId(itemId);
     setLeaveTypeStatus(status);
@@ -69,6 +70,7 @@ const LateEarly = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       try {
@@ -105,25 +107,25 @@ const LateEarly = () => {
               return itemDate >= todayStart && itemDate < todayEnd;
             })
           : [];
-      case 'Weekly':
-        const weekStart = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate() - today.getDay(),
-        );
-        return data
-          ? data.filter(item => new Date(item.date) >= weekStart)
-          : [];
-      case 'Monthly':
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        return data
-          ? data.filter(item => new Date(item.date) >= monthStart)
-          : [];
-      case 'Yearly':
-        const yearStart = new Date(today.getFullYear(), 0, 1);
-        return data
-          ? data.filter(item => new Date(item.date) >= yearStart)
-          : [];
+      // case 'Weekly':
+      //   const weekStart = new Date(
+      //     today.getFullYear(),
+      //     today.getMonth(),
+      //     today.getDate() - today.getDay(),
+      //   );
+      //   return data
+      //     ? data.filter(item => new Date(item.date) >= weekStart)
+      //     : [];
+      // case 'Monthly':
+      //   const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      //   return data
+      //     ? data.filter(item => new Date(item.date) >= monthStart)
+      //     : [];
+      // case 'Yearly':
+      //   const yearStart = new Date(today.getFullYear(), 0, 1);
+      //   return data
+      //     ? data.filter(item => new Date(item.date) >= yearStart)
+      //     : [];
       case 'All':
         return data ? data : [];
       default:
@@ -174,7 +176,7 @@ const LateEarly = () => {
     <Loader />
   ) : (
     <>
-      {currentUserData && currentUserData.user_type === 'Staff' ? (
+      {/* {currentUserData && currentUserData.user_type === 'Staff' ? (
         <View style={style.container}>
 
             <TouchableOpacity onPress={() => handleFilterData('Today')}>
@@ -233,13 +235,39 @@ const LateEarly = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      )}
+      )} */}
+      <View style={style.container}>
+        <TouchableOpacity onPress={() => handleFilterData('All')}>
+          <Text style={status === 'All' ? style.inactive : style.active}>
+            All ({data ? filterData('All', data).length : []})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Today')}>
+            <Text style={status === 'Today' ? style.inactive : style.active}>
+              Today ({data ? filterData('Today', data).length : []})
+            </Text>
+          </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Approved')}>
+          <Text style={status === 'Approved' ? style.inactive : style.active}>
+            Approved ({data ? filterData('Approved', data).length : []})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Pending')}>
+          <Text style={status === 'Pending' ? style.inactive : style.active}>
+            Pending ({data ? filterData('Pending', data).length : []})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Declined')}>
+          <Text style={status === 'Declined' ? style.inactive : style.active}>
+            Declined ({data ? filterData('Declined', data).length : []})
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <View style={style.details}>
         <FlatList
           data={filterData(status, data)}
           renderItem={({item}) => (
-        
             <View
               style={style.card}
               key={item.id}
@@ -302,31 +330,36 @@ const LateEarly = () => {
                         fontSize: 12,
                         borderRadius: 20,
                         padding: 8,
-                        color:item && item.status === 'Pending'? 'gold' : item && item.status === 'Approved' ? 'green' : 'red',
+                        color:
+                          item && item.status === 'Pending'
+                            ? 'gold'
+                            : item && item.status === 'Approved'
+                            ? 'green'
+                            : 'red',
                         fontWeight: 'bold',
                       }}>
                       {item && item.status}
                     </Text>
                   ) : null}
                   {currentUserData &&
-                    currentUserData.user_type === 'Staff' ? null : (
-                      <>
-                        {item.status == 'Approved' ? null : (
-                          <TouchableOpacity
-                            onPress={() =>
-                              handleModalVisible(item.id, 'Approved')
-                            }>
-                            <Text style={style.active}>Approve Leave</Text>
-                          </TouchableOpacity>
-                        )}
-                        {item.status == 'Declined' ? null : (
-                          <TouchableOpacity
-                            onPress={() =>
-                              handleModalVisible(item.id, 'Declined')
-                            }>
-                            <Text style={style.inactive}>Decline Leave</Text>
-                          </TouchableOpacity>
-                        )}
+                  currentUserData.user_type === 'Staff' ? null : (
+                    <>
+                      {item.status == 'Approved' ? null : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleModalVisible(item.id, 'Approved')
+                          }>
+                          <Text style={style.active}>Approve Leave</Text>
+                        </TouchableOpacity>
+                      )}
+                      {item.status == 'Declined' ? null : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleModalVisible(item.id, 'Declined')
+                          }>
+                          <Text style={style.inactive}>Decline Leave</Text>
+                        </TouchableOpacity>
+                      )}
                     </>
                   )}
                 </View>
@@ -335,21 +368,10 @@ const LateEarly = () => {
           )}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={
-            <View style={{alignItems: 'center'}}>
-              <Image
-                height={20}
-                width={20}
-                source={require('../../../../assests/not_found.png')}
-              />
-              <Text style={styles.lable}>
-                No late/early requests have been applied yet
-              </Text>
-            </View>
-          }
+          ListEmptyComponent={<NotFound />}
         />
       </View>
-      
+
       {currentUserData && currentUserData.user_type === 'Staff' ? (
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('ApplyLE')}>
@@ -377,9 +399,7 @@ const LateEarly = () => {
           <View style={{paddingVertical: 30, paddingHorizontal: 20, gap: 10}}>
             <View
               style={{flexDirection: 'row', gap: 120, alignItems: 'center'}}>
-              <Text style={styles.lable}>
-               Late/Early Request
-              </Text>
+              <Text style={styles.lable}>Late/Early Request</Text>
               <Text
                 style={{
                   fontSize: 12,
@@ -399,7 +419,10 @@ const LateEarly = () => {
             </View>
             <View>
               <Text style={{color: 'black', fontSize: 12, padding: 5}}>
-                Late/Early : {uniqueData && uniqueData.late_early ? uniqueData.late_early : null}
+                Late/Early :{' '}
+                {uniqueData && uniqueData.late_early
+                  ? uniqueData.late_early
+                  : null}
               </Text>
               <Text style={{color: 'black', fontSize: 12, padding: 5}}>
                 Date :{' '}

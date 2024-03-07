@@ -20,6 +20,7 @@ const Tab = createBottomTabNavigator();
 
 const DashboardBase = () => {
   const navigation = useNavigation();
+  
   const route = useRoute();
   const {id} = route.params;
 
