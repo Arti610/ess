@@ -83,7 +83,7 @@ const UserProfile = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [data]);
+  }, []);
 
   return (
     <>
@@ -172,7 +172,7 @@ const UserProfile = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('CheckinCheckout', {
+                  navigation.navigate('checkin/checkout', {
                     data: data,
                   })
                 }

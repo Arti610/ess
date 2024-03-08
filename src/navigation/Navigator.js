@@ -34,11 +34,12 @@ import UserDetailScreen from '../pages/user/detail.jsx';
 import NotificationDetails from '../pages/staff/Notification/NotificationDetails.jsx';
 import LeaveRequest from '../pages/staff/leave/leaveRequest/LeaveRequest.jsx';
 import LateEarly from '../pages/staff/leave/lateEarly/LateEarly.jsx';
-import CheckinChekout from '../pages/management/Users/CheckinChekout.jsx';
+import CheckinChekout from '../pages/management/Users/Checkin.jsx';
 import Leaves from '../pages/management/Users/Leaves.jsx';
 import LateEarlys from '../pages/management/Users/LateEarlys.jsx';
 import Documents from '../pages/management/Users/Documents.jsx';
 import Vlog from '../pages/management/Users/Vlog.jsx';
+import Clock from '../pages/management/Clock/Clock.jsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -299,8 +300,8 @@ const Navigator = () => {
           }}
         />
         <Stack.Screen
-          name='CheckinCheckout'
-          component={CheckinChekout}
+          name='checkin/checkout'
+          component={Clock}
           options={{
             headerTitle: () => (
               <View>

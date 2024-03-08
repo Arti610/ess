@@ -124,6 +124,7 @@ const StaffDashboard = () => {
         <Tab.Screen
           name="Clock"
           component={Clock}
+          initialParams={{id : null}}
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,

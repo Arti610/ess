@@ -84,7 +84,7 @@ const DashboardBase = () => {
             tabBarLabel: () => <Text style={styles.lable}>Vlogs</Text>,
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Clock"
           component={Clock}
           initialParams={{id: id}}
@@ -104,7 +104,7 @@ const DashboardBase = () => {
             ),
             tabBarLabel: () => <Text style={styles.lable}>Clock</Text>
           }}
-        />
+        /> */}
         <Tab.Screen
           name="Leave"
           component={LeaveBase}

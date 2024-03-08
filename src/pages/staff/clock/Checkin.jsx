@@ -6,6 +6,8 @@ import { currentUser } from "../../../utils/currentUser";
 import moment from "moment";
 import Icon from 'react-native-vector-icons/AntDesign'
 import Loader from "../../../utils/ActivityIndicator";
+import NotFound from "../../../utils/NotFound";
+import { useRoute } from "@react-navigation/native";
 
 const Checkin = () => {
     const [status, setStatus] = useState('All');
@@ -13,6 +15,7 @@ const Checkin = () => {
     const [token, setToken] = useState(null);
     const [data, setData] = useState(null);
   
+   
     const handleFilterData = (status) => {
         setStatus(status);
     }
@@ -98,7 +101,7 @@ const Checkin = () => {
                             </View>
                         )}
                         keyExtractor={(item, index) => index.toString()}
-                        ListEmptyComponent={<View style={{alignItems: 'center'}}><Image height={20} width={20} source={require('../../../assests/not_found.png')}/><Text style={styles.textHeading}>Data Not Found</Text></View>}
+                        ListEmptyComponent={<NotFound/>}
                     /> 
                 </View>
            

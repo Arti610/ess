@@ -383,7 +383,6 @@ const Dashboard = () => {
           }
         } catch (error) {
           setcheckinLoading(false);
-          console.log('Error during check-in', error.response.data);
           Toast.show({
             type: 'error',
             text1: error.response.data,
@@ -394,7 +393,7 @@ const Dashboard = () => {
       } else {
         Toast.show({
           type: 'error',
-          text1: 'Error',
+          text1: 'Incorrect location',
           text2: 'You are not at the correct location for check-in.',
           autoHide: 3000,
         });
