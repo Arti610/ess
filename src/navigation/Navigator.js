@@ -135,7 +135,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>User Profile Details</Text>
+                <Text style={styles.textSubHeading}>Profile</Text>
               </View>
             ),
           }}
