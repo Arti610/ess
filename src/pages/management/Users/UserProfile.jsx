@@ -170,6 +170,7 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
+             
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('checkin/checkout', {
@@ -238,24 +239,7 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Vlogs', {
-                    data : data
-                  })
-                }
-                style={pStyles.footerText}>
-                <View style={pStyles.footerTextView}>
-                  <View style={pStyles.leftFooterText}>
-                    <IconEditProfile
-                      name="pen"
-                      style={pStyles.logoutUserIcon}
-                    />
-                    <Text style={pStyles.lable}>Vlog</Text>
-                  </View>
-                  <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-                </View>
-              </TouchableOpacity>
+            
             </View>
           </View>
         </View>

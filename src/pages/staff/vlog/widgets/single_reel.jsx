@@ -1,9 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, Text, Dimensions, TouchableOpacity, Image} from 'react-native';
 import Video from 'react-native-video';
-import Ionic from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
 import API_CONFIG from '../../../../config/apiConfig';
 import Slider from '@react-native-community/slider';
 import {SkypeIndicator} from 'react-native-indicators';
@@ -23,7 +20,6 @@ const SingleReel = ({item, index, currentIndex}) => {
 
   const [mute, setMute] = useState(false);
 
-  const [like, setLike] = useState(true);
 
   const [currentPosition, setCurrentPosition] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -168,27 +164,6 @@ const SingleReel = ({item, index, currentIndex}) => {
           </View>
         </View>
       </View>
-      {/* <View
-        style={{
-          position: 'absolute',
-          bottom: 10,
-          right: 0,
-        }}>
-        <TouchableOpacity onPress={() => setLike(!like)} style={{padding: 10}}>
-          <AntDesign
-            name={like ? 'heart' : 'hearto'}
-            style={{color: like ? 'red' : 'white', fontSize: 25}}
-          />
-          <Text style={{color: 'white'}}>4B</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={{padding: 10, paddingBottom: 30}}>
-          <Ionic
-            name="paper-plane-outline"
-            style={{color: 'white', fontSize: 25}}
-          />
-        </TouchableOpacity>
-      </View> */}
     </View>
   );
 };

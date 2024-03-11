@@ -10,13 +10,17 @@ import {launchCamera} from 'react-native-image-picker';
 import {useRoute} from '@react-navigation/native';
 
 const Vlog = () => {
+
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
+
   const [currentUser, setCurrentUser] = useState(null);
+
+  const navigation = useNavigation();
   const route = useRoute();
   const {id} = route.params;
 
-  const navigation = useNavigation();
+
   const handleLaunchCamera = async () => {
     try {
       const options = {
@@ -36,6 +40,7 @@ const Vlog = () => {
       console.log('hell=========', error);
     }
   };
+
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
@@ -79,16 +84,11 @@ const Vlog = () => {
         <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
           Vlog
         </Text>
-        <TouchableOpacity
-          onPress={
-            () => handleLaunchCamera()
-            // navigation.navigate('UploadVlog', {
-            //   userId:
-            //     currentUser && currentUser.id ? currentUser.id : currentUser.id,
-            // })
-          }>
-          <Feather name="camera" style={{fontSize: 25, color: 'white'}} />
-        </TouchableOpacity>
+        {currentUser && currentUser.user_type === 'Management' ? null : (
+          <TouchableOpacity onPress={() => handleLaunchCamera()}>
+            <Feather name="camera" style={{fontSize: 25, color: 'white'}} />
+          </TouchableOpacity>
+        )}
       </View>
       <ReelsComponent id={id} />
     </View>

@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getApi from '../../../../redux/slices/utils/getApi';
 import {SkypeIndicator} from 'react-native-indicators';
+
 const ReelsComponent = ({id}) => {
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -14,7 +14,6 @@ import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 import Vlog from './Vlog/Vlog';
 import LeaveBase from '../staff/leave/LeaveBase';
-import Clock from '../staff/clock/clock';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,9 +44,7 @@ const DashboardBase = () => {
                 <Text style={styles.textSubHeading}>Home</Text>
               </View>
             ),
-            tabBarIcon: () => (
-              <IconFa name="home" style={styles.icons} size={20} />
-            ),
+            tabBarIcon: () => (<IconFa name="home" style={styles.icons} size={20} />),
             tabBarLabel: () => <Text style={styles.lable}>Home</Text>,
           }}
         />
