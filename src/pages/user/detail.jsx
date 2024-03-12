@@ -11,6 +11,7 @@ import IconLocation from 'react-native-vector-icons/Ionicons';
 import IconWeekend from 'react-native-vector-icons/MaterialIcons';
 import API_CONFIG from '../../config/apiConfig';
 import getApi from '../../redux/slices/utils/getApi';
+import moment from 'moment';
 
 const UserDetailScreen = ({route}) => {
   const {userId} = route.params;
@@ -18,15 +19,7 @@ const UserDetailScreen = ({route}) => {
   const [loading, setLoading] = useState(false);
   var [userData, setUserData] = useState({});
 
-  const formatDate = datetimeString => {
-    const date = new Date(datetimeString);
-    const options = {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    };
-    return date.toLocaleDateString(undefined, options);
-  };
+
 
   useEffect(() => {
     setLoading(true);
@@ -74,7 +67,7 @@ const UserDetailScreen = ({route}) => {
             />
           </View>
 
-          <Text style={style.name}>
+          <Text style={styles.textHeading}>
             {userData.first_name} {userData.last_name}
           </Text>
           <View style={style.statusUserTypeStyle}>
@@ -83,14 +76,14 @@ const UserDetailScreen = ({route}) => {
             <Text style={style.statusTextStyle}> {userData.user_type}</Text>
             <Text style={style.separatorStyle}> | </Text>
             <Text style={style.statusTextStyle}>
-              {formatDate(userData.date_joined)}
+              {moment(userData.date_joined).format('DD MMM YYYY')}
             </Text>
           </View>
         </View>
       </View>
 
       <Text style={[styles.textSubHeading, {margin: 5}]}>Personal Details</Text>
-      <View style={[styles.textInput, {paddingLeft: 20}]}>
+      <View style={styles.textInput}>
         <View style={style.rowStyle}>
           <View style={style.childCircleAvatar}>
             <Iconemail name="email" style={style.branchChildInfoIconStyle} />
@@ -210,11 +203,6 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
 
-  headerColumnStyle: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
   separatorStyle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -235,22 +223,11 @@ const style = StyleSheet.create({
 
   iconStyle: {
     fontSize: 18,
+    alignSelf: 'center',
+    paddingRight: 20,
+    color: primaryColor,
+  },
 
-    alignSelf: 'center',
-    paddingRight: 20,
-    color: primaryColor,
-  },
-  iconAddressStyle: {
-    fontSize: 15,
-    alignSelf: 'center',
-    paddingRight: 20,
-    color: primaryColor,
-  },
-  branchInfoIconStyle: {
-    fontSize: 24,
-    color: 'white',
-    alignSelf: 'center',
-  },
   circleAvatar: {
     height: 40,
     width: 40,
@@ -281,23 +258,7 @@ const style = StyleSheet.create({
     padding: 5,
     gap: 10,
   },
-  branchInfoRowStyle: {
-    width: 'auto',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    paddingLeft: 30,
-    paddingTop: 13,
-  },
-
-  branchInfoTextStyle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor,
-    textAlign: 'center',
-    paddingLeft: 10,
-  },
-
+  
   profileImage: {
     width: 120,
     height: 120,
@@ -305,60 +266,13 @@ const style = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: 'white',
   },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 0,
-    color: primaryColor,
-    textAlign: 'center',
-  },
-  address: {
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  phoneNumber: {
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
+
   status: {
     fontSize: 16,
     marginBottom: 20,
     textAlign: 'center',
   },
 
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-
-  branchAddress: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  branchStatus: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  branchType: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  weekOff: {
-    marginBottom: 20,
-    borderRadius: 8,
-    padding: 20,
-  },
-  weekOffName: {
-    fontSize: 16,
-    marginBottom: 10,
-    fontWeight: 'bold',
-  },
-  weekOffDescription: {
-    fontSize: 16,
-  },
   statusIndicatorRed: {
     position: 'absolute',
     top: 5,
@@ -368,7 +282,6 @@ const style = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'red',
     color: 'white',
-
     lineHeight: 15,
   },
   statusIndicatorGreen: {
@@ -380,7 +293,6 @@ const style = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'green',
     color: 'white',
-
     lineHeight: 15,
   },
 });

@@ -58,6 +58,7 @@ const EditUserForm = () => {
     const [selectShiftTime, setSelectShiftTime] = useState(null);
     const [branchInfo, setBranchInfo] = useState(null)
 
+
     const handleImagePickerResponse = (response) => {
         if (response.didCancel) {
             console.log('User cancelled image picker');
@@ -87,66 +88,69 @@ const EditUserForm = () => {
         }
     }
     
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
+    const fetchData = async () => {
+ 
+        try {
 
-                const getManagerStaff = await getApi.getManagerStaff(id)
-                if (getManagerStaff.data) {
-                    const transformManagerData = getManagerStaff.data.map(item => ({
-                        key: item.id.toString(),
-                        value: `${item.first_name} ${item.last_name}`
-                    }))
+            const getManagerStaff = await getApi.getManagerStaff(id)
+            if (getManagerStaff.data) {
+                const transformManagerData = getManagerStaff.data.map(item => ({
+                    key: item.id.toString(),
+                    value: `${item.first_name} ${item.last_name}`
+                }))
 
-                    setManagertaffData(transformManagerData)
-                }
-                const getBranchDepartment = await getApi.getBranchDepartment(id)
-                if (getBranchDepartment.data) {
-                    const transformDepartmentData = getBranchDepartment.data.map(item => ({
-                        key: item.id.toString(),
-                        value: item.name,
-                    }));
-                    setDepartmentData(transformDepartmentData)
-                }
-                const getDesignation = await getApi.getBranchDesignation(id)
-                if (getDesignation.data) {
-
-                    const transformDesignationData = getDesignation.data.map(item => ({
-                        key: item.id.toString(),
-                        value: item.name
-                    }))
-                    setDesignationData(transformDesignationData)
-                }
-                const getWeekoff = await getApi.getWeekOff(id)
-                if (getWeekoff.data) {
-
-                    const transformWeeloffData = getWeekoff.data.map(item => ({
-                        key: item.week_off_id.toString(),
-                        value: item.name
-                    }))
-                    setWeekoffData(transformWeeloffData)
-                }
-                const getBranchInfo = await getApi.getBranchsBranchInfo(id)
-          
-                if(getBranchInfo.data){
-                    setLoading(false)
-                    setBranchInfo(getBranchInfo.data[0])
-
-                    const checkInTime = moment(getBranchInfo.data[0].check_in_time, 'HH:mm').format('hh:mm A');
-                    const checkOutTime = moment(getBranchInfo.data[0].check_out_time, 'HH:mm').format('hh:mm A');
-                    
-                    const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
-
-                    const shiftTimeDatakey = [
-                        { key: shiftTimeData, value: shiftTimeData },
-                     
-                    ];
-                      setShiftTimeData(shiftTimeDatakey);
-                }
-            } catch (error) {
-                console.log('Error got during get apis', error);
+                setManagertaffData(transformManagerData)
             }
+            const getBranchDepartment = await getApi.getBranchDepartment(id)
+
+            if (getBranchDepartment.data) {
+                const transformDepartmentData = getBranchDepartment.data.map(item => ({
+                    key: item.id.toString(),
+                    value: item.name,
+                }));
+                setDepartmentData(transformDepartmentData)
+            }
+            const getDesignation = await getApi.getBranchDesignation(id)
+            if (getDesignation.data) {
+
+                const transformDesignationData = getDesignation.data.map(item => ({
+                    key: item.id.toString(),
+                    value: item.name
+                }))
+                setDesignationData(transformDesignationData)
+            }
+            const getWeekoff = await getApi.getWeekOff(id)
+            if (getWeekoff.data) {
+
+                const transformWeeloffData = getWeekoff.data.map(item => ({
+                    key: item.week_off_id.toString(),
+                    value: item.name
+                }))
+                setWeekoffData(transformWeeloffData)
+            }
+            const getBranchInfo = await getApi.getBranchsBranchInfo(id)
+      
+            if(getBranchInfo.data) {
+                setLoading(false)
+                setBranchInfo(getBranchInfo.data[0])
+                
+                const checkInTime = moment(getBranchInfo.data[0].check_in_time, 'HH:mm').format('hh:mm A');
+                const checkOutTime = moment(getBranchInfo.data[0].check_out_time, 'HH:mm').format('hh:mm A');
+                
+                const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
+
+                const shiftTimeDatakey = [
+                    { key: shiftTimeData, value: shiftTimeData },
+                ];
+          
+                  setShiftTimeData(shiftTimeDatakey);
+            }
+        } catch (error) {
+            console.log('Error got during get apis', error.response.data);
         }
+    }
+
+    useEffect(() => {  
         fetchData();
     }, [])
 
@@ -219,7 +223,7 @@ const EditUserForm = () => {
             try {
                 setLoading(true);
                 const res = await getApi.getIndividualUser(userId);
-  
+
                 if (res.data) {
                     setFormdata({
                         ...formdata,
@@ -235,6 +239,7 @@ const EditUserForm = () => {
                         user_type: res.data.user_data.user_type ? res.data.user_data.user_type : null,
                         week_off: res.data.user_data.week_off ? res.data.user_data.week_off.name : null,
                         address: res.data.user_data.address ?  res.data.user_data.address : null,
+                        check_in_time: res.data.user_data.check_in_time ? res.data.user_data.check_in_time : null,
                     });
                     setSelectedGender(res.data.user_data.gender ? res.data.user_data.gender : null)
                     setSelectedUsertype(res.data.user_data.user_type ? res.data.user_data.user_type : null)
@@ -242,6 +247,16 @@ const EditUserForm = () => {
                     setSelectDepartment(res.data.user_data.department ? res.data.user_data.department.id : null)
                     setSelectDesignation(res.data.user_data.designation ? res.data.user_data.designation.id : null)    
                     setSelectWeekoff(res.data.user_data.week_off ? res.data.user_data.week_off.id : null)
+                   
+                    // setSelectShiftTime(res.data.user_data.branch_info.check_in_time ? res.data.user_data.branch_info.check_in_time : null);
+                    if (res.data.user_data.branch_info) {
+                        console.log('res.data.user_data.branch_info',res.data.user_data.branch_info);
+                        const checkInTime = moment(res.data.user_data.branch_info.check_in_time, 'HH:mm').format('hh:mm A');
+                        const checkOutTime = moment(res.data.user_data.branch_info.check_out_time, 'HH:mm').format('hh:mm A');
+                        const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
+                        const shiftTimeDataKey =shiftTimeData 
+                        setSelectShiftTime(shiftTimeDataKey);
+                    }
                     setLoading(false);
                 }
             } catch (error) {
@@ -395,11 +410,11 @@ const EditUserForm = () => {
                             dropdownStyles={styles.textInput}
                             setSelected={(val) => setSelectShiftTime(val)}
                             data={shiftTimeData || []}
-                            save="key"
-                            placeholder={'SelectShift Time e.g. (10:00 AM to 06:00 PM'}
+                            save="value"
+                            // placeholder={'SelectShift Time e.g. (10:00 AM to 06:00 PM'}
+                            placeholder={selectShiftTime ? selectShiftTime : 'SelectShift Time e.g. (10:00 AM to 06:00 PM'}
                             notFoundText="Data not found"
-                            value={selectShiftTime}
-                           
+                            value={selectShiftTime}   
                         />
                                
                     </View>

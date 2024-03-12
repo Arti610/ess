@@ -36,7 +36,7 @@ const ActiveUser = () => {
 
     return (<>
         {loading ? <Loader /> : (<ScrollView>
-            <UserCard item={userData} />
+            <UserCard item={userData} id ={id}/>
         </ScrollView>)}
 
         <Toast />

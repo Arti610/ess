@@ -18,7 +18,7 @@ const UserProfile = () => {
 
   const {userData} = route.params;
   const {id} = route.params;
-
+  
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState(null);
