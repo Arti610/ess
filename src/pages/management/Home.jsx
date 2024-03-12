@@ -75,7 +75,7 @@ const Home = () => {
           <View style={style.card}>
             <View><Icon name='users' style={style.userIcon} /></View>
             <View><Text style={styles.textHeading}>{inActiveStaffs && totalStaffs ? (totalStaffs - inActiveStaffs) : 0}</Text></View>
-            <View><Text style={styles.lable}>Active Staffs</Text></View>
+            <View><Text style={styles.lable}>Active Staff</Text></View>
           </View>
           <View style={style.card}>
             <View><IconFa6 name='clock-rotate-left' style={style.checkinIcon} /></View>
@@ -100,7 +100,7 @@ const Home = () => {
           <View style={style.card}>
             <View><Icon name='users-slash' style={style.InactiveuserIcon} /></View>
             <View><Text style={styles.textHeading}>{inActiveStaffs ? inActiveStaffs : 0}</Text></View>
-            <View><Text style={styles.lable}>Inactive Staffs</Text></View>
+            <View><Text style={styles.lable}>Inactive Staff</Text></View>
           </View>
         </View>
       

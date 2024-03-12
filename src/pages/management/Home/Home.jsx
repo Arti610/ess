@@ -80,8 +80,8 @@ const Home = () => {
         <View style={style.container}>
           <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('ActiveUser', {id : id})}>
             <View><Icon name='users' style={style.userIcon} /></View>
-            <View><Text style={styles.textHeading}>{inActiveStaffs && totalStaffs ? activeStaff : 0}</Text></View>
-            <View><Text style={styles.lable}>Active Staffs</Text></View>
+            <View><Text style={styles.textHeading}>{activeStaff  ? activeStaff : 0}</Text></View>
+            <View><Text style={styles.lable}>Active Staff</Text></View>
           </TouchableOpacity>
           <TouchableOpacity style={style.card} onPress={()=> navigation.navigate('CheckInUser', {id : id})}>
             <View><IconFa6 name='clock-rotate-left' style={style.checkinIcon} /></View>
@@ -106,7 +106,7 @@ const Home = () => {
           <TouchableOpacity style={style.card}  onPress={()=> navigation.navigate('InactiveUser', {id : id})}>
             <View><Icon name='users-slash' style={style.InactiveuserIcon} /></View>
             <View><Text style={styles.textHeading}>{inActiveStaffs ? inActiveStaffs : 0}</Text></View>
-            <View><Text style={styles.lable}>Inactive Staffs</Text></View>
+            <View><Text style={styles.lable}>Inactive Staff</Text></View>
           </TouchableOpacity>
         </View>
       </ScrollView>

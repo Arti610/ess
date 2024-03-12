@@ -89,12 +89,6 @@ const UserProfile = () => {
     <>
       {data ? (
         <View>
-          {/* <View>
-            <Text>User Profile {data.user.id}</Text>
-          </View> */}
-          {/* <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('EditUserForm', { id: id, userId: userData.id })}><Text style={styles.buttonText}>Edit</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.primaryButton} onPress={handleModalVisible}><Text style={styles.buttonText}>Delete</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.primaryButton} onPress={() => handleSubmit(userData.id)}>{loading ? <ButtonLoader/> :<Text style={styles.buttonText}> {userData.status === 'Deactivated' ? 'Activate Staff' : 'Deactivate Staff'}</Text>}</TouchableOpacity> */}
           <View style={pStyles.container}>
             {data ? (
               <View style={pStyles.userHeader}>
@@ -151,6 +145,7 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
+
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('EditUserForm', {
@@ -170,7 +165,7 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
-             
+
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('checkin/checkout', {
@@ -181,7 +176,7 @@ const UserProfile = () => {
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile
-                      name="pen"
+                      name="history"
                       style={pStyles.logoutUserIcon}
                     />
                     <Text style={pStyles.lable}>Checkin/Checkout</Text>
@@ -189,13 +184,14 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
+
               <TouchableOpacity
-                onPress={() => navigation.navigate('Leaves', { data: data })}
+                onPress={() => navigation.navigate('Leaves', {data: data})}
                 style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile
-                      name="pen"
+                      name="receipt"
                       style={pStyles.logoutUserIcon}
                     />
                     <Text style={pStyles.lable}>Leave</Text>
@@ -203,17 +199,18 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
+
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('LateEarlys', {
-                    data : data
+                    data: data,
                   })
                 }
                 style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile
-                      name="pen"
+                      name="clock"
                       style={pStyles.logoutUserIcon}
                     />
                     <Text style={pStyles.lable}>Late/Early</Text>
@@ -221,17 +218,14 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
+
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Documents', {
-                    data : data
-                  })
-                }
+                onPress={() => navigation.navigate('Documents', {data: data})}
                 style={pStyles.footerText}>
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile
-                      name="pen"
+                      name="file"
                       style={pStyles.logoutUserIcon}
                     />
                     <Text style={pStyles.lable}>Document</Text>
@@ -239,7 +233,7 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
-            
+              
             </View>
           </View>
         </View>

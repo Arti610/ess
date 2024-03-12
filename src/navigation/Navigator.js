@@ -34,12 +34,13 @@ import UserDetailScreen from '../pages/user/detail.jsx';
 import NotificationDetails from '../pages/staff/Notification/NotificationDetails.jsx';
 import LeaveRequest from '../pages/staff/leave/leaveRequest/LeaveRequest.jsx';
 import LateEarly from '../pages/staff/leave/lateEarly/LateEarly.jsx';
-import CheckinChekout from '../pages/management/Users/Checkin.jsx';
 import Leaves from '../pages/management/Users/Leaves.jsx';
 import LateEarlys from '../pages/management/Users/LateEarlys.jsx';
 import Documents from '../pages/management/Users/Documents.jsx';
 import Vlog from '../pages/management/Users/Vlog.jsx';
 import Clock from '../pages/management/Clock/Clock.jsx';
+import AddDocument from '../pages/management/AddDocument.jsx';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -217,7 +218,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Active Staffs</Text>
+                <Text style={styles.textSubHeading}>Active Staff</Text>
               </View>
             ),
           }}
@@ -250,7 +251,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Inactive Staffs</Text>
+                <Text style={styles.textSubHeading}>Inactive Staff</Text>
               </View>
             ),
           }}
@@ -350,6 +351,17 @@ const Navigator = () => {
             headerTitle: () => (
               <View>
                 <Text style={styles.textSubHeading}>Vlog</Text>
+              </View>
+            ),
+          }}
+        />
+         <Stack.Screen
+          name="AddDocument"
+          component={AddDocument}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Add Document</Text>
               </View>
             ),
           }}

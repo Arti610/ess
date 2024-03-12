@@ -16,11 +16,12 @@ import IconN from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {currentUser} from '../../utils/currentUser';
 import getApi from '../../redux/slices/utils/getApi';
-import Documents from '../documents/Documents';
+import Document from '../management/Document';
 
 const Tab = createBottomTabNavigator();
 
 const Notification = () => {
+  
   const [branchId, setBranchId] = useState(null);
   const [data, setData] = useState(0);
 
@@ -153,9 +154,9 @@ const StaffDashboard = () => {
             tabBarLabel: () => <Text style={styles.lable}>Leave</Text>,
           })}
         />
-        {/* <Tab.Screen
+        <Tab.Screen
           name="Documents"
-          component={Documents}
+          component={Document}
           initialParams={{id : null}}
           options={() => ({
             headerTitle: () => null,
@@ -170,7 +171,7 @@ const StaffDashboard = () => {
             ),
             tabBarLabel: () => <Text style={styles.lable}>Documents</Text>,
           })}
-        /> */}
+        />
       </Tab.Navigator>
       <Toast />
     </>

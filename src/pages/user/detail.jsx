@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
-import {useEffect,  useState} from 'react';
+import {useEffect, useState} from 'react';
 import Loader from '../../utils/ActivityIndicator';
-import {primaryColor, secondaryColor} from '../../../style';
+import {primaryColor, secondaryColor, styles} from '../../../style';
 import Iconemail from 'react-native-vector-icons/Zocial';
 import IconPhone from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconBranch from 'react-native-vector-icons/Entypo';
@@ -50,18 +50,19 @@ const UserDetailScreen = ({route}) => {
   return loading ? (
     <Loader />
   ) : (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.makeItCenter}>
-          <View style={styles.proImageName}>
-            {userData.user_type == 'Management' ? null : (
+    <ScrollView contentContainerStyle={style.container}>
+
+      <View>
+        <View style={style.makeItCenter}>
+          <View style={style.proImageName}>
+            {userData.user_type == 'Staff' ? (
               <View
                 style={
                   userData.status == 'Not In Office'
-                    ? styles.statusIndicatorRed
-                    : styles.statusIndicatorGreen
+                    ? style.statusIndicatorRed
+                    : style.statusIndicatorGreen
                 }></View>
-            )}
+            ) : null}
             <Image
               source={{
                 uri:
@@ -69,169 +70,132 @@ const UserDetailScreen = ({route}) => {
                     ? 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg'
                     : `${API_CONFIG.imageUrl}${userData.profile_image}`,
               }}
-              style={styles.profileImage}
+              style={style.profileImage}
             />
           </View>
-          {/* <View style={styles.statusBadge}> </View> */}
-          <Text style={styles.name}>
+
+          <Text style={style.name}>
             {userData.first_name} {userData.last_name}
           </Text>
-          <View style={styles.statusUserTypeStyle}>
-            <Text style={styles.statusTextStyle}> {userData.status}</Text>
-            <Text style={styles.separatorStyle}> | </Text>
-            <Text style={styles.statusTextStyle}> {userData.user_type}</Text>
-            <Text style={styles.separatorStyle}> | </Text>
-            <Text style={styles.statusTextStyle}>
+          <View style={style.statusUserTypeStyle}>
+            <Text style={style.statusTextStyle}> {userData.status}</Text>
+            <Text style={style.separatorStyle}> | </Text>
+            <Text style={style.statusTextStyle}> {userData.user_type}</Text>
+            <Text style={style.separatorStyle}> | </Text>
+            <Text style={style.statusTextStyle}>
               {formatDate(userData.date_joined)}
             </Text>
           </View>
         </View>
+      </View>
 
-        <View style={styles.headerColumnStyle}>
-          <View style={styles.rowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <Iconemail name="email" style={styles.branchChildInfoIconStyle} />
-            </View>
+      <Text style={[styles.textSubHeading, {margin: 5}]}>Personal Details</Text>
+      <View style={[styles.textInput, {paddingLeft: 20}]}>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <Iconemail name="email" style={style.branchChildInfoIconStyle} />
+          </View>
 
-            <Text style={styles.headerTextStyle}>{userData.email}</Text>
+          <Text style={styles.lable}>{userData.email}</Text>
+        </View>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconPhone
+              name="cellphone"
+              style={style.branchChildInfoIconStyle}
+            />
           </View>
-          <View style={styles.rowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconPhone
-                name="cellphone"
-                style={styles.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.headerTextStyle}>
-              + {userData.phone_number}
-            </Text>
+          <Text style={styles.lable}>+ {userData.phone_number}</Text>
+        </View>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconPhone
+              name={userData.gender == 'Male' ? 'gender-male' : 'gender-female'}
+              style={style.branchChildInfoIconStyle}
+            />
           </View>
-          <View style={styles.rowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconPhone
-                name={
-                  userData.gender == 'Male' ? 'gender-male' : 'gender-female'
-                }
-                style={styles.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.headerTextStyle}>{userData.gender}</Text>
+          <Text style={styles.lable}>{userData.gender}</Text>
+        </View>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconLocation
+              name="location"
+              style={style.branchChildInfoIconStyle}
+            />
           </View>
-          <View style={styles.rowStyle}>
-            {/* <IconLocation name="location" style={styles.iconAddressStyle} /> */}
-            <View style={styles.childCircleAvatar}>
-              <IconLocation
-                name="location"
-                style={styles.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.headerTextStyle}>{userData.address}</Text>
-          </View>
+          <Text style={styles.lable}>{userData.address}</Text>
         </View>
       </View>
-      <View style={styles.divider} />
 
-      {userData.branch == null ? (
-        <Loader />
-      ) : (
-        <View style={styles.branchInfo}>
-          <View style={styles.rowStyle}>
-            <View style={styles.circleAvatar}>
-              <IconBranch
-                name="flow-branch"
-                style={styles.branchInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.branchInfoTextStyle}> Branch Info</Text>
+      <Text style={[styles.textSubHeading, {margin: 5}]}>Branch Info</Text>
+      <View style={styles.textInput}>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconUser name="user" style={style.branchChildInfoIconStyle} />
           </View>
-
-          <View style={styles.branchInfoRowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconUser name="user" style={styles.branchChildInfoIconStyle} />
-            </View>
-            <Text style={styles.branchInfoChildTextStyle}>
-              {userData.branch == null ? 'No Branch' : userData.branch.name}
-            </Text>
-          </View>
-          <View style={styles.branchInfoRowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconLocation
-                name="location"
-                style={styles.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.branchInfoChildTextStyle}>
-              {userData.branch.address}
-            </Text>
-          </View>
-          <View style={styles.branchInfoRowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconPhone
-                name="home-city"
-                style={styles.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.branchInfoChildTextStyle}>
-              {userData.branch.city}
-            </Text>
-          </View>
+          <Text style={styles.lable}>
+            {userData.branch == null ? 'No Branch' : userData.branch.name}
+          </Text>
         </View>
-      )}
-      <View style={styles.divider} />
-
-      {userData.week_off == null ? (
-        <Loader />
-      ) : (
-        <View style={styles.branchInfo}>
-          <View style={styles.rowStyle}>
-            <View style={styles.circleAvatar}>
-              <IconWeekend name="weekend" style={styles.branchInfoIconStyle} />
-            </View>
-            <Text style={styles.branchInfoTextStyle}> Week Off</Text>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconLocation
+              name="location"
+              style={style.branchChildInfoIconStyle}
+            />
           </View>
-
-          <View style={styles.branchInfoRowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconUser name="user" style={styles.branchChildInfoIconStyle} />
-            </View>
-            <Text style={styles.branchInfoChildTextStyle}>
-              {userData.week_off.name}
-            </Text>
-          </View>
-          <View style={styles.branchInfoRowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconLocation
-                name="location"
-                style={styles.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.branchInfoChildTextStyle}>
-              {userData.branch.address}
-            </Text>
-          </View>
-          <View style={styles.branchInfoRowStyle}>
-            <View style={styles.childCircleAvatar}>
-              <IconPhone
-                name="subtitles-outline"
-                style={styles.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.branchInfoChildTextStyle}>
-              {userData.week_off.description == null
-                ? 'No description'
-                : userData.week_off.description}
-            </Text>
-          </View>
+          <Text style={styles.lable}>{userData.branch.address}</Text>
         </View>
-      )}
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconPhone
+              name="home-city"
+              style={style.branchChildInfoIconStyle}
+            />
+          </View>
+          <Text style={styles.lable}>{userData.branch.city}</Text>
+        </View>
+      </View>
+
+      <Text style={styles.textSubHeading}>Week Off</Text>
+      <View style={styles.textInput}>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconUser name="user" style={style.branchChildInfoIconStyle} />
+          </View>
+          <Text style={styles.lable}>{userData.week_off.name}</Text>
+        </View>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconLocation
+              name="location"
+              style={style.branchChildInfoIconStyle}
+            />
+          </View>
+          <Text style={styles.lable}>{userData.branch.address}</Text>
+        </View>
+        <View style={style.rowStyle}>
+          <View style={style.childCircleAvatar}>
+            <IconPhone
+              name="subtitles-outline"
+              style={style.branchChildInfoIconStyle}
+            />
+          </View>
+          <Text style={styles.lable}>
+            {userData.week_off.description == null
+              ? 'No description'
+              : userData.week_off.description}
+          </Text>
+        </View>
+      </View>
+
     </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: 'white',
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
@@ -271,16 +235,13 @@ const styles = StyleSheet.create({
 
   iconStyle: {
     fontSize: 18,
-    // alignContent:'center',
-    // justifyContent:'center',
+
     alignSelf: 'center',
     paddingRight: 20,
     color: primaryColor,
   },
   iconAddressStyle: {
     fontSize: 15,
-    // alignContent:'center',
-    // justifyContent:'center',
     alignSelf: 'center',
     paddingRight: 20,
     color: primaryColor,
@@ -288,7 +249,6 @@ const styles = StyleSheet.create({
   branchInfoIconStyle: {
     fontSize: 24,
     color: 'white',
-
     alignSelf: 'center',
   },
   circleAvatar: {
@@ -304,27 +264,22 @@ const styles = StyleSheet.create({
     width: 25,
     backgroundColor: primaryColor,
     borderRadius: 50,
-
     justifyContent: 'center',
-    // paddingRight: 10,
   },
   branchChildInfoIconStyle: {
     fontSize: 13,
     color: 'white',
-
     alignSelf: 'center',
     padding: 6,
   },
 
   rowStyle: {
-    //  backgroundColor:'red',
-    //  height:50,
-    //  width:'100%',
     width: 'auto',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingBottom: 10,
+    padding: 5,
+    gap: 10,
   },
   branchInfoRowStyle: {
     width: 'auto',
@@ -334,38 +289,15 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingTop: 13,
   },
-  headerTextStyle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    // marginBottom: 10,
-    color: primaryColor,
-    textAlign: 'center',
-    paddingLeft: 10,
-  },
+
   branchInfoTextStyle: {
     fontSize: 24,
     fontWeight: 'bold',
-    // marginBottom: 10,
     color: primaryColor,
     textAlign: 'center',
     paddingLeft: 10,
   },
-  branchInfoChildTextStyle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    // marginBottom: 10,
-    color: primaryColor,
-    textAlign: 'center',
-    paddingLeft: 10,
-  },
-  header: {
-    alignItems: 'flex-start',
-    marginBottom: 20,
-    backgroundColor: secondaryColor,
-    borderRadius: 8,
-    paddingVertical: 20,
-    paddingHorizontal: 13,
-  },
+
   profileImage: {
     width: 120,
     height: 120,
@@ -395,32 +327,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  divider: {
-    height: 1,
-    backgroundColor: primaryColor,
-    marginBottom: 20,
-  },
-  verticleDivider: {
-    height: 20,
-    width: 2,
-    backgroundColor: primaryColor,
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignSelf: 'center',
-    textAlign: 'center',
-  },
+
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  branchInfo: {
-    marginBottom: 20,
-    backgroundColor: secondaryColor,
-    borderRadius: 8,
-    padding: 20,
-  },
+
   branchAddress: {
     fontSize: 16,
     marginBottom: 10,
@@ -435,7 +348,6 @@ const styles = StyleSheet.create({
   },
   weekOff: {
     marginBottom: 20,
-    backgroundColor: secondaryColor,
     borderRadius: 8,
     padding: 20,
   },
@@ -454,7 +366,7 @@ const styles = StyleSheet.create({
     minWidth: 15,
     height: 15,
     borderRadius: 10,
-    backgroundColor: 'red', // You can customize the badge color
+    backgroundColor: 'red',
     color: 'white',
 
     lineHeight: 15,
@@ -466,7 +378,7 @@ const styles = StyleSheet.create({
     minWidth: 15,
     height: 15,
     borderRadius: 10,
-    backgroundColor: 'green', // You can customize the badge color
+    backgroundColor: 'green',
     color: 'white',
 
     lineHeight: 15,

@@ -14,7 +14,7 @@ const UserCard = ({item, id}) => {
 
   return (
     <View style={style.container}>
-      {item ? (
+      {item && item.length > 0 ? (
         item.map((item, i) => (
           <TouchableOpacity
             key={i}
@@ -46,7 +46,6 @@ const UserCard = ({item, id}) => {
                 ? item.user_type
                 : 'No User Type'}
             </Text>
-            {/* <Text style={style.text}>{item.status && item.status ? item.status : 'No User Type'}</Text> */}
           </TouchableOpacity>
         ))
       ) : (
