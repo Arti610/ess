@@ -166,7 +166,6 @@ const EditUserForm = () => {
                     type: image.assets[0]?.type || '',
                     uri: image.assets[0]?.uri || '',
                 });
-                
             }
            
             fData.append('first_name', formdata.first_name)

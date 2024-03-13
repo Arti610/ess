@@ -126,7 +126,7 @@ const ApplyLR = () => {
     fData.append('to_date', formValues.to_date ? formValues.to_date : null);
     fData.append('description', values.description ? values.description : null);
     document ? fData.append('attachment', document ? document : null) : null;
-    console.log('fData', fData);
+
 
     try {
       setIsLoading(true);

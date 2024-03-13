@@ -12,5 +12,7 @@ export default {
     // createCheckout: (payload) => apiService.post(`create_manual_checkOut`, payload),
     createCheckin: (payload) => apiService.post(`user/check_in`, payload),
     createCheckout: (payload) => apiService.post(`user/check_out`, payload),
+    createDocUpload: (payload, option) => apiService.post(`create_docsUpload`, payload, option),
+    // createDocUpload: (payload) => console.log(payload, 'payloda')
     
 }

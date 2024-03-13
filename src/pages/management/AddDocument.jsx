@@ -1,43 +1,105 @@
 import {Formik} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, View, Button, TouchableOpacity} from 'react-native';
+import {Text, TextInput, View, TouchableOpacity} from 'react-native';
 import {styles} from '../../../style';
 import ButtonLoader from '../../utils/BtnActivityIndicator';
 import {SelectList} from 'react-native-dropdown-select-list';
 import getApi from '../../redux/slices/utils/getApi';
+import DocumentPicker from 'react-native-document-picker';
+import createApi from '../../redux/slices/utils/createApi';
+import Toast from 'react-native-toast-message';
+import {useNavigation} from '@react-navigation/native';
 
 const AddDocument = ({route}) => {
+  const navigation = useNavigation();
   const {id} = route.params;
 
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [selectCountry, setSelectCountry] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedDocument, setSelectedDocument] = useState(null);
 
-  const initialValues = {document: '', user: ''};
-  console.log('selectCountry==>', selectCountry);
+  const initialValues = {
+    document_name: null,
+    user: null,
+    branch: null,
+    document: null,
+  };
 
   useEffect(() => {
-    try {
-      const fetchUser = async () => {
+    const fetchUser = async () => {
+      try {
         const res = await getApi.getStaffList(id);
         if (res.data) {
-          const transformCountryData = res.data.map(item => ({
+          const transformUserData = res.data.map(item => ({
             key: item.id.toString(),
             value: `${item.first_name} ${item.last_name}`,
           }));
-
-          setData(transformCountryData);
+          setData(transformUserData);
         }
-      };
-      fetchUser();
-    } catch (error) {
-      console.log(error);
-    }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser();
   }, []);
 
-  const handleSubmit = values => {                        
-    console.log('Submitted:', values);                                      
-  };                       
+  const handleDocumentPick = async () => {
+    try {
+      const doc = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.allFiles],
+      });
+
+      if (doc) {
+        setSelectedDocument(doc);
+      }
+    } catch (error) {
+      if (DocumentPicker.isCancel(error)) {
+        console.log('Document selection cancelled', error);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleSubmit = async values => {
+    setIsLoading(true);
+
+    try {
+      const fData = new FormData();
+      fData.append('document_name', values.document_name ? values.document_name : null);
+      fData.append('user', selectedUser ? selectedUser : null);
+      fData.append('branch', id ? id : null);
+      selectedDocument ? fData.append('document', selectedDocument ? selectedDocument : null) : null;
+  
+      const response = await createApi.createDocUpload(fData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        navigation.navigate('Document', {id : id});
+        Toast.show({
+          type: 'success',
+          text1: 'Document uploded success',
+          text2: 'your document uploded successfully',
+          autoHide: true,
+        });
+        setIsLoading(false);
+      }
+
+    } catch (error) {
+      console.log('Upload Error:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Document uploded failed',
+        text2: 'you are failed to upload document',
+        autoHide: true,
+      });
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
@@ -48,14 +110,14 @@ const AddDocument = ({route}) => {
             <SelectList
               boxStyles={styles.textInput}
               dropdownStyles={styles.textInput}
-              setSelected={val => setSelectCountry(val)}
+              setSelected={val => setSelectedUser(val)}
               data={data}
               save="key"
               placeholder={'Select User'}
               notFoundText="Data not found"
-              value={selectCountry}
+              value={selectedUser}
               onBlur={handleBlur('user')}
-              onChangText={handleChange('user')}
+              onChangeText={handleChange('user')}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -63,15 +125,27 @@ const AddDocument = ({route}) => {
             <TextInput
               placeholder="Document Name (e.g. National Id Card)"
               style={styles.textInput}
-              onChangeText={handleChange('document')}
-              onBlur={handleBlur('document')}
-              value={values.document}
+              onChangeText={handleChange('document_name')}
+              onBlur={handleBlur('document_name')}
+              value={values.document_name}
             />
           </View>
-          <View>
+          <View style={styles.inputContainer}>
             <Text style={styles.lable}>Select Document</Text>
+            <TouchableOpacity
+              style={styles.textInput}
+              onPress={handleDocumentPick}>
+              <Text>
+                {selectedDocument
+                  ? selectedDocument.name
+                  : 'Select Document'}
+              </Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.primaryButton} onPress={handleSubmit}>
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={handleSubmit}
+            disabled={isLoading}>
             {isLoading ? (
               <ButtonLoader />
             ) : (

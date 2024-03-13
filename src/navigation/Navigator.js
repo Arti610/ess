@@ -40,6 +40,8 @@ import Documents from '../pages/management/Users/Documents.jsx';
 import Vlog from '../pages/management/Users/Vlog.jsx';
 import Clock from '../pages/management/Clock/Clock.jsx';
 import AddDocument from '../pages/management/AddDocument.jsx';
+import Document from '../pages/management/Document.jsx';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -351,6 +353,17 @@ const Navigator = () => {
             headerTitle: () => (
               <View>
                 <Text style={styles.textSubHeading}>Vlog</Text>
+              </View>
+            ),
+          }}
+        />
+         <Stack.Screen
+          name="Document"
+          component={Document}
+          options={{
+            headerTitle: () => (
+              <View>
+                <Text style={styles.textSubHeading}>Document</Text>
               </View>
             ),
           }}

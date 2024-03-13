@@ -16,11 +16,11 @@ import API_CONFIG from '../../config/apiConfig';
 import {styles} from '../../../style';
 import NotFound from '../../utils/NotFound';
 import getApi from '../../redux/slices/utils/getApi';
-import Loader from '../../utils/ActivityIndicator';
 import {currentUser} from '../../utils/currentUser';
 import Toast from 'react-native-toast-message';
 import IconAdd from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import Loader from '../../utils/ActivityIndicator';
 
 const Documents = ({item}) => {
   const [currentUserData, setCurrentUserData] = useState(null);
@@ -112,7 +112,6 @@ const Documents = ({item}) => {
           <Icon name="download" style={{fontSize: 20}} />
         </Text>
       </TouchableOpacity>
-      
     </View>
   );
 };
@@ -177,8 +176,8 @@ const downloadDocument = async url => {
 const Document = ({route}) => {
   const {id} = route.params;
 
-  const navigation = useNavigation()
-  
+  const navigation = useNavigation();
+
   const [data, setData] = useState(null);
 
   const fetchUser = async () => {
@@ -197,21 +196,27 @@ const Document = ({route}) => {
     fetchUser();
   }, []);
 
-  return data ? (
+  return (
     <>
-    <FlatList
-      data={data}
-      renderItem={({item}) => <Documents item={item} />}
-      ListEmptyComponent={<NotFound />}
-    />
-    <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('AddDocument', {id : id})}>
-          <IconAdd name="add" style={styles.addIcon} />
-        </TouchableOpacity>
-      </View>
-      </>
-  ) : (
-    <Loader />
+      {data ? (
+        <>
+          <FlatList
+            data={data}
+            renderItem={({item}) => <Documents item={item} />}
+            ListEmptyComponent={<NotFound />}
+          />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('AddDocument', {id: id})}>
+              <IconAdd name="add" style={styles.addIcon} />
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : (
+        <Loader />
+      )}
+      <Toast />
+    </>
   );
 };
 
