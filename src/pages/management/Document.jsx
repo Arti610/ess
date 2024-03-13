@@ -11,9 +11,10 @@ import {
 import RNFetchBlob from 'rn-fetch-blob';
 import {Platform, PermissionsAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconD from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import API_CONFIG from '../../config/apiConfig';
-import {styles} from '../../../style';
+import {secondaryColor, styles} from '../../../style';
 import NotFound from '../../utils/NotFound';
 import getApi from '../../redux/slices/utils/getApi';
 import {currentUser} from '../../utils/currentUser';
@@ -21,100 +22,8 @@ import Toast from 'react-native-toast-message';
 import IconAdd from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import Loader from '../../utils/ActivityIndicator';
-
-const Documents = ({item}) => {
-  const [currentUserData, setCurrentUserData] = useState(null);
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const res = await currentUser();
-      setCurrentUserData(res.data);
-    };
-    fetchCurrentUser();
-  }, []);
-
-  const handleDownload = async () => {
-    const granted = await getDownloadPermissionAndroid();
-
-    if (granted) {
-      downloadDocument(`${API_CONFIG.imageUrl}${item.document}`)
-        .then(() =>
-          Toast.show({
-            type: 'success',
-            text1: 'Download Successful',
-            text2: 'File downloaded successfully',
-            autoHide: true,
-          }),
-        )
-        .catch(() =>
-          Toast.show({
-            type: 'error',
-            text1: 'Download Failed',
-            text2: 'Failed to download file',
-            autoHide: true,
-          }),
-        );
-    } else {
-      Alert.alert('Permission Denied', 'Permission to download PDF was denied');
-    }
-  };
-
-  return (
-    <View
-      style={[
-        styles.textInput,
-        {
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          margin: 10,
-        },
-      ]}>
-      <View>
-        {currentUserData &&
-        currentUserData.user_type === 'Staff' ? null : item ? (
-          <View style={pStyles.userHeader}>
-            {item && item.user && item.user.profile_image ? (
-              <Image
-                source={{
-                  uri: `${API_CONFIG.imageUrl}${
-                    item && item.user && item.user.profile_image
-                      ? item.user.profile_image
-                      : null
-                  }`,
-                }}
-                style={pStyles.image}
-              />
-            ) : (
-              <Image
-                source={require('../../assests/userProfile.webp')}
-                style={pStyles.image}
-              />
-            )}
-
-            <Text>{`${
-              item && item.user && item.user.first_name
-                ? item.user.first_name
-                : 'User'
-            } ${
-              item && item.user && item.user.last_name
-                ? item.user.last_name
-                : 'Name'
-            }`}</Text>
-          </View>
-        ) : null}
-
-        <Text style={styles.lable}>{item.document_name}</Text>
-        <Text>{moment(item.created_at).format('DD MMM YYYY')}</Text>
-      </View>
-      <TouchableOpacity onPress={handleDownload}>
-        <Text style={styles.lable}>
-          <Icon name="download" style={{fontSize: 20}} />
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+import DeleteModal from '../../utils/DeleteModal';
+import deleteApi from '../../redux/slices/utils/deleteApi';
 
 export const getDownloadPermissionAndroid = async () => {
   try {
@@ -177,9 +86,12 @@ const Document = ({route}) => {
   const {id} = route.params;
 
   const navigation = useNavigation();
-
+  const [isLoading, setIsLoading] = useState(null);
   const [data, setData] = useState(null);
-
+  const [Id, setId] = useState(null);
+  const [currentUserData, setCurrentUserData] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+console.log('Id',Id);
   const fetchUser = async () => {
     try {
       const res = await getApi.getAllDocumentList(id);
@@ -196,13 +108,147 @@ const Document = ({route}) => {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const res = await currentUser();
+      setCurrentUserData(res.data);
+    };
+    fetchCurrentUser();
+  }, []);
+
+  const handleDownload = async () => {
+    const granted = await getDownloadPermissionAndroid();
+
+    if (granted) {
+      downloadDocument(`${API_CONFIG.imageUrl}${item.document}`)
+        .then(() =>
+          Toast.show({
+            type: 'success',
+            text1: 'Download Successful',
+            text2: 'File downloaded successfully',
+            autoHide: true,
+          }),
+        )
+        .catch(() =>
+          Toast.show({
+            type: 'error',
+            text1: 'Download Failed',
+            text2: 'Failed to download file',
+            autoHide: true,
+          }),
+        );
+    } else {
+      Alert.alert('Permission Denied', 'Permission to download PDF was denied');
+    }
+  };
+
+  const handleModalVisible = (id) => {
+    setModalVisible(!modalVisible);
+    setId(id)
+  };
+  const handleDelete = async () => {
+
+    try {
+      setIsLoading(true)
+      const res = await deleteApi.deleteDocUpload(Id);
+
+      if (res.status === 200) {
+        setModalVisible(false);
+        Toast.show({
+          type: 'success',
+          text1: `Document deleted successfully`,
+          position: 'top',
+          visibilityTime: 4000,
+          autoHide: true,
+        });
+        fetchUser();
+      }
+    } catch (error) {
+      console.log(error, 'error');
+      Toast.show({
+        type: 'error',
+        text1: `Document not deleted, try again`,
+        position: 'top',
+        visibilityTime: 4000,
+        autoHide: true,
+      });
+    }
+    setModalVisible(false);
+    setIsLoading(false)
+  };
   return (
     <>
       {data ? (
         <>
           <FlatList
             data={data}
-            renderItem={({item}) => <Documents item={item} />}
+            renderItem={({item}) => (
+              <View
+                style={[
+                  styles.textInput,
+                  {
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginHorizontal: 10,
+                    marginTop: 5,
+                  },
+                ]}>
+                <View>
+                  {currentUserData &&
+                  currentUserData.user_type === 'Staff' ? null : item ? (
+                    <View style={pStyles.userHeader}>
+                      {item && item.user && item.user.profile_image ? (
+                        <Image
+                          source={{
+                            uri: `${API_CONFIG.imageUrl}${
+                              item && item.user && item.user.profile_image
+                                ? item.user.profile_image
+                                : null
+                            }`,
+                          }}
+                          style={pStyles.image}
+                        />
+                      ) : (
+                        <Image
+                          source={require('../../assests/userProfile.webp')}
+                          style={pStyles.image}
+                        />
+                      )}
+
+                      <Text>{`${
+                        item && item.user && item.user.first_name
+                          ? item.user.first_name
+                          : 'User'
+                      } ${
+                        item && item.user && item.user.last_name
+                          ? item.user.last_name
+                          : 'Name'
+                      }`}</Text>
+                    </View>
+                  ) : null}
+
+                  <Text style={styles.lable}>{item.document_name}</Text>
+                  <Text>{moment(item.created_at).format('DD MMM YYYY')}</Text>
+                </View>
+                <View style={{flexDirection: 'row', gap: 5}}>
+                  <TouchableOpacity
+                    onPress={handleDownload}
+                    style={styles.textInput}>
+                    <Text style={styles.lable}>
+                      <Icon name="download" style={{fontSize: 20}} />
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={()=>handleModalVisible(item.id)}
+                    style={styles.textInput}>
+                    <Text style={styles.lable}>
+                      <IconD name="delete" style={{fontSize: 20}} />
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
             ListEmptyComponent={<NotFound />}
           />
           <View style={styles.buttonContainer}>
@@ -216,6 +262,13 @@ const Document = ({route}) => {
         <Loader />
       )}
       <Toast />
+      <DeleteModal
+        modalVisible={modalVisible}
+        handleModalVisible={handleModalVisible}
+        text="document"
+        handleDelete={handleDelete}
+        isLoading={isLoading}
+      />
     </>
   );
 };

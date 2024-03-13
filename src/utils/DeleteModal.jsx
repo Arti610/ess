@@ -1,42 +1,15 @@
 import React from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
 import {  secondaryColor, styles } from '../../style';
-import deleteApi from '../redux/slices/utils/deleteApi';
-import { useNavigation } from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import getApi from '../redux/slices/utils/getApi';
+import ButtonLoader from './BtnActivityIndicator';
 
-const DeleteModal = ({ modalVisible, handleModalVisible,  text, userid, path }) => {
-    const navigation = useNavigation();
+const DeleteModal = ({isLoading, handleDelete, modalVisible, handleModalVisible,  text }) => {
 
-    const handleDelete = async () => {
-      
-            try {
-                const res = await deleteApi.deleteUser(userid);
-                if (res.status === 200) {
-                    navigation.navigate(path);
-                    Toast.show({
-                        type: "success",
-                        text1: `${text} deleted successfully`,
-                        position: 'top',
-                        visibilityTime: 4000,
-                        autoHide: true
-                    });
-                    await getApi.getStaffList(userid)
-                }
-            } catch (error) {
-                Toast.show({
-                    type: "error",
-                    text1: `${text} not deleted, try again`,
-                    position: 'top',
-                    visibilityTime: 4000,
-                    autoHide: true
-                });
-            
-        }
-    };
-
+    const confirmDelete = async () => {
+        await handleDelete();
+        handleModalVisible();
+      };
     return (
         <View style={style.centeredView}>
             <Modal
@@ -60,8 +33,8 @@ const DeleteModal = ({ modalVisible, handleModalVisible,  text, userid, path }) 
                             </Pressable>
                             <Pressable
                                 style={styles.ModalPrimaryButton}
-                                onPress={handleDelete}>
-                                <Text style={styles.buttonText}>Yes</Text>
+                                onPress={confirmDelete}>
+                                 { isLoading ? <ButtonLoader/> : <Text style={styles.buttonText}>Yes</Text>}
                             </Pressable>
                         </View>
                     </View>

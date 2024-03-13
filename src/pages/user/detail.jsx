@@ -38,6 +38,8 @@ const UserDetailScreen = ({route}) => {
     fetchUser();
   }, []);
 
+  console.log('userData==>', userData);
+  
   return loading ? (
     <Loader />
   ) : (
