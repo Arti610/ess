@@ -62,6 +62,7 @@ const Login = () => {
       }
       return res;
     } catch (error) {
+      console.log('error',error);
       Toast.show({
         type: 'error',
         position: 'top',

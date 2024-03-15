@@ -131,6 +131,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 10,
     marginVertical: 10,
+    paddingHorizontal: 10,
     backgroundColor: primaryColor,
   },
   secondaryButton:{
@@ -146,7 +147,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: 'bold'
   },
   secondaryButtonText: {

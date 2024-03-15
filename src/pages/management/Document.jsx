@@ -91,7 +91,7 @@ const Document = ({route}) => {
   const [Id, setId] = useState(null);
   const [currentUserData, setCurrentUserData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-console.log('Id',Id);
+
   const fetchUser = async () => {
     try {
       const res = await getApi.getAllDocumentList(id);
@@ -116,11 +116,12 @@ console.log('Id',Id);
     fetchCurrentUser();
   }, []);
 
-  const handleDownload = async () => {
+  const handleDownload = async (document) => {
+
     const granted = await getDownloadPermissionAndroid();
 
     if (granted) {
-      downloadDocument(`${API_CONFIG.imageUrl}${item.document}`)
+      downloadDocument(`${API_CONFIG.imageUrl}${document}`)
         .then(() =>
           Toast.show({
             type: 'success',
@@ -146,6 +147,7 @@ console.log('Id',Id);
     setModalVisible(!modalVisible);
     setId(id)
   };
+
   const handleDelete = async () => {
 
     try {
@@ -176,6 +178,7 @@ console.log('Id',Id);
     setModalVisible(false);
     setIsLoading(false)
   };
+
   return (
     <>
       {data ? (
@@ -233,7 +236,7 @@ console.log('Id',Id);
                 </View>
                 <View style={{flexDirection: 'row', gap: 5}}>
                   <TouchableOpacity
-                    onPress={handleDownload}
+                    onPress={()=>handleDownload(item.document)}
                     style={styles.textInput}>
                     <Text style={styles.lable}>
                       <Icon name="download" style={{fontSize: 20}} />
@@ -265,7 +268,7 @@ console.log('Id',Id);
       <DeleteModal
         modalVisible={modalVisible}
         handleModalVisible={handleModalVisible}
-        text="document"
+        text="delete document"
         handleDelete={handleDelete}
         isLoading={isLoading}
       />

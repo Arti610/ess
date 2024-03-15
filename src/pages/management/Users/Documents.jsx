@@ -7,6 +7,7 @@ import API_CONFIG from '../../../config/apiConfig';
 import {styles} from '../../../../style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
+import NotFound from '../../../utils/NotFound';
 
 
 const Document = ({item}) => {
@@ -117,6 +118,7 @@ const downloadDocument = async url => {
 };
 
 const Documents = ({route}) => {
+  
   const {data} = route.params;
 
   return data ? (
@@ -124,6 +126,7 @@ const Documents = ({route}) => {
       <FlatList
         data={data.docs ? data.docs : []}
         renderItem={({item}) => <Document item={item} />}
+        ListEmptyComponent={<NotFound/>}
       />
       
     </>

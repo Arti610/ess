@@ -26,9 +26,6 @@ const AddBranch = () => {
 
   const { isLoading, branchDataById } = useSelector((state) => state.branch);
 
-  useEffect(()=>{
-  
-  },[])
 
   const recivedId = route.params?.data || null;
   const [data, setData] = useState([]);
@@ -96,7 +93,7 @@ const AddBranch = () => {
       form_data.append('address', values.address ? values.address : branchDataById.address);
 
     const res =  recivedId ? await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
-    console.log('res', res);
+
     if(res.status === 200 || res.status === 201){
       getAllBranch(dispatch)
     }
@@ -133,7 +130,6 @@ const AddBranch = () => {
     fetchCountry();
   }, []);
 
-  console.log('branchDataById', branchDataById);
   
   return (
 

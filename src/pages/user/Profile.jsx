@@ -149,6 +149,7 @@ const Profile = () => {
         <Loader />
       ) : (
         <View style={pStyles.container}>
+          
           {data ? (
             <View style={pStyles.userHeader}>
               {data && data.user_data && data.user_data.profile_image ? (
@@ -179,6 +180,8 @@ const Profile = () => {
                     : 'Name'
                 }`}</Text>
               </View>
+
+             
             </View>
           ) : null}
 

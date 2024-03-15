@@ -9,7 +9,8 @@ const DeleteModal = ({isLoading, handleDelete, modalVisible, handleModalVisible,
     const confirmDelete = async () => {
         await handleDelete();
         handleModalVisible();
-      };
+    };
+
     return (
         <View style={style.centeredView}>
             <Modal
@@ -24,7 +25,7 @@ const DeleteModal = ({isLoading, handleDelete, modalVisible, handleModalVisible,
                     <View style={style.modalView}>
                         <Icon name='delete' style={[styles.icon, style.icon]}/>
                         <Text style={styles.textHeading}>{`Are you sure ?`}</Text>
-                        <Text style={styles.textDesc}>{`You are about to delete ${text}`}</Text>
+                        <Text style={styles.textDesc}>{`You are about to ${text}`}</Text>
                         <View style={style.buttonContainer}>
                             <Pressable
                                 style={styles.secondaryButton}

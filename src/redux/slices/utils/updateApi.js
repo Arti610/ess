@@ -3,6 +3,7 @@ import apiService from "../../../config/apiService";
 export default {
 
     updateUser: async (id, payload, option) => { return await apiService.put(`updateuser/${id}`, payload, option) },
+    // updateUser: async (id, payload, option) => console.log('payload', payload),
   
     changePassword: async (payload, option) => { return await apiService.put(`change_password`, payload, option) },
 

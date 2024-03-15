@@ -38,35 +38,38 @@ const UserDetailScreen = ({route}) => {
     fetchUser();
   }, []);
 
-  console.log('userData==>', userData);
-  
   return loading ? (
     <Loader />
   ) : (
     <ScrollView contentContainerStyle={style.container}>
       <View style={style.makeItCenter}>
         <View style={style.proImageName}>
-          {userData.user_type == 'Staff' ? (
+        {userData.user_type == 'Staff' ? (
             <View
               style={
                 userData.status == 'Not In Office'
                   ? style.statusIndicatorRed
                   : style.statusIndicatorGreen
               }></View>
-          ) : null}
-          <Image
-            source={{
-              uri:
-                userData.profile_image == null
-                  ? 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg'
-                  : `${API_CONFIG.imageUrl}${
-                      userData && userData.profile_image
+          ) : null} 
+          
+            {userData && userData && userData.profile_image ? (
+                <Image
+                  source={{
+                    uri: `${API_CONFIG.imageUrl}${
+                      userData && userData && userData.profile_image
                         ? userData.profile_image
                         : null
                     }`,
-            }}
-            style={style.profileImage}
-          />
+                  }}
+                 style={style.profileImage}
+                />
+              ) : (
+                <Image
+                  source={require('../../assests/userProfile.webp')}
+                 style={style.profileImage}
+                />
+              )}
         </View>
 
         <Text style={styles.textHeading}>
@@ -137,73 +140,88 @@ const UserDetailScreen = ({route}) => {
         ) : null}
       </View>
 
-      <Text style={[styles.textSubHeading, {margin: 5}]}>Branch Info</Text>
-      <View style={styles.textInput}>
-        {userData && userData.branch && userData.branch.address ? (
-          <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconUser name="user" style={style.branchChildInfoIconStyle} />
-            </View>
-            <Text style={styles.lable}>{userData.branch.name}</Text>
+      {userData && userData.branch ? (
+        <>
+          <Text style={[styles.textSubHeading, {margin: 5}]}>Branch Info</Text>
+          <View style={styles.textInput}>
+            {userData && userData.branch && userData.branch.address ? (
+              <View style={style.rowStyle}>
+                <View style={style.childCircleAvatar}>
+                  <IconUser
+                    name="user"
+                    style={style.branchChildInfoIconStyle}
+                  />
+                </View>
+                <Text style={styles.lable}>{userData.branch.name}</Text>
+              </View>
+            ) : null}
+            {userData && userData.branch && userData.branch.address ? (
+              <View style={style.rowStyle}>
+                <View style={style.childCircleAvatar}>
+                  <IconLocation
+                    name="location"
+                    style={style.branchChildInfoIconStyle}
+                  />
+                </View>
+                <Text style={styles.lable}>{userData.branch.address}</Text>
+              </View>
+            ) : null}
+            {userData && userData.branch && userData.branch.city ? (
+              <View style={style.rowStyle}>
+                <View style={style.childCircleAvatar}>
+                  <IconPhone
+                    name="home-city"
+                    style={style.branchChildInfoIconStyle}
+                  />
+                </View>
+                <Text style={styles.lable}>{userData.branch.city}</Text>
+              </View>
+            ) : null}
           </View>
-        ) : null}
-        {userData && userData.branch && userData.branch.address ? (
-          <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconLocation
-                name="location"
-                style={style.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.lable}>{userData.branch.address}</Text>
+        </>
+      ) : null}
+      {userData && userData.branch ? (
+        <>
+          <Text style={styles.textSubHeading}>Week Off</Text>
+          <View style={styles.textInput}>
+            {userData && userData.week_off && userData.week_off.name ? (
+              <View style={style.rowStyle}>
+                <View style={style.childCircleAvatar}>
+                  <IconUser
+                    name="user"
+                    style={style.branchChildInfoIconStyle}
+                  />
+                </View>
+                <Text style={styles.lable}>{userData.week_off.name}</Text>
+              </View>
+            ) : null}
+            {userData && userData.branch && userData.branch.address ? (
+              <View style={style.rowStyle}>
+                <View style={style.childCircleAvatar}>
+                  <IconLocation
+                    name="location"
+                    style={style.branchChildInfoIconStyle}
+                  />
+                </View>
+                <Text style={styles.lable}>{userData.branch.address}</Text>
+              </View>
+            ) : null}
+            {userData && userData.week_off && userData.week_off.description ? (
+              <View style={style.rowStyle}>
+                <View style={style.childCircleAvatar}>
+                  <IconPhone
+                    name="subtitles-outline"
+                    style={style.branchChildInfoIconStyle}
+                  />
+                </View>
+                <Text style={styles.lable}>
+                  {userData.week_off.description}
+                </Text>
+              </View>
+            ) : null}
           </View>
-        ) : null}
-        {userData && userData.branch && userData.branch.city ? (
-          <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconPhone
-                name="home-city"
-                style={style.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.lable}>{userData.branch.city}</Text>
-          </View>
-        ) : null}
-      </View>
-
-      <Text style={styles.textSubHeading}>Week Off</Text>
-      <View style={styles.textInput}>
-        {userData && userData.week_off && userData.week_off.name ? (
-          <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconUser name="user" style={style.branchChildInfoIconStyle} />
-            </View>
-            <Text style={styles.lable}>{userData.week_off.name}</Text>
-          </View>
-        ) : null}
-        {userData && userData.branch && userData.branch.address ? (
-          <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconLocation
-                name="location"
-                style={style.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.lable}>{userData.branch.address}</Text>
-          </View>
-        ) : null}
-        {userData && userData.week_off && userData.week_off.description ? (
-          <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconPhone
-                name="subtitles-outline"
-                style={style.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.lable}>{userData.week_off.description}</Text>
-          </View>
-        ) : null}
-      </View>
+        </>
+      ) : null}
     </ScrollView>
   );
 };
@@ -236,7 +254,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom : 10,
+    marginBottom: 10,
   },
 
   statusTextStyle: {

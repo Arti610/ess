@@ -253,8 +253,8 @@ const EditUserForm = () => {
                         const checkInTime = moment(res.data.user_data.branch_info.check_in_time, 'HH:mm').format('hh:mm A');
                         const checkOutTime = moment(res.data.user_data.branch_info.check_out_time, 'HH:mm').format('hh:mm A');
                         const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
-                        const shiftTimeDataKey =shiftTimeData 
-                        setSelectShiftTime(shiftTimeDataKey);
+                        const shiftTimeDataKey = shiftTimeData 
+                        setSelectShiftTime(shiftTimeDataKey );
                     }
                     setLoading(false);
                 }
