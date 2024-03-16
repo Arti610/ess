@@ -6,7 +6,7 @@ import {primaryColor, secondaryColor, styles} from '../../../style';
 import Iconemail from 'react-native-vector-icons/Zocial';
 import IconPhone from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconBranch from 'react-native-vector-icons/Entypo';
-import IconUser from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import IconLocation from 'react-native-vector-icons/Ionicons';
 import IconWeekend from 'react-native-vector-icons/MaterialIcons';
 import API_CONFIG from '../../config/apiConfig';
@@ -23,9 +23,9 @@ const UserDetailScreen = ({route}) => {
     setLoading(true);
     const fetchUser = async () => {
       try {
-        const res = await getApi.getIndividualUser(userId);
+        const res = await getApi.getAllUserList(userId);
         if (res) {
-          let jsonData = res.data.user_data;
+          let jsonData = res.data;
           setUserData(jsonData);
         }
       } catch (error) {
@@ -38,190 +38,173 @@ const UserDetailScreen = ({route}) => {
     fetchUser();
   }, []);
 
+  console.log('userData', userData);
+
   return loading ? (
     <Loader />
   ) : (
     <ScrollView contentContainerStyle={style.container}>
       <View style={style.makeItCenter}>
         <View style={style.proImageName}>
-        {userData.user_type == 'Staff' ? (
+          {userData && userData.user && userData.user.user_type == 'Staff' ? (
             <View
               style={
-                userData.status == 'Not In Office'
+                userData.user.status == 'Not In Office'
                   ? style.statusIndicatorRed
                   : style.statusIndicatorGreen
               }></View>
-          ) : null} 
-          
-            {userData && userData && userData.profile_image ? (
-                <Image
-                  source={{
-                    uri: `${API_CONFIG.imageUrl}${
-                      userData && userData && userData.profile_image
-                        ? userData.profile_image
-                        : null
-                    }`,
-                  }}
-                 style={style.profileImage}
-                />
-              ) : (
-                <Image
-                  source={require('../../assests/userProfile.webp')}
-                 style={style.profileImage}
-                />
-              )}
+          ) : null}
+
+          {userData && userData.user && userData.user.profile_image ? (
+            <Image
+              source={{
+                uri: `${API_CONFIG.imageUrl}${
+                  userData && userData.user && userData.user.profile_image
+                    ? userData.user.profile_image
+                    : null
+                }`,
+              }}
+              style={style.profileImage}
+            />
+          ) : (
+            <Image
+              source={require('../../assests/userProfile.webp')}
+              style={style.profileImage}
+            />
+          )}
         </View>
 
         <Text style={styles.textHeading}>
-          {userData && userData.first_name ? userData.first_name : 'User'}
-          {userData && userData.last_name ? userData.last_name : 'Name'}
+          {userData && userData.user && userData.user.first_name
+            ? userData.user.first_name
+            : 'User'}
+          &nbsp;
+          {userData && userData.user && userData.user.last_name
+            ? userData.user.last_name
+            : 'Name'}
         </Text>
+     
         <View style={style.statusUserTypeStyle}>
-          <Text style={style.statusTextStyle}>
-            {userData && userData.status ? userData.status : 'Status'}
-          </Text>
-          <Text style={style.separatorStyle}> | </Text>
-          <Text style={style.statusTextStyle}>
-            {userData && userData.user_type ? userData.user_type : 'User Type'}
-          </Text>
-          <Text style={style.separatorStyle}> | </Text>
-          <Text style={style.statusTextStyle}>
-            {moment(
-              userData && userData.date_joined ? userData.date_joined : 'DOJ',
-            ).format('DD MMM YYYY')}
-          </Text>
+          <View
+            style={[
+              styles.textInput,
+              {alignItems: 'center', justifyContent: 'center', width: 100},
+            ]}>
+            <Text>{userData.attendance_count ? userData.attendance_count : 0}</Text>
+            <Text style={styles.lable}>Attendence</Text>
+          </View>
+          <View style={[styles.textInput,{alignItems: 'center', justifyContent: 'center', width: 100} ]}>
+            <Text>{userData.leaves_count ? userData.leaves_count : 0}</Text>
+            <Text style={styles.lable}>Leave</Text>
+          </View>
+          <View
+            style={[
+              styles.textInput,
+              {alignItems: 'center', justifyContent: 'center', width: 100},
+            ]}>
+            <Text>
+              {userData &&
+              userData.monthly_salary &&
+              userData.monthly_salary.length > 0
+                ? userData.monthly_salary[0].total_salary
+                : 0}
+            </Text>
+            <Text style={styles.lable}>Salary</Text>
+          </View>
         </View>
       </View>
 
-      <Text style={[styles.textSubHeading, {margin: 5}]}>Personal Details</Text>
+      <Text style={[styles.textSubHeading, {margin: 5}]}>
+        Personal Information
+      </Text>
       <View style={styles.textInput}>
-        {userData && userData.email ? (
+        {userData && userData.user && userData.user.status ? (
           <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <Iconemail name="email" style={style.branchChildInfoIconStyle} />
-            </View>
-            <Text style={styles.lable}>{userData.email}</Text>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Status : {userData && userData.user && userData.user.status ? userData.user.status : null}
+            </Text>
           </View>
         ) : null}
-        {userData && userData.phone_number ? (
+        {userData && userData.user && userData.user.user_type ? (
           <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconPhone
-                name="cellphone"
-                style={style.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.lable}>{userData.phone_number}</Text>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>User Type : {userData && userData.user && userData.user.user_type  ? userData.user.user_type  : null}</Text>
           </View>
         ) : null}
-        {userData && userData.gender ? (
+        {userData && userData.user && userData.user.gender ? (
           <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconPhone
-                name={
-                  userData.gender == 'Male' ? 'gender-male' : 'gender-female'
-                }
-                style={style.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.lable}>{userData.gender}</Text>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Gender : {userData && userData.user && userData.user.gender ? userData.user.gender : null}
+            </Text>
           </View>
         ) : null}
-        {userData && userData.address ? (
+        {userData && userData.user && userData.user.date_joined ? (
           <View style={style.rowStyle}>
-            <View style={style.childCircleAvatar}>
-              <IconLocation
-                name="location"
-                style={style.branchChildInfoIconStyle}
-              />
-            </View>
-            <Text style={styles.lable}>{userData.address}</Text>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Date Of Joining : {userData && userData.user && userData.user.date_joined ? moment(userData.user.date_joined).format('DD MMM YYYY') : null}
+            </Text>
+          </View>
+        ) : null}
+        {userData && userData.user && userData.user.department ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Department : {userData && userData.user &&  userData.user.department && userData.user.department.name  ? userData.user.department.name : null}
+            </Text>
+          </View>
+        ) : null}
+        {userData && userData.user && userData.user.designation ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Designation : {userData && userData.user && userData.user.designation && userData.user.designation.name ? userData.user.designation.name : null}
+            </Text>
+          </View>
+        ) : null}
+        {userData && userData.user && userData.user.branch ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Branch Name : {userData && userData.user && userData.user.branch && userData.user.branch.name  ? userData.user.branch.name : null}</Text>
+          </View>
+        ) : null}
+        {userData && userData.user && userData.user.user_type === 'Staff' ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Manager : {userData && userData.user && userData.user.manager && userData.user.manager.first_name ? `${userData.user.manager.first_name} ${userData.user.manager.last_name}` : null}
+
+            </Text>
+          </View>
+        ) : null}
+        {userData && userData.user && userData.user.week_off ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Week Off : {userData && userData.user && userData.user.week_off &&  userData.user.week_off.name ? userData.user.week_off.name : null}
+            </Text>
           </View>
         ) : null}
       </View>
 
-      {userData && userData.branch ? (
-        <>
-          <Text style={[styles.textSubHeading, {margin: 5}]}>Branch Info</Text>
-          <View style={styles.textInput}>
-            {userData && userData.branch && userData.branch.address ? (
-              <View style={style.rowStyle}>
-                <View style={style.childCircleAvatar}>
-                  <IconUser
-                    name="user"
-                    style={style.branchChildInfoIconStyle}
-                  />
-                </View>
-                <Text style={styles.lable}>{userData.branch.name}</Text>
-              </View>
-            ) : null}
-            {userData && userData.branch && userData.branch.address ? (
-              <View style={style.rowStyle}>
-                <View style={style.childCircleAvatar}>
-                  <IconLocation
-                    name="location"
-                    style={style.branchChildInfoIconStyle}
-                  />
-                </View>
-                <Text style={styles.lable}>{userData.branch.address}</Text>
-              </View>
-            ) : null}
-            {userData && userData.branch && userData.branch.city ? (
-              <View style={style.rowStyle}>
-                <View style={style.childCircleAvatar}>
-                  <IconPhone
-                    name="home-city"
-                    style={style.branchChildInfoIconStyle}
-                  />
-                </View>
-                <Text style={styles.lable}>{userData.branch.city}</Text>
-              </View>
-            ) : null}
+      <Text style={[styles.textSubHeading, {margin: 5}]}>Contact Information</Text>
+      <View style={styles.textInput}>
+        {userData && userData.user && userData.user.email ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Email : {userData && userData.user && userData.user.email ? userData.user.email : null}</Text>
           </View>
-        </>
-      ) : null}
-      {userData && userData.branch ? (
-        <>
-          <Text style={styles.textSubHeading}>Week Off</Text>
-          <View style={styles.textInput}>
-            {userData && userData.week_off && userData.week_off.name ? (
-              <View style={style.rowStyle}>
-                <View style={style.childCircleAvatar}>
-                  <IconUser
-                    name="user"
-                    style={style.branchChildInfoIconStyle}
-                  />
-                </View>
-                <Text style={styles.lable}>{userData.week_off.name}</Text>
-              </View>
-            ) : null}
-            {userData && userData.branch && userData.branch.address ? (
-              <View style={style.rowStyle}>
-                <View style={style.childCircleAvatar}>
-                  <IconLocation
-                    name="location"
-                    style={style.branchChildInfoIconStyle}
-                  />
-                </View>
-                <Text style={styles.lable}>{userData.branch.address}</Text>
-              </View>
-            ) : null}
-            {userData && userData.week_off && userData.week_off.description ? (
-              <View style={style.rowStyle}>
-                <View style={style.childCircleAvatar}>
-                  <IconPhone
-                    name="subtitles-outline"
-                    style={style.branchChildInfoIconStyle}
-                  />
-                </View>
-                <Text style={styles.lable}>
-                  {userData.week_off.description}
-                </Text>
-              </View>
-            ) : null}
+        ) : null}
+          
+       {userData && userData.user && userData.user.phone_number ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Phone Number : {userData && userData.user && userData.user.phone_number ? userData.user.phone_number : null}</Text>
           </View>
-        </>
-      ) : null}
+        ) : null}
+
+        {userData && userData.user && userData.user.address ? (
+          <View style={style.rowStyle}>
+            <Icon name="tags" style={style.branchChildInfoIconStyle} />
+            <Text style={styles.lable}>Address : {userData && userData.user && userData.user.address ? userData.user.address : null}</Text>
+          </View>
+        ) : null}
+      </View>
     </ScrollView>
   );
 };
@@ -255,6 +238,8 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
+    marginTop: 10,
+    gap: 5,
   },
 
   statusTextStyle: {
@@ -275,7 +260,6 @@ const style = StyleSheet.create({
     width: 40,
     backgroundColor: primaryColor,
     borderRadius: 50,
-
     justifyContent: 'center',
   },
   childCircleAvatar: {
@@ -287,7 +271,7 @@ const style = StyleSheet.create({
   },
   branchChildInfoIconStyle: {
     fontSize: 13,
-    color: 'white',
+    color: primaryColor,
     alignSelf: 'center',
     padding: 6,
   },
@@ -297,8 +281,9 @@ const style = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    padding: 5,
-    gap: 10,
+    alignContent: 'center',
+    // padding: 5,
+    gap: 2,
   },
 
   profileImage: {

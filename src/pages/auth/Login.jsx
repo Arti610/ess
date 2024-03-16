@@ -46,8 +46,8 @@ const Login = () => {
         dispatch(loginSuccess(res.data));
         if (res.data.user_type === 'Management') {
           navigation.navigate('Base');
-        } else if (res.data.user_type === 'Management') {
-          navigation.navigate('ManagerBase');
+        } else if (res.data.user_type === 'Manager') {
+          navigation.navigate('DashboardBase');
         } else {
           navigation.navigate('StaffBase');
         }

@@ -20,6 +20,8 @@ const UserProfile = () => {
   const {userData} = route.params;
   const {id} = route.params;
 
+  // console.log('userData',userData);
+
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalActiveVisible, setModalActiveVisible] = useState(false);
@@ -29,6 +31,7 @@ const UserProfile = () => {
   const handleModalVisible = () => {
     setModalVisible(!modalVisible);
   };
+
   const handleModalActiveVisible = () => {
     setModalActiveVisible(!modalActiveVisible);
   };
@@ -98,7 +101,6 @@ const UserProfile = () => {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, [data]);
@@ -106,8 +108,9 @@ const UserProfile = () => {
   const handleDelete = async () => {
     try {
       const res = await deleteApi.deleteUser(data.user.id);
-      console.log('res', res);
+      
       if (res.status === 200) {
+        navigation.navigate('Users')
         Toast.show({
           type: 'success',
           text1: `Account deleted successfully`,
@@ -287,7 +290,7 @@ const UserProfile = () => {
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile
-                      name="file"
+                      name="check-double"
                       style={pStyles.logoutUserIcon}
                     />
                     <Text style={pStyles.lable}>
@@ -306,7 +309,7 @@ const UserProfile = () => {
                 <View style={pStyles.footerTextView}>
                   <View style={pStyles.leftFooterText}>
                     <IconEditProfile
-                      name="file"
+                      name="trash-alt"
                       style={pStyles.logoutUserIcon}
                     />
                     <Text style={pStyles.lable}>Delete Account</Text>
@@ -314,6 +317,7 @@ const UserProfile = () => {
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
               </TouchableOpacity>
+              
             </View>
           </View>
         </View>
@@ -410,7 +414,7 @@ const pStyles = StyleSheet.create({
   iconStyles: {
     color: primaryColor,
     fontSize: 20,
-    fontWeight: 400,
+    fontWeight: 'bold'
   },
   logoutUserIcon: {
     backgroundColor: primaryColor,
@@ -420,5 +424,6 @@ const pStyles = StyleSheet.create({
     borderRadius: 15,
     textAlign: 'center',
     color: '#fff',
+    fontWeight : 'bold'
   },
 });

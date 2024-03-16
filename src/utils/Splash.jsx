@@ -33,7 +33,7 @@ const Splash = () => {
             if (parsedUserData.user_type === 'Management') {
               navigation.navigate('Base');
             } else if (parsedUserData.user_type === 'Manager') {
-              navigation.navigate('ManagerBase');
+              navigation.navigate('DashboardBase', {id : id});
             } else {
               navigation.navigate('StaffBase', {id : id});
             }

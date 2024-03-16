@@ -31,7 +31,6 @@ const EditProfile = ({route}) => {
   const refRBSheet = useRef();
   const {userId} = route.params;
 
-  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -104,13 +103,11 @@ const EditProfile = ({route}) => {
       formData.append('last_name', values.last_name ? values?.last_name : userData?.last_name);
       formData.append('email', values.email ? values?.email : userData?.email);
       formData.append('phone_number', values.phone_number ? values?.phone_number : userData?.phone_number);
-      formData.append('phone_number', values.phone_number ? values?.phone_number : userData?.phone_number);
       formData.append('gender', selectedGender || userData?.gender);
       formData.append('address', values.address ? values?.address : userData?.address);
 
       setUpdateLoading(true);
 
-      // const res = await getApi.getIndividualUser(userId, formData, {
       const res = await updateApi.updateUser(userId, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -154,17 +151,14 @@ const EditProfile = ({route}) => {
   ) : (
     <ScrollView>
       <View style={styles.container}>
-        <Formik
-          //   initialValues={userId ? {...userData} : initialState}
+        <Formik     
           initialValues={{
             first_name: userData == null ? null : userData.user_data.first_name,
             last_name: userData == null ? null : userData.user_data.last_name,
-            email: userData == null ? null : userData.user_data.email,
-            // gender: userData == null ? null : userData.user_data.gender,
+            email: userData == null ? null : userData.user_data.email,  
             phone_number: userData == null ? null : userData.user_data.phone_number,
             address: userData == null ? null : userData.user_data.address,
-          }}
-          // validationSchema={addUserSchema}
+          }} 
           onSubmit={values => handlePress(values)}>
           {({
             handleSubmit,

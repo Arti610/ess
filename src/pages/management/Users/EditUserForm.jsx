@@ -16,6 +16,7 @@ import ButtonLoader from "../../../utils/BtnActivityIndicator";
 import moment from "moment";
 
 const EditUserForm = () => {
+
     const route = useRoute();
     const navigation = useNavigation();
     const { id, userId } = route.params;
@@ -42,12 +43,12 @@ const EditUserForm = () => {
         address: "",
     });
 
-    const [image, setImage] = useState(null)
-    const [managerStaffData, setManagertaffData] = useState([])
-    const [departmentData, setDepartmentData] = useState([])
-    const [designationData, setDesignationData] = useState([])
-    const [weekoffData, setWeekoffData] = useState([])
-    const [shiftTimeData, setShiftTimeData] = useState([])
+    const [image, setImage] = useState(null);
+    const [managerStaffData, setManagertaffData] = useState([]);
+    const [departmentData, setDepartmentData] = useState([]);
+    const [designationData, setDesignationData] = useState([]);
+    const [weekoffData, setWeekoffData] = useState([]);
+    const [shiftTimeData, setShiftTimeData] = useState([]);
 
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedUsertype, setSelectedUsertype] = useState(null);
@@ -56,8 +57,7 @@ const EditUserForm = () => {
     const [selectDesignation, setSelectDesignation] = useState(null);
     const [selectWeekoff, setSelectWeekoff] = useState(null);
     const [selectShiftTime, setSelectShiftTime] = useState(null);
-    const [branchInfo, setBranchInfo] = useState(null)
-
+    const [branchInfo, setBranchInfo] = useState(null);
 
     const handleImagePickerResponse = (response) => {
         if (response.didCancel) {
@@ -175,13 +175,12 @@ const EditUserForm = () => {
             fData.append('address', formdata.address)
             fData.append('gender', selectedGender)
             fData.append('user_type', selectedUsertype)
-            if (selectedUsertype === "Staff") { fData.append('manager', selectManager) }
+            if (selectedUsertype === "Staff") { fData.append('manager', selectManager)}
             fData.append('department', selectDepartment)
             fData.append('designation', selectDesignation)
             fData.append('week_off', selectWeekoff)
-            if(selectShiftTime != null) { fData.append('branch_info', branchInfo.id) }
+            if(selectShiftTime != null) { fData.append('branch_info', branchInfo.id)}
     
-        
             const res = await updateApi.updateUser(userId, fData, {
                 headers: {
                     'content-type': "multipart/form-data"
@@ -190,7 +189,7 @@ const EditUserForm = () => {
            
             if (res.status === 200 || res.status === 201) {
                 setIsLoading(false);
-
+                console.log('res.data',res);
                 navigation.navigate('UserProfile', {userData : res.data});
                 Toast.show({
                     type: 'success',
@@ -201,7 +200,7 @@ const EditUserForm = () => {
                     autoHide: true,
                 });
                 getApi.getAllUserList(id)
-                getApi.getAllUserList(id)
+             
             }
         } catch (error) {
             console.log('error', error.response.data);
@@ -267,6 +266,7 @@ const EditUserForm = () => {
 
     return (
         loading ? <Loader /> : (
+
             <ScrollView>
 
                 <View style={styles.formContainer}>
@@ -336,7 +336,7 @@ const EditUserForm = () => {
                         />
                     </View>
                     <View style={styles.inputContainer}>
-                        <Text style={styles.lable}>Gender </Text>
+                        <Text style={styles.lable}>Gender</Text>
                         <SelectList
                             boxStyles={styles.textInput}
                             dropdownStyles={styles.textInput}
@@ -447,6 +447,7 @@ const EditUserForm = () => {
 
                 <Toast />
             </ScrollView>
+
         )
     );
 };
