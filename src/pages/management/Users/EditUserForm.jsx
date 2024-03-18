@@ -49,7 +49,7 @@ const EditUserForm = () => {
     const [designationData, setDesignationData] = useState([]);
     const [weekoffData, setWeekoffData] = useState([]);
     const [shiftTimeData, setShiftTimeData] = useState([]);
-
+console.log('selectManager',selectManager);
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedUsertype, setSelectedUsertype] = useState(null);
     const [selectManager, setSelectManager] = useState(null);
@@ -168,18 +168,18 @@ const EditUserForm = () => {
                 });
             }
            
-            fData.append('first_name', formdata.first_name)
-            fData.append('last_name', formdata.last_name)
-            fData.append('email', formdata.email)
-            fData.append('phone_number', formdata.phone_number)
-            fData.append('address', formdata.address)
-            fData.append('gender', selectedGender)
-            fData.append('user_type', selectedUsertype)
-            if (selectedUsertype === "Staff") { fData.append('manager', selectManager)}
-            fData.append('department', selectDepartment)
-            fData.append('designation', selectDesignation)
-            fData.append('week_off', selectWeekoff)
-            if(selectShiftTime != null) { fData.append('branch_info', branchInfo.id)}
+            fData.append('first_name', formdata.first_name ? formdata.first_name : null)
+            fData.append('last_name', formdata.last_name ? formdata.last_name : null)
+            fData.append('email', formdata.email ? formdata.email : null)
+            fData.append('phone_number', formdata.phone_number ? formdata.phone_number : null)
+            fData.append('address', formdata.address ? formdata.address : null)
+            fData.append('gender', selectedGender ? selectedGender : null)
+            fData.append('user_type', selectedUsertype ? selectedUsertype : null)
+            if (selectedUsertype === "Staff") { fData.append('manager', selectManager ? selectManager : null)}
+            fData.append('department', selectDepartment ? selectDepartment : null)
+            fData.append('designation', selectDesignation ? selectDesignation : null)
+            fData.append('week_off', selectWeekoff ? selectWeekoff : null)
+            if(selectShiftTime != null) { fData.append('branch_info', branchInfo.id ? branchInfo.id : null)}
     
             const res = await updateApi.updateUser(userId, fData, {
                 headers: {
@@ -189,7 +189,7 @@ const EditUserForm = () => {
            
             if (res.status === 200 || res.status === 201) {
                 setIsLoading(false);
-                console.log('res.data',res);
+      
                 navigation.navigate('UserProfile', {userData : res.data});
                 Toast.show({
                     type: 'success',
@@ -248,7 +248,7 @@ const EditUserForm = () => {
                    
                     // setSelectShiftTime(res.data.user_data.branch_info.check_in_time ? res.data.user_data.branch_info.check_in_time : null);
                     if (res.data.user_data.branch_info) {
-                        console.log('res.data.user_data.branch_info',res.data.user_data.branch_info);
+                    
                         const checkInTime = moment(res.data.user_data.branch_info.check_in_time, 'HH:mm').format('hh:mm A');
                         const checkOutTime = moment(res.data.user_data.branch_info.check_out_time, 'HH:mm').format('hh:mm A');
                         const shiftTimeData = `${checkInTime} to ${checkOutTime}`;

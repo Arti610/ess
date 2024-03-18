@@ -1,6 +1,7 @@
 import apiService from "../../../config/apiService"
 
 export default {
+    getBranchById : (id) => apiService.get(`get_branch/${id}`),
     getStaffList: (id) => apiService.get(`get_branch_user/${id}`),
     getLateEarlyList: (id) => apiService.get(`get_lateEarly_list/${id}`),
     getLeaveList: (id) => apiService.get(`get_leave_list/${id}`),
