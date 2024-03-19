@@ -151,8 +151,7 @@ export const deleteBranch = async (id, dispatch) => {
 
 export default {
   getAllBranchInfo : () => apiService.get(`all_branch_info`),
-  // getBranchInfoById : (id) => apiService.get(`get_branch_info/${id}`),
-  getBranchInfoById : (id) => console.log('id', id),
+  getBranchInfoById : (id) => apiService.get(`get_branch_info/${id}`),
   createBranchInfo : (payload) => apiService.post(`create_branch_info`, payload),
   updateBranchInfo : (id, payload, option) => apiService.post(`update_branch_info/${id}`, payload, option),
   get_places:(place)=> apiService.post(`get_places`,{places:place}),

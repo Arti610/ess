@@ -1,7 +1,9 @@
 import apiService from "../../../config/apiService";
 
 export default {
+    updateBranchInfo : (id, payload, option) => apiService.post(`update_branch_info/${id}`, payload, option),
 
+    
     updateBranch : async (id, payload, option) => {return await apiService.put(`update_branch/${id}`, payload, option)},
 
     updateUser: async (id, payload, option) => { return await apiService.put(`updateuser/${id}`, payload, option) },

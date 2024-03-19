@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
   Image,
-  ActivityIndicator,
   ScrollView,
 } from 'react-native';
 import {Formik} from 'formik';
@@ -13,11 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {
-  createBranch,
-  getAllBranch,
-  updateBrnach,
-} from '../../../redux/slices/branch/branchApi';
+import {  getAllBranch} from '../../../redux/slices/branch/branchApi';
 import API_CONFIG from '../../../config/apiConfig';
 import {styles} from '../../../../style';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -29,7 +24,6 @@ import {addBranch} from '../../../utils/validationSchema';
 import Loader from '../../../utils/ActivityIndicator';
 import {SelectList} from 'react-native-dropdown-select-list';
 import getApi from '../../../redux/slices/utils/getApi';
-import image from '../../../assests/branch.jpg';
 import createApi from '../../../redux/slices/utils/createApi';
 import updateApi from '../../../redux/slices/utils/updateApi';
 
@@ -82,72 +76,6 @@ const AddBranch = () => {
     }
   };
 
-  // const handlePress = async (values) => {
-
-  //   try {
-  //     let form_data = new FormData();
-  //     recivedId ?
-  //       (image?.assets[0] ? form_data.append('image', {
-  //         name: image.assets[0].fileName ? image.assets[0].fileName : '',
-  //         type: image.assets[0].type ? image.assets[0].type : '',
-  //         uri: image.assets[0].uri ? image.assets[0].uri : '',
-  //       })
-  //         : null)
-  //       : (image?.assets[0] ? form_data.append('image', {
-  //         name: image.assets[0].fileName ? image.assets[0].fileName : '',
-  //         type: image.assets[0].type ? image.assets[0].type : '',
-  //         uri: image.assets[0].uri ? image.assets[0].uri : '',
-  //       }) : null)
-
-  //     form_data.append('country', selectCountry ? selectCountry : branchDataById?.country.id);
-  //     form_data.append('name', values.name ? values.name : branchDataById.name);
-  //     form_data.append('city', values.city ? values.city : branchDataById.city);
-  //     form_data.append('address', values.address ? values.address : branchDataById.address);
-
-  //   const res =  recivedId ? await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
-
-  //   if(res.status === 200 || res.status === 201){
-  //     getAllBranch(dispatch)
-  //   }
-
-  //   } catch (error) {
-  //     console.log('Error occured during branch creation or updation : ', error);
-  //   }
-  // };
-
-  // const handlePress = async (values) => {
-
-  //   try {
-  //     let form_data = new FormData();
-  //     recivedId ?
-  //       (image?.assets[0] ? form_data.append('image', {
-  //         name: image.assets[0].fileName ? image.assets[0].fileName : '',
-  //         type: image.assets[0].type ? image.assets[0].type : '',
-  //         uri: image.assets[0].uri ? image.assets[0].uri : '',
-  //       })
-  //         : null)
-  //       : (image?.assets[0] ? form_data.append('image', {
-  //         name: image.assets[0].fileName ? image.assets[0].fileName : '',
-  //         type: image.assets[0].type ? image.assets[0].type : '',
-  //         uri: image.assets[0].uri ? image.assets[0].uri : '',
-  //       }) : null)
-
-  //     form_data.append('country', selectCountry ? selectCountry : branchDataById?.country.id);
-  //     form_data.append('name', values.name ? values.name : branchDataById.name);
-  //     form_data.append('city', values.city ? values.city : branchDataById.city);
-  //     form_data.append('address', values.address ? values.address : branchDataById.address);
-
-  //   const res =  recivedId ? await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
-
-  //   if(res.status === 200 || res.status === 201){
-  //     getAllBranch(dispatch)
-  //   }
-
-  //   } catch (error) {
-  //     console.log('Error occured during branch creation or updation : ', error);
-  //   }
-  // };
-
   const handlePress = async values => {
     try {
       let form_data = new FormData();
@@ -182,11 +110,10 @@ const AddBranch = () => {
             'content-type': 'multipart/form-data',
           },
         });
-        console.log('res', res);
+       
         if (res.status === 200 || res.status === 201) {
           setIsLoading(false);
           navigation.navigate('Base');
-          getAllBranch(dispatch);
           Toast.show({
             type: 'success',
             text1: 'Branch updated successfully',
@@ -213,7 +140,6 @@ const AddBranch = () => {
         if (res.status === 200 || res.status === 201) {
           navigation.navigate('Base');
           setIsLoading(false);
-          getAllBranch(dispatch);
           Toast.show({
             type: 'success',
             text1: 'Branch created successfully',
@@ -435,7 +361,7 @@ const AddBranch = () => {
                             : 'Select Country e.g. (India)'
                         }
                         notFoundText="Data not found"
-                        value={selectCountry} // Set the value prop to the selected country's key
+                        value={selectCountry} 
                         onBlur={handleBlur('country')}
                         onChangText={handleChange('country')}
                       />

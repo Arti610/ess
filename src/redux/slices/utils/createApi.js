@@ -3,6 +3,7 @@ import apiService from "../../../config/apiService";
 export default {
 
     createBranch : (payload, option) => apiService.post(`create_branch`, payload, option),
+    createBranchInfo:(payload, option)=>apiService.post('create_branch_info', payload, option),
     createUser: (payload, option) => apiService.post(`createuser`, payload, option),
     uploadTask: (payload, option) => apiService.post(`create_taskupload`, payload, option),
     createLeaveRequest: (payload, option) => apiService.post(`create_leaverequest`, payload, option),

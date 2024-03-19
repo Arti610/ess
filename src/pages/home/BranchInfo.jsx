@@ -12,7 +12,7 @@ const BranchInfo = () => {
     const navigation = useNavigation();
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-   
+ 
     useEffect(() => {
         try { 
             const fetchBranchInfo = async () => {
