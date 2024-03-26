@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconD from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import API_CONFIG from '../../config/apiConfig';
-import {secondaryColor, styles} from '../../../style';
+import {styles} from '../../../style';
 import NotFound from '../../utils/NotFound';
 import getApi from '../../redux/slices/utils/getApi';
 import {currentUser} from '../../utils/currentUser';
@@ -92,19 +92,18 @@ const Document = ({route}) => {
   const [currentUserData, setCurrentUserData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const fetchUser = async () => {
-    try {
-      const res = await getApi.getAllDocumentList(id);
-
-      if (res) {
-        setData(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await getApi.getAllDocumentList();
+
+        if (res) {
+          setData(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchUser();
   }, []);
 
@@ -116,8 +115,7 @@ const Document = ({route}) => {
     fetchCurrentUser();
   }, []);
 
-  const handleDownload = async (document) => {
-
+  const handleDownload = async document => {
     const granted = await getDownloadPermissionAndroid();
 
     if (granted) {
@@ -143,15 +141,14 @@ const Document = ({route}) => {
     }
   };
 
-  const handleModalVisible = (id) => {
+  const handleModalVisible = id => {
     setModalVisible(!modalVisible);
-    setId(id)
+    setId(id);
   };
 
   const handleDelete = async () => {
-
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const res = await deleteApi.deleteDocUpload(Id);
 
       if (res.status === 200) {
@@ -176,7 +173,7 @@ const Document = ({route}) => {
       });
     }
     setModalVisible(false);
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   return (
@@ -236,19 +233,22 @@ const Document = ({route}) => {
                 </View>
                 <View style={{flexDirection: 'row', gap: 5}}>
                   <TouchableOpacity
-                    onPress={()=>handleDownload(item.document)}
+                    onPress={() => handleDownload(item.document)}
                     style={styles.textInput}>
                     <Text style={styles.lable}>
                       <Icon name="download" style={{fontSize: 20}} />
                     </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={()=>handleModalVisible(item.id)}
-                    style={styles.textInput}>
-                    <Text style={styles.lable}>
-                      <IconD name="delete" style={{fontSize: 20}} />
-                    </Text>
-                  </TouchableOpacity>
+                  {currentUserData &&
+                    currentUserData.user_type === 'Staff' ? null : (
+                      <TouchableOpacity
+                        onPress={() => handleModalVisible(item.id)}
+                        style={styles.textInput}>
+                        <Text style={styles.lable}>
+                          <IconD name="delete" style={{fontSize: 20}} />
+                        </Text>
+                      </TouchableOpacity>
+                  )}
                 </View>
               </View>
             )}

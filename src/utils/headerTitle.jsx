@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import getApi from '../redux/slices/utils/getApi';
-import {primaryColor} from '../../style';
+import {primaryColor, styles} from '../../style';
 import API_CONFIG from '../config/apiConfig';
 
 const HeaderTitle = () => {
@@ -20,7 +20,6 @@ const HeaderTitle = () => {
   const formattedDate = currentDate.toLocaleDateString('en-US', option);
   const [isLoading, setIsLoading] = useState(false);
   const [greeting, setGreeting] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
   const [data, setData] = useState(null);
   
   useEffect(() => {
@@ -32,7 +31,7 @@ const HeaderTitle = () => {
           const res = JSON.parse(resString);
 
           if (res) {
-            setCurrentUser(res.data);
+          
             const resData = res.data;
 
             const id = resData.id;
@@ -71,18 +70,18 @@ const HeaderTitle = () => {
   return (
     <View style={{flexDirection: 'row', marginLeft: 10}}>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <View style={styles.userName}>
+        <View style={style.userName}>
           {data && data?.user_data?.profile_image ? (
             <Image
               source={{
                 uri: `${API_CONFIG.imageUrl}${data?.user_data?.profile_image}`,
               }}
-              style={styles.image}
+              style={style.image}
             />
           ) : (
             <Image
               source={require('../assests/userProfile.webp')}
-              style={styles.image}
+              style={style.image}
             />
           )}
         </View>
@@ -99,7 +98,7 @@ const HeaderTitle = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   userName: {
     backgroundColor: primaryColor,
     borderRadius: 20,

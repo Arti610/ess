@@ -6,7 +6,7 @@ import IconFa from 'react-native-vector-icons/FontAwesome';
 import DocIcon from 'react-native-vector-icons/Ionicons';
 import HeaderTitle from '../../utils/headerTitle';
 import Toast from 'react-native-toast-message';
-import {primaryColor, styles} from '../../../style';
+import {primaryColor, secondaryColor, styles} from '../../../style';
 import {BackHandler, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Vlog from './vlog/Vlog';
 import Clock from './clock/clock';
@@ -21,7 +21,6 @@ import Document from '../management/Document';
 const Tab = createBottomTabNavigator();
 
 const Notification = () => {
-  
   const [branchId, setBranchId] = useState(null);
   const [data, setData] = useState(0);
 
@@ -95,7 +94,12 @@ const Notification = () => {
 const StaffDashboard = () => {
   return (
     <>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {height: 60},
+          tabBarActiveBackgroundColor: secondaryColor,
+          tabBarInactiveTintColor: primaryColor,
+        }}>
         <Tab.Screen
           name="dashboard"
           component={Dashboard}
@@ -103,7 +107,9 @@ const StaffDashboard = () => {
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
             headerRight: () => <Notification />,
-            tabBarIcon: () => (<Icon name="code-branch" style={styles.icons} size={20} />),
+            tabBarIcon: () => (
+              <Icon name="code-branch" style={styles.icons} size={20} />
+            ),
             tabBarLabel: () => <Text style={styles.lable}>Home</Text>,
           })}
         />
@@ -125,7 +131,7 @@ const StaffDashboard = () => {
         <Tab.Screen
           name="Clock"
           component={Clock}
-          initialParams={{id : null}}
+          initialParams={{id: null}}
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
@@ -139,7 +145,7 @@ const StaffDashboard = () => {
         <Tab.Screen
           name="Leave"
           component={LeaveBase}
-          initialParams={{id : null}}
+          initialParams={{id: null}}
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
@@ -157,17 +163,13 @@ const StaffDashboard = () => {
         <Tab.Screen
           name="Documents"
           component={Document}
-          initialParams={{id : null}}
+          initialParams={{id: null}}
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
             headerRight: () => <Notification />,
             tabBarIcon: () => (
-              <DocIcon
-                name="documents"
-                style={styles.icons}
-                size={20}
-              />
+              <DocIcon name="documents" style={styles.icons} size={20} />
             ),
             tabBarLabel: () => <Text style={styles.lable}>Documents</Text>,
           })}
@@ -187,7 +189,7 @@ const style = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 20,
-    position: 'relative', 
+    position: 'relative',
   },
   icon: {
     fontSize: 25,
@@ -200,7 +202,7 @@ const style = StyleSheet.create({
     minWidth: 15,
     height: 15,
     borderRadius: 10,
-    backgroundColor: 'red', 
+    backgroundColor: 'red',
     color: 'white',
     fontSize: 10,
     textAlign: 'center',

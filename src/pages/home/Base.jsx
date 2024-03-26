@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BranchIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Home from './Home';
-import UserProfile from '../../utils/userProfile';
 import HeaderTitle from '../../utils/headerTitle';
 import BranchInfo from './BranchInfo';
 import Toast from 'react-native-toast-message';

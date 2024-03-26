@@ -10,7 +10,9 @@ export default {
     getManagerStaffList: (id) => apiService.get(`get_managers_staff/${id}`),
     getLateEarlyList: (id) => apiService.get(`get_lateEarly_list/${id}`),
     getLeaveList: (id) => apiService.get(`get_leave_list/${id}`),
-    getAllDocumentList: (id) => apiService.get(`get_docsUpload_list/${id}`),
+    // getAllDocumentList: (id) => apiService.get(`get_docsUpload_list/${id}`),
+    getAllDocumentList: () => apiService.get(`get_DocsUpload_list`),
+    // getAllDocumentList: (id) => console.log('id', id),
     getAllUserList: (id) => apiService.get(`all_details_user/${id}`),
     getIndividualUser: (id) => apiService.get(`get_user/${id}`),
     getVlog: (id) => apiService.get(`/${id}`),
@@ -22,7 +24,6 @@ export default {
     getBranchDesignation: (id) => apiService.get(`get_branch_designation/${id}`),
     getLeaveTypeList: (id) => apiService.get(`leavetype_by_branch/${id}`),
     getBranchsBranchInfo: (id) => apiService.get(`get_branchs_branch_info/${id}`),
-
 
     // VLog
     getAllVlog: (id) => apiService.get(`get_task_list/${id}`),

@@ -1,17 +1,16 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Users from './Users/Users';
 import Home from './Home/Home';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StyleSheet, Text, View} from 'react-native';
-import {styles} from '../../../style';
+import {primaryColor, secondaryColor, styles} from '../../../style';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconI from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 import Vlog from './Vlog/Vlog';
 import LeaveBase from '../staff/leave/LeaveBase';
-import getApi from '../../redux/slices/utils/getApi';
 import Document from './Document';
 
 const Tab = createBottomTabNavigator();
@@ -26,7 +25,9 @@ const DashboardBase = () => {
     <>
       <Tab.Navigator
         screenOptions={{
-          tabBarStyle: {height: 60},
+          tabBarStyle: { height: 60 },
+          tabBarActiveBackgroundColor: secondaryColor, 
+          tabBarInactiveTintColor: primaryColor, 
         }}>
         <Tab.Screen
           name="Home"
@@ -61,13 +62,13 @@ const DashboardBase = () => {
                   style={tStyles.icon}>
                   <Icon name="arrowleft" style={styles.textSubHeading} />
                 </Text>
-                <Text style={styles.textSubHeading}>Users</Text>
+                <Text style={styles.textSubHeading}>Staffs</Text>
               </View>
             ),
             tabBarIcon: () => (
               <IconFa name="users" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Users</Text>,
+            tabBarLabel: () => <Text style={styles.lable}>Staffs</Text>,
           }}
         />
         <Tab.Screen
@@ -77,7 +78,7 @@ const DashboardBase = () => {
           options={{
             headerShown: false,
             tabBarIcon: () => (
-              <IconFa name="home" style={styles.icons} size={20} />
+              <IconMCI name="movie" style={styles.icons} size={20} />
             ),
             tabBarLabel: () => <Text style={styles.lable}>Vlogs</Text>,
           }}

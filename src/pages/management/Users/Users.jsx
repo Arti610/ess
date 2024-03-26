@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 import Loader from '../../../utils/ActivityIndicator';
 import UserCard from '../../../utils/UserCard';
 import getApi from '../../../redux/slices/utils/getApi';
+import {currentUser} from '../../../utils/currentUser';
 
 const Users = () => {
   const navigation = useNavigation();
@@ -14,25 +15,53 @@ const Users = () => {
   const {id} = route.params;
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState(null);
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const res = await currentUser();
+        if (res.data) {
+          setCurrentUserData(res.data);
+        }
+      };
+      fetchData();
+    } catch (error) {
+      console.log('during fecting users', error);
+    }
+  }, []);
+
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      try {
-        setIsLoading(true);
-        const fetchusers = async () => {
-          const res = await getApi.getStaffList(id);
-          if (res.status === 200) {
-            setData(res.data);
-            setIsLoading(false);
-          }
-        };
-        fetchusers();
-      } catch (error) {
-        setIsLoading(false);
+      if (currentUserData) {
+        try {
+          setIsLoading(true);
+          const fetchusers = async () => {
+            if (currentUserData && currentUserData.user_type === 'Manager') {
+              const res = await getApi.getManagerStaffList(
+                currentUserData.id ? currentUserData.id : null,
+              );
+              if (res.status === 200) {
+                setData(res.data);
+                setIsLoading(false);
+              }
+            } else {
+              const res = await getApi.getStaffList(id);
+              if (res.status === 200) {
+                setData(res.data);
+                setIsLoading(false);
+              }
+            }
+          };
+          fetchusers();
+        } catch (error) {
+          setIsLoading(false);
+        }
       }
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, currentUserData, id]);
 
   return isLoading ? (
     <Loader />
