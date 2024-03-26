@@ -1,16 +1,14 @@
 import React from 'react';
-import {useEffect, useState} from 'react';
 import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import ReelsComponent from './widgets/reels_component';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchCamera} from 'react-native-image-picker';
 
 const Vlog = () => {
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-  const [currentUser, setCurrentUser] = useState(null);
+
 
   const navigation = useNavigation();
   const handleLaunchCamera = async () => {
@@ -32,25 +30,7 @@ const Vlog = () => {
       console.log('hell=========', error);
     }
   };
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const resString = await AsyncStorage.getItem('currentUser');
-        if (resString) {
-          const res = JSON.parse(resString);
-          if (res && res.data) {
-            setCurrentUser(res.data);
-          }
-        } else {
-          console.log('No user data found in AsyncStorage');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
 
-    fetchCurrentUser();
-  }, []);
 
   return (
     <View

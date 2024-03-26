@@ -17,8 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF5 from 'react-native-vector-icons/FontAwesome5';
 import VideoP from 'react-native-video';
 import Toast from 'react-native-toast-message';
-import Loader from '../../../utils/ActivityIndicator';
-import {Video} from 'react-native-compressor';
+import ButtonLoader from '../../../utils/BtnActivityIndicator';
 
 const ShowingVlog = () => {
   const route = useRoute();
@@ -26,7 +25,6 @@ const ShowingVlog = () => {
   const navigation = useNavigation();
 
   const refRBSheet = useRef();
-  console.log('outside video =====>>>>>>>>>>>>', video);
 
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -69,16 +67,7 @@ const ShowingVlog = () => {
 
   const uploadVideo = async values => {
     setLoading(true);
-    console.log('values', values);
 
-    const result = await Video.compress(video.assets[0].uri, {}, progress => {
-      console.log('Compression Progress: ', progress);
-    });
-
-    console.log('result -==-=--=-=-=', result);
-
-    // console.log('video', video.assets[0].uri);
-    // console.log('image obj', image);
     const fData = new FormData();
     if (image != null) {
       fData.append('thumbnail', {
@@ -87,7 +76,7 @@ const ShowingVlog = () => {
         uri: image == null ? '' : image.assets[0].uri,
       });
     }
-    // console.log('video 22222222',video);
+
     fData.append('video', {
       name: video.assets[0].fileName ? video.assets[0].fileName : '',
       type: video.assets[0].type ? video.assets[0].type : '',
@@ -105,7 +94,7 @@ const ShowingVlog = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('res', res);
+
       if (res.status === 201) {
         setLoading(false);
         Toast.show({
@@ -129,7 +118,7 @@ const ShowingVlog = () => {
     }
   };
 
-  return loading == false ? (
+  return (
     <ScrollView>
       <Formik initialValues={initialState} onSubmit={uploadVideo}>
         {({
@@ -247,15 +236,15 @@ const ShowingVlog = () => {
               <TouchableOpacity
                 style={styles.primaryButton}
                 onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Submit</Text>
+                <Text style={styles.buttonText}>
+                  {loading ? <ButtonLoader /> : Submit}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
       </Formik>
     </ScrollView>
-  ) : (
-    <Loader></Loader>
   );
 };
 

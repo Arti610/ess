@@ -1,13 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-// import {styles} from '../../style';
-import UserProfile from '../utils/userProfile';
+
 import {useNavigation} from '@react-navigation/native';
 import getApi from '../redux/slices/utils/getApi';
 import {primaryColor} from '../../style';
 import API_CONFIG from '../config/apiConfig';
-import Loader from './ActivityIndicator';
+
 const HeaderTitle = () => {
   const option = {
     day: '2-digit',
@@ -23,6 +22,7 @@ const HeaderTitle = () => {
   const [greeting, setGreeting] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [data, setData] = useState(null);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,9 +54,7 @@ const HeaderTitle = () => {
 
     fetchData();
 
-    // fetchUserData();
-
-    // Determine the greeting based on the current time
+   
     if (currentHour >= 5 && currentHour < 12) {
       setGreeting('Morning');
     } else if (currentHour >= 12 && currentHour < 18) {

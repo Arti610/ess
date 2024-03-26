@@ -25,7 +25,7 @@ const Splash = () => {
         setTimeout(async () => {
           const userDataString = await AsyncStorage.getItem('currentUser');
           const parsedUserData = JSON.parse(userDataString)
-
+          console.log('parsedUserData',parsedUserData);
           const id = parsedUserData && parsedUserData.data && parsedUserData.data.branch && parsedUserData.data.branch.id && parsedUserData.data.branch.id;
 
           if (parsedUserData) {
@@ -33,7 +33,7 @@ const Splash = () => {
             if (parsedUserData.user_type === 'Management') {
               navigation.navigate('Base');
             } else if (parsedUserData.user_type === 'Manager') {
-              navigation.navigate('DashboardBase', {id : id});
+              navigation.navigate('managerDashboard', {id : id});
             } else {
               navigation.navigate('StaffBase', {id : id});
             }

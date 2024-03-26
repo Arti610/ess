@@ -7,54 +7,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {styles, textColor} from '../../../../style';
-import getApi from '../../../redux/slices/utils/getApi';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconFa6 from 'react-native-vector-icons/FontAwesome6';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
-import {currentUser} from '../../../utils/currentUser';
-import Loader from '../../../utils/ActivityIndicator';
+import getApi from '../../redux/slices/utils/getApi';
+import Loader from '../../utils/ActivityIndicator';
+import {currentUser} from '../../utils/currentUser';
+import {styles, textColor} from '../../../style';
 
 const Home = () => {
   const navigation = useNavigation();
 
-  const route = useRoute();
-  const {id} = route.params;
-
   const [staff, setStaff] = useState([]);
   const [leaveRequest, setLeaveRequest] = useState([]);
   const [lateEarly, setLateEarly] = useState([]);
-
+  const [currentUserData, setcurrentUserData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
-  useEffect(() => {
-    const fetchApis = async () => {
-      try {
-        setLoading(true);
-
-        const staffRes = await getApi.getStaffList(id);
-        if (staffRes.data) {
-          setLoading(false);
-          setStaff(staffRes.data);
-        }
-
-        const lateEarlyRes = await getApi.getLateEarlyList(id);
-        if (lateEarlyRes.data) {
-          setLoading(false);
-          setLateEarly(lateEarlyRes.data);
-        }
-        const leaveRes = await getApi.getLeaveList(id);
-        if (leaveRes.data) {
-          setLoading(false);
-          setLeaveRequest(leaveRes.data);
-        }
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-    fetchApis();
-  }, []);
+  const fetchCurrentUser = async () => {
+    const res = await currentUser();
+    setcurrentUserData(res.data);
+  };
 
   let checkinCount = 0;
   let checkoutCount = 0;
@@ -90,7 +63,51 @@ const Home = () => {
   }
 
   const activeStaff = totalStaffs - inActiveStaffs;
-console.log('activeStaff',activeStaff);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
+  const id =
+    currentUserData && currentUserData.branch && currentUserData.branch.id
+      ? currentUserData.branch.id
+      : null;
+
+
+  useEffect(() => {
+    setLoading(true);
+    if (currentUserData) {
+      try {
+        const fetchData = async () => {
+          const staffRes = await getApi.getManagerStaffList(
+            currentUserData.id ? currentUserData.id : null,
+          );
+         
+          if (staffRes.data) {
+            setStaff(staffRes.data);
+          }
+
+          const lateEarlyRes = await getApi.getLateEarlyList(id);
+          if (lateEarlyRes.data) {
+            setLateEarly(lateEarlyRes.data);
+          }
+
+          const leaveRes = await getApi.getLeaveList(id);
+          if (leaveRes.data) {
+            setLeaveRequest(leaveRes.data);
+          }
+
+          setLoading(false); // Move setLoading(false) inside fetchData
+        };
+
+        fetchData();
+      } catch (error) {
+        console.log('error during fetching data in manager dashboard', error);
+        setLoading(false); // Handle error and setLoading(false)
+      }
+    }
+  }, [currentUserData, id]);
+
   return loading ? (
     <Loader />
   ) : (

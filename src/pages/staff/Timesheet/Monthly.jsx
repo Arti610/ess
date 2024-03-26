@@ -50,7 +50,7 @@ const Monthly = () => {
     const filterData = (status) => {
         let newData;
         const currentMonth = moment().month();
-   console.log('currentMonth',currentMonth);
+
         if (status === 'All') {
             newData = data.filter(item => moment(item.date).month() === currentMonth);
           

@@ -1,10 +1,17 @@
-import React from "react";
-import { Text, View } from "react-native";
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React from 'react';
+import Home from './Home';
 
-const ManagerDashboard = () =>{
-    return(
-        <View><Text>Manager Dashboard</Text></View>
-    )
-}
+const Tab = createBottomTabNavigator();
+const ManagerDashboard = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="ManagerDashboard" component={Home} />
+    </Tab.Navigator>
+
+
+
+  );
+};
 
 export default ManagerDashboard;

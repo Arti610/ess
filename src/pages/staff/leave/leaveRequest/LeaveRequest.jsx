@@ -11,7 +11,6 @@ import {primaryColor, secondaryColor, styles} from '../../../../../style';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import IconAdd from 'react-native-vector-icons/MaterialIcons';
 import getApi from '../../../../redux/slices/utils/getApi';
-0;
 import moment from 'moment';
 import Loader from '../../../../utils/ActivityIndicator';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -49,10 +48,8 @@ const LeaveRequest = () => {
     let res;
 
     if (currentUserData && currentUserData.user_type === 'Staff') {
-   
       res = await getApi.getAllLeaveRequest();
     } else {
-    
       res = await getApi.getLeaveList(id);
     }
 
@@ -98,25 +95,7 @@ const LeaveRequest = () => {
               return itemDate >= todayStart && itemDate < todayEnd;
             })
           : [];
-      // case 'Weekly':
-      //   const weekStart = new Date(
-      //     today.getFullYear(),
-      //     today.getMonth(),
-      //     today.getDate() - today.getDay(),
-      //   );
-      //   return data
-      //     ? data.filter(item => new Date(item.from_date) >= weekStart)
-      //     : [];
-      // case 'Monthly':
-      //   const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-      //   return data
-      //     ? data.filter(item => new Date(item.from_date) >= monthStart)
-      //     : [];
-      // case 'Yearly':
-      //   const yearStart = new Date(today.getFullYear(), 0, 1);
-      //   return data
-      //     ? data.filter(item => new Date(item.from_date) >= yearStart)
-      //     : [];
+
       case 'All':
         return data ? data : [];
       default:
@@ -222,21 +201,21 @@ const LeaveRequest = () => {
                       alignItems: 'center',
                       marginBottom: 10,
                     }}>
-                    <Image
-                      style={style.image}
-                      source={{
-                        uri: `${API_CONFIG.imageUrl}${
-                          item.user.profile_image
-                            ? item.user.profile_image
-                            : null
-                        }`,
-                      }}
-                    />
-                    <Text style={styles.lable}>
-                      {item && item.user && item.user.first_name
-                        ? `${item.user.first_name} ${item.user.last_name}`
-                        : 'User'}
-                    </Text>
+                  
+                    {item &&
+                    item.user &&
+                    item.user.profile_image ? (
+                      <Image
+                        source={{uri: `${API_CONFIG.imageUrl}${item && item.user && item.user.profile_image ? item.user.profile_image : null}` }}
+                        style={style.image}
+                      />
+                    ) : (
+                      <Image
+                        source={require('../../../../assests/userProfile.webp')}
+                        style={style.image}
+                      />
+                    )}
+                    <Text style={styles.lable}>{item && item.user && `${item.user.first_name} ${item.user.last_name}`}</Text>
                   </View>
                 )}
 

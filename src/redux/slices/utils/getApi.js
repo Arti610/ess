@@ -7,10 +7,10 @@ export default {
     getBranchInfoById : (id) => apiService.get(`get_branch_info/${id}`),
     get_places:(place)=> apiService.post(`get_places`,{places:place}),
     getStaffList: (id) => apiService.get(`get_branch_user/${id}`),
+    getManagerStaffList: (id) => apiService.get(`get_managers_staff/${id}`),
     getLateEarlyList: (id) => apiService.get(`get_lateEarly_list/${id}`),
     getLeaveList: (id) => apiService.get(`get_leave_list/${id}`),
     getAllDocumentList: (id) => apiService.get(`get_docsUpload_list/${id}`),
-
     getAllUserList: (id) => apiService.get(`all_details_user/${id}`),
     getIndividualUser: (id) => apiService.get(`get_user/${id}`),
     getVlog: (id) => apiService.get(`/${id}`),

@@ -201,8 +201,8 @@ export const styles = StyleSheet.create({
   },
   updateProfileBtn: {
     position: 'absolute',
-    bottom: 5,
-    right: 5,
+    bottom: 0,
+    left: 0,
     backgroundColor: primaryColor,
     color: 'white',
     borderRadius: 15,

@@ -19,6 +19,7 @@ const EditUserForm = () => {
 
     const route = useRoute();
     const navigation = useNavigation();
+
     const { id, userId } = route.params;
     const refRBSheet = useRef();
 
@@ -49,7 +50,6 @@ const EditUserForm = () => {
     const [designationData, setDesignationData] = useState([]);
     const [weekoffData, setWeekoffData] = useState([]);
     const [shiftTimeData, setShiftTimeData] = useState([]);
-console.log('selectManager',selectManager);
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedUsertype, setSelectedUsertype] = useState(null);
     const [selectManager, setSelectManager] = useState(null);
@@ -272,24 +272,18 @@ console.log('selectManager',selectManager);
                 <View style={styles.formContainer}>
                     <View style={styles.profileContainer}> 
                        
-                           {image != null ?  <Image source={image !== null ? { uri: image.assets[0].uri ? image.assets[0].uri : null } : require('../../../assests/userProfile.webp')} style={styles.updateProfile} />
-                            : <Image source={formdata.profile_image ? { uri: (`${API_CONFIG.imageUrl}${formdata.profile_image}`) } : require('../../../assests/userProfile.webp')} style={styles.updateProfile} />
-                    }
+                        {image != null ?  <Image source={image !== null ? { uri: image.assets[0].uri ? image.assets[0].uri : null } : require('../../../assests/userProfile.webp')} style={styles.updateProfile} />
+                        : <Image source={formdata.profile_image ? { uri: (`${API_CONFIG.imageUrl}${formdata.profile_image}`) } : require('../../../assests/userProfile.webp')} style={styles.updateProfile} />
+                        }
                         <TouchableOpacity onPress={() => refRBSheet.current.open()} ><Icon name='camera' style={styles.updateProfileBtn} /></TouchableOpacity>
                         <RBSheet
                             ref={refRBSheet}
                             closeOnDragDown={true}
                             closeOnPressMask={false}
                             customStyles={{
-                                wrapper: {
-                                    backgroundColor: "transparent",
-                                },
-                                container: {
-                                    height: 150
-                                },
-                                draggableIcon: {
-                                    backgroundColor: "#000",
-                                }
+                                wrapper: { backgroundColor: "transparent" },
+                                container: { height: 150 },
+                                draggableIcon: {backgroundColor: "#000" }
                             }}
                         >
                             <View style={styles.launchImageOption}>

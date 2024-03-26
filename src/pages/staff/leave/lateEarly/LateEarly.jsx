@@ -176,66 +176,6 @@ const LateEarly = () => {
     <Loader />
   ) : (
     <>
-      {/* {currentUserData && currentUserData.user_type === 'Staff' ? (
-        <View style={style.container}>
-
-            <TouchableOpacity onPress={() => handleFilterData('Today')}>
-            <Text style={status === 'Today' ? style.inactive : style.active}>
-              Today ({data ? filterData('Today', data).length : []})
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => handleFilterData('All')}>
-            <Text style={status === 'All' ? style.inactive : style.active}>
-              All ({data ? filterData('All', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Approved')}>
-            <Text style={status === 'Approved' ? style.inactive : style.active}>
-              Approved ({data ? filterData('Approved', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Pending')}>
-            <Text style={status === 'Pending' ? style.inactive : style.active}>
-              Pending ({data ? filterData('Pending', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Declined')}>
-            <Text style={status === 'Declined' ? style.inactive : style.active}>
-              Declined ({data ? filterData('Declined', data).length : []})
-            </Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={style.container}>
-          <TouchableOpacity onPress={() => handleFilterData('All')}>
-            <Text style={status === 'All' ? style.inactive : style.active}>
-              All ({data ? filterData('All', data).length : []})
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => handleFilterData('Today')}>
-            <Text style={status === 'Today' ? style.inactive : style.active}>
-              Today ({data ? filterData('Today', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Weekly')}>
-            <Text style={status === 'Weekly' ? style.inactive : style.active}>
-              Weekly ({data ? filterData('Weekly', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Monthly')}>
-            <Text style={status === 'Monthly' ? style.inactive : style.active}>
-              Monthly ({data ? filterData('Monthly', data).length : []})
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFilterData('Yearly')}>
-            <Text style={status === 'Yearly' ? style.inactive : style.active}>
-              Yearly ({data ? filterData('Yearly', data).length : []})
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )} */}
       <View style={style.container}>
         <TouchableOpacity onPress={() => handleFilterData('All')}>
           <Text style={status === 'All' ? style.inactive : style.active}>
@@ -243,10 +183,10 @@ const LateEarly = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Today')}>
-            <Text style={status === 'Today' ? style.inactive : style.active}>
-              Today ({data ? filterData('Today', data).length : []})
-            </Text>
-          </TouchableOpacity>
+          <Text style={status === 'Today' ? style.inactive : style.active}>
+            Today ({data ? filterData('Today', data).length : []})
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Approved')}>
           <Text style={status === 'Approved' ? style.inactive : style.active}>
             Approved ({data ? filterData('Approved', data).length : []})
@@ -282,16 +222,24 @@ const LateEarly = () => {
                       alignItems: 'center',
                       marginBottom: 10,
                     }}>
-                    <Image
-                      style={style.image}
-                      source={{
-                        uri: `${API_CONFIG.imageUrl}${
-                          item.user.profile_image
-                            ? item.user.profile_image
-                            : null
-                        }`,
-                      }}
-                    />
+                   
+                    {item && item.user && item.user.profile_image ? (
+                      <Image
+                        source={{
+                          uri: `${API_CONFIG.imageUrl}${
+                            item && item.user && item.user.profile_image
+                              ? item.user.profile_image
+                              : null
+                          }`,
+                        }}
+                        style={style.image}
+                      />
+                    ) : (
+                      <Image
+                        source={require('../../../../assests/userProfile.webp')}
+                        style={style.image}
+                      />
+                    )}
                     <Text style={styles.lable}>
                       {item && item.user && item.user.first_name
                         ? `${item.user.first_name} ${item.user.last_name}`

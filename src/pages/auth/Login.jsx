@@ -47,7 +47,7 @@ const Login = () => {
         if (res.data.user_type === 'Management') {
           navigation.navigate('Base');
         } else if (res.data.user_type === 'Manager') {
-          navigation.navigate('DashboardBase');
+          navigation.navigate('managerDashboard', {id : null});
         } else {
           navigation.navigate('StaffBase');
         }

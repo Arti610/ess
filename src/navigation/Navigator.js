@@ -88,6 +88,8 @@ const Navigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="Home" component={Home} />
+  
+        <Stack.Screen name="managerDashboard" component={ManagerDashboard} options={{headerShown : false}}/>
         <Stack.Screen
           name="AddBranch"
           component={AddBranch}
