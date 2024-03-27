@@ -92,20 +92,21 @@ const Document = ({route}) => {
   const [currentUserData, setCurrentUserData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await getApi.getAllDocumentList();
+  const fetchUser = async () => {
+    try {
+      const res = await getApi.getAllDocumentList();
 
-        if (res) {
-          setData(res.data);
-        }
-      } catch (error) {
-        console.log(error);
+      if (res) {
+        setData(res.data);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  useEffect(() => {
     fetchUser();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -147,6 +148,7 @@ const Document = ({route}) => {
   };
 
   const handleDelete = async () => {
+    
     try {
       setIsLoading(true);
       const res = await deleteApi.deleteDocUpload(Id);
@@ -161,7 +163,7 @@ const Document = ({route}) => {
           autoHide: true,
         });
         fetchUser();
-      }
+      } 
     } catch (error) {
       console.log(error, 'error');
       Toast.show({

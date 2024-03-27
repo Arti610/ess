@@ -27,15 +27,10 @@ import Toast from 'react-native-toast-message';
 import Geolocation from '@react-native-community/geolocation';
 import {promptForEnableLocationIfNeeded} from 'react-native-android-location-enabler';
 import {SkypeIndicator} from 'react-native-indicators';
-import {
-  getUserFailed,
-  getUserStart,
-  getUserSuccess,
-} from '../../../redux/slices/users/userSlice';
+
 import {useDispatch} from 'react-redux';
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [currentTime, setCurrentTime] = useState('');
   const [latitude, setLatitude] = useState(null);
@@ -612,9 +607,16 @@ const Dashboard = () => {
               alignItems: 'center',
             }}>
             <Text style={styles.textSubHeading}>Recent Activity</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Clock')}>
-              <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
-            </TouchableOpacity>
+            {currentUserId && currentUserId.user_type === 'Manager' ? (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('checkin/checkout', {data : attendence})}>
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => navigation.navigate('Clock')}>
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {inoutData &&

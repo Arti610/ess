@@ -20,8 +20,6 @@ const UserProfile = () => {
   const {userData} = route.params;
   const {id} = route.params;
 
-  // console.log('userData',userData);
-
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalActiveVisible, setModalActiveVisible] = useState(false);
@@ -47,6 +45,7 @@ const UserProfile = () => {
   };
 
   const fetchData = async () => {
+    console.log('userData.id', userData.id);
     try {
       const res = await getApi.getAllUserList(userData.id);
       if (res.data) {

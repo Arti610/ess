@@ -11,7 +11,11 @@ import IconEdit from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import {useDispatch} from 'react-redux';
-import {  logoutFailure,  logoutStart,  logoutSuccess,} from '../../redux/slices/auth/authSlice';
+import {
+  logoutFailure,
+  logoutStart,
+  logoutSuccess,
+} from '../../redux/slices/auth/authSlice';
 import authApi from '../../redux/slices/auth/authApi';
 import LogoutModal from '../../utils/LogoutModal';
 import Loader from '../../utils/ActivityIndicator';
@@ -27,6 +31,9 @@ const Profile = () => {
   const [data, setData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [userDetails, setUserDetails] = useState(null);
+
   const handleModalVisible = () => {
     setModalVisible(!modalVisible);
   };
@@ -85,20 +92,19 @@ const Profile = () => {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        setIsLoading(true);
+        setLoading(true);
         const resString = await AsyncStorage.getItem('currentUser');
         if (resString) {
           const res = JSON.parse(resString);
 
           if (res && res.data) {
             setCurrentUser(res.data);
-            setIsLoading(false);
+            setLoading(false);
           }
         } else {
           console.log('No user data found in AsyncStorage');
         }
       } catch (error) {
-        setIsLoading(false);
         console.log('Error fetching user data:', error);
       }
     };
@@ -143,13 +149,32 @@ const Profile = () => {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+
+    if (currentUser && currentUser.id) {
+      const fetchData = async () => {
+        try {
+          setLoading(true);
+          const res = await getApi.getAllUserList(currentUser.id);
+
+          if (res.data) {
+            setUserDetails(res.data);
+            setLoading(false);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, []);
+
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
         <View style={pStyles.container}>
-          
           {data ? (
             <View style={pStyles.userHeader}>
               {data && data.user_data && data.user_data.profile_image ? (
@@ -180,8 +205,6 @@ const Profile = () => {
                     : 'Name'
                 }`}</Text>
               </View>
-
-             
             </View>
           ) : null}
 
@@ -219,10 +242,7 @@ const Profile = () => {
               style={pStyles.footerText}>
               <View style={pStyles.footerTextView}>
                 <View style={pStyles.leftFooterText}>
-                  <IconEditProfile
-                    name="pen"
-                    style={pStyles.logoutUserIcon}
-                  />
+                  <IconEditProfile name="pen" style={pStyles.logoutUserIcon} />
                   <Text style={pStyles.lable}>Edit Profile</Text>
                 </View>
                 <IconEdit name="chevron-right" style={pStyles.iconStyles} />
@@ -241,10 +261,7 @@ const Profile = () => {
               style={pStyles.footerText}>
               <View style={pStyles.footerTextView}>
                 <View style={pStyles.leftFooterText}>
-                  <IconEditProfile
-                    name="key"
-                    style={pStyles.logoutUserIcon}
-                  />
+                  <IconEditProfile name="key" style={pStyles.logoutUserIcon} />
                   <Text style={pStyles.lable}>Change Password</Text>
                 </View>
                 <IconEdit name="chevron-right" style={pStyles.iconStyles} />
@@ -253,7 +270,9 @@ const Profile = () => {
             {currentUser && currentUser.user_type == 'Management' ? null : (
               <>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Leave')}
+                  onPress={() =>
+                    navigation.navigate('Leaves', {data: userDetails})
+                  }
                   style={pStyles.footerText}>
                   <View style={pStyles.footerTextView}>
                     <View style={pStyles.leftFooterText}>
@@ -267,7 +286,25 @@ const Profile = () => {
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Clock')}
+                  onPress={() =>
+                    navigation.navigate('LateEarlys', {data: userDetails})
+                  }
+                  style={pStyles.footerText}>
+                  <View style={pStyles.footerTextView}>
+                    <View style={pStyles.leftFooterText}>
+                      <IconEditProfile
+                        name="th-list"
+                        style={pStyles.logoutUserIcon}
+                      />
+                      <Text style={pStyles.lable}>Late/Early</Text>
+                    </View>
+                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('checkin/checkout', {data: userDetails})
+                  }
                   style={pStyles.footerText}>
                   <View style={pStyles.footerTextView}>
                     <View style={pStyles.leftFooterText}>
@@ -276,6 +313,22 @@ const Profile = () => {
                         style={pStyles.logoutUserIcon}
                       />
                       <Text style={pStyles.lable}>My Attendance</Text>
+                    </View>
+                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Documents', {data: userDetails})
+                  }
+                  style={pStyles.footerText}>
+                  <View style={pStyles.footerTextView}>
+                    <View style={pStyles.leftFooterText}>
+                      <IconEditProfile
+                        name="file"
+                        style={pStyles.logoutUserIcon}
+                      />
+                      <Text style={pStyles.lable}>Document</Text>
                     </View>
                     <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                   </View>
@@ -316,24 +369,20 @@ const pStyles = StyleSheet.create({
   container: {
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   userHeader: {
-    flex: 1,
+    // flex: 1,
+    height: '20%',
     gap: 10,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  userBody: {
-    flex: 1,
-    width: '100%',
-    paddingLeft: 20,
-    justifyContent: 'center',
-    alignItems: 'start',
+    marginTop: 10,
   },
   userFooter: {
-    flex: 2,
+    // flex: 3,
+    height: 'fit-content',
     width: '100%',
     justifyContent: 'start',
     alignItems: 'center',
@@ -341,7 +390,7 @@ const pStyles = StyleSheet.create({
     borderTopRightRadius: 50,
     elevation: 1,
     borderColor: '#D0D5DD',
-    padding: 20,
+    padding: 10,
     backgroundColor: '#FFF',
   },
   lable: {

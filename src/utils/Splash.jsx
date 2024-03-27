@@ -25,7 +25,7 @@ const Splash = () => {
         setTimeout(async () => {
           const userDataString = await AsyncStorage.getItem('currentUser');
           const parsedUserData = JSON.parse(userDataString)
-          console.log('parsedUserData',parsedUserData);
+       
           const id = parsedUserData && parsedUserData.data && parsedUserData.data.branch && parsedUserData.data.branch.id && parsedUserData.data.branch.id;
 
           if (parsedUserData) {
@@ -47,13 +47,11 @@ const Splash = () => {
     }
     navigationAuth()
   })
-  return (
 
+return (
     <View style={styles.container}>
       <BarIndicator color={primaryColor} />
     </View>
-
-
   )
 }
 

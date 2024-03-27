@@ -61,7 +61,7 @@ const Users = () => {
       }
     });
     return unsubscribe;
-  }, [navigation, currentUserData, id]);
+  }, [navigation]);
 
   return isLoading ? (
     <Loader />

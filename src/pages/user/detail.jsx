@@ -2,13 +2,8 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import {useEffect, useState} from 'react';
 import Loader from '../../utils/ActivityIndicator';
-import {primaryColor, secondaryColor, styles} from '../../../style';
-import Iconemail from 'react-native-vector-icons/Zocial';
-import IconPhone from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconBranch from 'react-native-vector-icons/Entypo';
+import {primaryColor,  styles} from '../../../style';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import IconLocation from 'react-native-vector-icons/Ionicons';
-import IconWeekend from 'react-native-vector-icons/MaterialIcons';
 import API_CONFIG from '../../config/apiConfig';
 import getApi from '../../redux/slices/utils/getApi';
 import moment from 'moment';
@@ -17,7 +12,7 @@ const UserDetailScreen = ({route}) => {
   const {userId} = route.params;
 
   const [loading, setLoading] = useState(false);
-  var [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     setLoading(true);
@@ -37,8 +32,6 @@ const UserDetailScreen = ({route}) => {
 
     fetchUser();
   }, []);
-
-  console.log('userData', userData);
 
   return loading ? (
     <Loader />

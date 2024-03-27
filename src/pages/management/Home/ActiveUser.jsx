@@ -22,7 +22,6 @@ const ActiveUser = () => {
         setCurrentUserData(res.data);
       } catch (error) {
         console.log(error);
-        // Display error message to the user
         Toast.show({
           type: 'error',
           text1: 'Error',

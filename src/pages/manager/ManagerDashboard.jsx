@@ -11,6 +11,7 @@ import IconI from 'react-native-vector-icons/Ionicons';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFa from 'react-native-vector-icons/FontAwesome';
 import Document from '../management/Document';
+import Dashboard from '../staff/dashboard/Dashboard';
 
 const Tab = createBottomTabNavigator();
 const ManagerDashboard = () => {
@@ -22,8 +23,8 @@ const ManagerDashboard = () => {
         tabBarInactiveTintColor: primaryColor, 
       }}>
       <Tab.Screen
-        name="ManagerDashboard"
-        component={Home}
+        name="Dashboard"
+        component={Dashboard}
         options={() => ({
           headerTitle: () => null,
           headerLeft: () => <HeaderTitle />,
@@ -32,6 +33,20 @@ const ManagerDashboard = () => {
           ),
           tabBarLabel: ({ color }) => (
             <Text style={[styles.lable, { color }]}>Home</Text>
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="ManagerDashboard"
+        component={Home}
+        options={() => ({
+          headerTitle: () => null,
+          headerLeft: () => <HeaderTitle />,
+          tabBarIcon: ({ color }) => (
+            <IconFa name="dashboard" style={[styles.icons, { color }]} size={20} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text style={[styles.lable, { color }]}>Dashboard</Text>
           ),
         })}
       />
@@ -46,7 +61,7 @@ const ManagerDashboard = () => {
             <IconFa name="users" style={[styles.icons, { color }]} size={20} />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Staffs</Text>
+            <Text style={[styles.lable, { color }]}>Staff</Text>
           ),
         })}
       />
@@ -85,7 +100,7 @@ const ManagerDashboard = () => {
             />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Leaves</Text>
+            <Text style={[styles.lable, { color }]}>Leave</Text>
           ),
         })}
       />
@@ -105,7 +120,7 @@ const ManagerDashboard = () => {
             />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Documents</Text>
+            <Text style={[styles.lable, { color }]}>Document</Text>
           ),
         })}
       />

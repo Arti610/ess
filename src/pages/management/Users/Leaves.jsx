@@ -1,19 +1,18 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import Loader from '../../../utils/ActivityIndicator';
-import {styles} from '../../../../style';
+import {primaryColor, styles} from '../../../../style';
 import NotFound from '../../../utils/NotFound';
 import moment from 'moment';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import getApi from '../../../redux/slices/utils/getApi';
 
 const Leaves = ({route}) => {
-
   const {data} = route.params;
   const rbSheet = useRef();
 
   const [uniqueData, setUniqueData] = useState(null);
-  
+
   const handleOpenRBSheet = async id => {
     const res = await getApi.getIndividualLeaveRequest(id);
     setUniqueData(res.data);
@@ -24,41 +23,60 @@ const Leaves = ({route}) => {
 
   return data ? (
     <>
-    <FlatList
-      data={data.leave}
-      ListEmptyComponent={<NotFound />}
-      renderItem={({item}) => (
-        <TouchableOpacity
-          onPress={() => handleOpenRBSheet(item.id)}
-          style={[
-            styles.textInput,
-            {
-              margin: 10,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            },
-          ]}>
-          <View>
-            <Text style={styles.lable}>{item.title}</Text>
-            <Text> From {moment(item.from_date).format('DD MMM yyyy')} To {moment(item.to_date).format('DD MMM YYYY')} </Text>
+      <FlatList
+        data={data.leave}
+        ListEmptyComponent={<NotFound />}
+        renderItem={({item}) => (
+          <View
+            style={[
+              styles.textInput,
+              {
+                margin: 10,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              },
+            ]}>
+            <View>
+              <View>
+                <Text style={styles.lable}>{item.title}</Text>
+                <Text>
+                  {' '}
+                  From {moment(item.from_date).format('DD MMM yyyy')} To{' '}
+                  {moment(item.to_date).format('DD MMM YYYY')}{' '}
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => handleOpenRBSheet(item.id)}
+                style={{
+                  backgroundColor: primaryColor,
+                  width: '50%',
+                  borderRadius: 25,
+                  color: 'white',
+                  padding : 6,
+                  marginVertical : 6,
+                  fontSize: 10,
+                  textAlign: 'center',
+                }}>
+                <Text style={styles.buttonText}>View Details</Text>
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                color:
+                  item && item.status === 'Pending'
+                    ? 'gold'
+                    : item && item.status === 'Approved'
+                    ? 'green'
+                    : 'red',
+                fontWeight: 'bold',
+              }}>
+              {item.status}
+            </Text>
           </View>
-          <Text 
-            style={{
-              color:
-                item && item.status === 'Pending'
-                  ? 'gold'
-                  : item && item.status === 'Approved'
-                  ? 'green'
-                  : 'red',
-              fontWeight: 'bold',
-            }}>
-            {item.status}
-          </Text>
-        </TouchableOpacity>
-      )}
-    />
-       {uniqueData ? (
+        )}
+      />
+      {uniqueData ? (
         <RBSheet
           ref={rbSheet}
           closeOnDragDown={true}
@@ -154,7 +172,6 @@ const Leaves = ({route}) => {
         </RBSheet>
       ) : null}
     </>
-    
   ) : (
     <Loader />
   );
