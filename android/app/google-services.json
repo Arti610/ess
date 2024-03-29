@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "374720264061",
+    "project_id": "essnative-d9772",
+    "storage_bucket": "essnative-d9772.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374720264061:android:3fdb536512755a75597e14",
+        "android_client_info": {
+          "package_name": "com.ess"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJYm6AbCdNj_vlUT-iTahUZbRZd0zBSEE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
