@@ -1,15 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import Loader from '../../../utils/ActivityIndicator';
 import NotFound from '../../../utils/NotFound';
-import { styles } from '../../../../style';
+import {primaryColor, styles} from '../../../../style';
 import moment from 'moment';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import getApi from '../../../redux/slices/utils/getApi';
 
-
 const LateEarlys = ({route}) => {
-
   const {data} = route.params;
   const rbSheet = useRef();
 
@@ -22,15 +20,52 @@ const LateEarlys = ({route}) => {
       rbSheet.current.open();
     }
   };
-  
+
   return data ? (
     <View>
       <FlatList
         data={data.lateEarly}
-        ListEmptyComponent={<NotFound/>}
+        ListEmptyComponent={<NotFound />}
         renderItem={({item}) => (
-          <TouchableOpacity
-          onPress={() => handleOpenRBSheet(item.id)}
+          // <View
+
+          //   style={[
+          //     styles.textInput,
+          //     {
+          //       margin: 10,
+          //       flexDirection: 'row',
+          //       justifyContent: 'space-between',
+          //       alignItems: 'center',
+          //     },
+          //   ]}>
+          //   <View>
+          //     <Text style={styles.lable}>{item.late_early ? item.late_early : 'Late/Early'}</Text>
+          //     <Text>{moment(item.date).format('DD MMM YYYY')}</Text>
+          //     <Text>{item.time}</Text>
+          //   </View>
+          //   <TouchableOpacity
+          //       onPress={() => handleOpenRBSheet(item.id)}
+          //       style={{
+          //         backgroundColor: primaryColor,
+          //         width: '50%',
+          //         borderRadius: 25,
+          //         color: 'white',
+          //         padding : 6,
+          //         marginVertical : 6,
+          //         fontSize: 10,
+          //         textAlign: 'center',
+          //       }}>
+          //       <Text style={styles.buttonText}>View Details</Text>
+          //     </TouchableOpacity>
+          //   <Text
+          //     style={{
+          //       color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red',
+          //       fontWeight: 'bold'
+          //     }}>
+          //     {item.status}
+          //   </Text>
+          // </View>
+          <View
             style={[
               styles.textInput,
               {
@@ -40,19 +75,41 @@ const LateEarlys = ({route}) => {
                 alignItems: 'center',
               },
             ]}>
-            <View>
-              <Text style={styles.lable}>{item.late_early ? item.late_early : 'Late/Early'}</Text>
-              <Text>{moment(item.date).format('DD MMM YYYY')}</Text>
-              <Text>{item.time}</Text>
+            <View >
+              <View>
+                <Text style={styles.lable}>
+                  {item.late_early ? item.late_early : 'Late/Early'}
+                </Text>
+                <Text>{moment(item.date).format('DD MMM YYYY')}</Text>
+                <Text>{item.time}</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => handleOpenRBSheet(item.id)}
+                style={{
+                  backgroundColor: primaryColor,
+                  borderRadius: 25,
+                  color: 'white',
+                  padding: 6,
+                  marginVertical: 6,
+                  fontSize: 10,
+                  textAlign: 'center',
+                }}>
+                <Text style={styles.buttonText}>View Details</Text>
+              </TouchableOpacity>
             </View>
-            <Text 
+            <Text
               style={{
-                color: item && item.status === 'Pending' ? 'gold' : item && item.status === 'Approved' ? 'green' : 'red',
-                fontWeight: 'bold'
+                color:
+                  item && item.status === 'Pending'
+                    ? 'gold'
+                    : item && item.status === 'Approved'
+                    ? 'green'
+                    : 'red',
+                fontWeight: 'bold',
               }}>
               {item.status}
             </Text>
-          </TouchableOpacity>
+          </View>
         )}
       />
       {uniqueData ? (
@@ -135,7 +192,6 @@ const LateEarlys = ({route}) => {
         </RBSheet>
       ) : null}
     </View>
-
   ) : (
     <Loader />
   );

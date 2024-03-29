@@ -5,8 +5,7 @@ import {
   TextInput,
   View,
   ScrollView,
-  StyleSheet,
-  Image,
+  StyleSheet
 } from 'react-native';
 import {styles} from '../../../style';
 import {loginStyles} from './Login.js';
@@ -38,16 +37,14 @@ const Login = () => {
       const res = await authApi.Login(values);
 
       if (res.status === 200) {
-
         await AsyncStorage.setItem('token', res.data.token);
         await AsyncStorage.setItem('currentUser', JSON.stringify(res.data));
-    
 
         dispatch(loginSuccess(res.data));
         if (res.data.user_type === 'Management') {
           navigation.navigate('Base');
         } else if (res.data.user_type === 'Manager') {
-          navigation.navigate('managerDashboard', {id : null});
+          navigation.navigate('managerDashboard', {id: null});
         } else {
           navigation.navigate('StaffBase');
         }
@@ -62,7 +59,7 @@ const Login = () => {
       }
       return res;
     } catch (error) {
-      console.log('error',error);
+      console.log('error', error);
       Toast.show({
         type: 'error',
         position: 'top',

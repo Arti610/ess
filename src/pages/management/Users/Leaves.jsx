@@ -24,7 +24,7 @@ const Leaves = ({route}) => {
   return data ? (
     <>
       <FlatList
-        data={data.leave}
+        data={data && data.leave}
         ListEmptyComponent={<NotFound />}
         renderItem={({item}) => (
           <View

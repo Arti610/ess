@@ -32,7 +32,7 @@ const ManagerDashboard = () => {
             <IconFa name="home" style={[styles.icons, { color }]} size={20} color={color} />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Home</Text>
+            <Text style={[styles.lable, { color }, {fontSize : 12}]}>Home</Text>
           ),
         })}
       />
@@ -46,7 +46,7 @@ const ManagerDashboard = () => {
             <IconFa name="dashboard" style={[styles.icons, { color }]} size={20} color={color} />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Dashboard</Text>
+            <Text style={[styles.lable, { color }, {fontSize : 12}]}>Dashboard</Text>
           ),
         })}
       />
@@ -61,7 +61,7 @@ const ManagerDashboard = () => {
             <IconFa name="users" style={[styles.icons, { color }]} size={20} />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Staff</Text>
+            <Text style={[styles.lable, { color }, {fontSize : 12}]}>Staff</Text>
           ),
         })}
       />
@@ -80,7 +80,7 @@ const ManagerDashboard = () => {
             />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Vlog</Text>
+            <Text style={[styles.lable, { color }, {fontSize : 12}]}>Vlog</Text>
           ),
         })}
       />
@@ -100,7 +100,7 @@ const ManagerDashboard = () => {
             />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Leave</Text>
+            <Text style={[styles.lable, { color }, {fontSize : 12}]}>Leave</Text>
           ),
         })}
       />
@@ -120,7 +120,7 @@ const ManagerDashboard = () => {
             />
           ),
           tabBarLabel: ({ color }) => (
-            <Text style={[styles.lable, { color }]}>Document</Text>
+            <Text style={[styles.lable, { color }, {fontSize : 12}]}>Document</Text>
           ),
         })}
       />

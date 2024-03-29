@@ -47,7 +47,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconFa name="home" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Home</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Home</Text>,
           }}
         />
         <Tab.Screen
@@ -68,7 +68,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconFa name="users" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Staffs</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Staffs</Text>,
           }}
         />
         <Tab.Screen
@@ -80,7 +80,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconMCI name="movie" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Vlogs</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Vlogs</Text>,
           }}
         />
         {/* <Tab.Screen
@@ -101,7 +101,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconFa name="clock-o" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Clock</Text>
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Clock</Text>
           }}
         /> */}
         <Tab.Screen
@@ -122,7 +122,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconMCI name="file-document" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Leaves</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Leaves</Text>,
           }}
         />
         <Tab.Screen
@@ -143,7 +143,7 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconI name="documents" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Documents</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Documents</Text>,
           }}
         />
       </Tab.Navigator>

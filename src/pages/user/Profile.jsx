@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {primaryColor, styles, textColor} from '../../../style';
@@ -33,7 +40,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [userDetails, setUserDetails] = useState(null);
-
+  
   const handleModalVisible = () => {
     setModalVisible(!modalVisible);
   };
@@ -149,14 +156,14 @@ const Profile = () => {
     return unsubscribe;
   }, [navigation]);
 
-  useEffect(() => {
+  useEffect(() => {  
 
     if (currentUser && currentUser.id) {
       const fetchData = async () => {
         try {
           setLoading(true);
           const res = await getApi.getAllUserList(currentUser.id);
-
+       
           if (res.data) {
             setUserDetails(res.data);
             setLoading(false);
@@ -167,11 +174,11 @@ const Profile = () => {
       };
       fetchData();
     }
-  }, []);
+  }, [currentUser]);
 
   return (
     <>
-      {isLoading ? (
+      {isLoading && currentUser && currentUser.id ? (
         <Loader />
       ) : (
         <View style={pStyles.container}>
@@ -267,7 +274,7 @@ const Profile = () => {
                 <IconEdit name="chevron-right" style={pStyles.iconStyles} />
               </View>
             </TouchableOpacity>
-            {currentUser && currentUser.user_type == 'Management' ? null : (
+            {userDetails && currentUser && currentUser.user_type == 'Management' ? null : (
               <>
                 <TouchableOpacity
                   onPress={() =>
@@ -303,7 +310,9 @@ const Profile = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('checkin/checkout', {data: userDetails})
+                    navigation.navigate('checkin/checkout', {
+                      data: userDetails,
+                    })
                   }
                   style={pStyles.footerText}>
                   <View style={pStyles.footerTextView}>
@@ -378,7 +387,7 @@ const pStyles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    marginVertical: 10,
   },
   userFooter: {
     // flex: 3,
@@ -409,7 +418,7 @@ const pStyles = StyleSheet.create({
   footerText: {
     width: '100%',
     marginVertical: 5,
-    padding: 15,
+    padding: 10,
     borderRadius: 8,
   },
 

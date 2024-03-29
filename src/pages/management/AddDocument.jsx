@@ -1,7 +1,7 @@
 import {Formik, useField} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, View, TouchableOpacity} from 'react-native';
-import {styles} from '../../../style';
+import {Text, TextInput, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {primaryColor, styles} from '../../../style';
 import ButtonLoader from '../../utils/BtnActivityIndicator';
 import {SelectList} from 'react-native-dropdown-select-list';
 import getApi from '../../redux/slices/utils/getApi';
@@ -11,6 +11,7 @@ import Toast from 'react-native-toast-message';
 import {useNavigation} from '@react-navigation/native';
 import {currentUser} from '../../utils/currentUser';
 import Loader from '../../utils/ActivityIndicator';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const AddDocument = ({route}) => {
   
@@ -167,7 +168,7 @@ const AddDocument = ({route}) => {
               value={values.document_name}
             />
           </View>
-          <View style={styles.inputContainer}>
+          {/* <View style={styles.inputContainer}>
             <Text style={styles.lable}>Select Document</Text>
             <TouchableOpacity
               style={styles.textInput}
@@ -176,7 +177,18 @@ const AddDocument = ({route}) => {
                 {selectedDocument ? selectedDocument.name : 'Select Document'}
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.lable}>Attachment</Text>
+              <TouchableOpacity style={style.uploadUI}  onPress={handleDocumentPick}>
+                <Icon name="cloud-upload-alt" style={style.icon} />
+                {selectedDocument && selectedDocument.name ? (
+                  <Text>{selectedDocument.name}</Text>
+                ) : (
+                  <Text>Upload your files</Text>
+                )}
+              </TouchableOpacity>
+            </View>
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={handleSubmit}
@@ -194,3 +206,23 @@ const AddDocument = ({route}) => {
 };
 
 export default AddDocument;
+
+const style = StyleSheet.create({
+  uploadUI: {
+    padding: 10,
+    height: 'fit-content',
+    borderWidth: 4,
+    borderColor: '#D0D5DD',
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'dotted',
+  },
+  icon: {
+    fontSize: 50,
+    color: primaryColor,
+  },
+})

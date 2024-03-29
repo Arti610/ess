@@ -33,7 +33,7 @@ const Users = () => {
 
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    // const unsubscribe = navigation.addListener('focus', () => {
       if (currentUserData) {
         try {
           setIsLoading(true);
@@ -42,13 +42,13 @@ const Users = () => {
               const res = await getApi.getManagerStaffList(
                 currentUserData.id ? currentUserData.id : null,
               );
-              if (res.status === 200) {
+              if (res.data) {
                 setData(res.data);
                 setIsLoading(false);
               }
             } else {
               const res = await getApi.getStaffList(id);
-              if (res.status === 200) {
+              if (res.data) {
                 setData(res.data);
                 setIsLoading(false);
               }
@@ -59,16 +59,16 @@ const Users = () => {
           setIsLoading(false);
         }
       }
-    });
-    return unsubscribe;
-  }, [navigation]);
+    // });
+    // return unsubscribe;
+  }, [data]);
 
   return isLoading ? (
     <Loader />
   ) : (
     <>
       <ScrollView>
-        <UserCard item={data} id={id} />
+        <UserCard item={data ? data : []} id={id} />
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -76,7 +76,6 @@ const Users = () => {
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
       </View>
-
       <Toast />
     </>
   );

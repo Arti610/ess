@@ -28,8 +28,6 @@ import Geolocation from '@react-native-community/geolocation';
 import {promptForEnableLocationIfNeeded} from 'react-native-android-location-enabler';
 import {SkypeIndicator} from 'react-native-indicators';
 
-import {useDispatch} from 'react-redux';
-
 const Dashboard = () => {
   const navigation = useNavigation();
   const [currentTime, setCurrentTime] = useState('');
@@ -80,13 +78,21 @@ const Dashboard = () => {
   }, []);
 
   const fetchData = async () => {
+   
     try {
       setLoading(true);
-      const res = await getApi.getAllCheckinoutList(token);
-
-      if (res.data) {
-        setLoading(false);
-        setInoutData(res.data);
+      if (currentUserId && currentUserId.id && currentUserId.user_type === 'Manager') {
+        const res = await getApi.getCheckinCheckoutManager(currentUserId.id);
+        if (res.data) {
+          setLoading(false);
+          setInoutData(res.data);
+        }
+      } else {
+        const res = await getApi.getAllCheckinoutList(token);
+        if (res.data) {
+          setLoading(false);
+          setInoutData(res.data);
+        }
       }
     } catch (error) {
       console.log('error during getting all checkin/checkout', error.response);
@@ -95,7 +101,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentUserId]);
   // Get BranInformation\
 
   useEffect(() => {
@@ -609,7 +615,9 @@ const Dashboard = () => {
             <Text style={styles.textSubHeading}>Recent Activity</Text>
             {currentUserId && currentUserId.user_type === 'Manager' ? (
               <TouchableOpacity
-                onPress={() => navigation.navigate('checkin/checkout', {data : attendence})}>
+                onPress={() =>
+                  navigation.navigate('checkin/checkout', {data: attendence})
+                }>
                 <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
               </TouchableOpacity>
             ) : (

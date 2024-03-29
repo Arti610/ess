@@ -21,6 +21,7 @@ import Document from '../management/Document';
 const Tab = createBottomTabNavigator();
 
 const Notification = () => {
+
   const [branchId, setBranchId] = useState(null);
   const [data, setData] = useState(0);
 
@@ -110,24 +111,10 @@ const StaffDashboard = () => {
             tabBarIcon: () => (
               <Icon name="code-branch" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Home</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Home</Text>,
           })}
         />
-        <Tab.Screen
-          name="Vlog"
-          component={Vlog}
-          options={() => ({
-            headerShown: false,
-            tabBarIcon: () => (
-              <BranchIcon
-                name="featured-play-list"
-                style={styles.icons}
-                size={20}
-              />
-            ),
-            tabBarLabel: () => <Text style={styles.lable}>Vlog</Text>,
-          })}
-        />
+       
         <Tab.Screen
           name="Clock"
           component={Clock}
@@ -139,7 +126,22 @@ const StaffDashboard = () => {
             tabBarIcon: () => (
               <IconFa name="clock-o" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Clock</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Clock</Text>,
+          })}
+        />
+         <Tab.Screen
+          name="Vlog"
+          component={Vlog}
+          options={() => ({
+            headerShown: false,
+            tabBarIcon: () => (
+              <BranchIcon
+                name="featured-play-list"
+                style={styles.icons}
+                size={20}
+              />
+            ),
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Vlog</Text>,
           })}
         />
         <Tab.Screen
@@ -157,7 +159,7 @@ const StaffDashboard = () => {
                 size={20}
               />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Leave</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Leave</Text>,
           })}
         />
         <Tab.Screen
@@ -171,7 +173,7 @@ const StaffDashboard = () => {
             tabBarIcon: () => (
               <DocIcon name="documents" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={styles.lable}>Documents</Text>,
+            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Documents</Text>,
           })}
         />
       </Tab.Navigator>

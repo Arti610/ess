@@ -38,6 +38,7 @@ export default {
         }
     }),
 
+    getCheckinCheckoutManager: (id) => apiService.get(`check_in_out_list_by_id/${id}`),
     getIndividualLeaveRequest: (id) => apiService.get(`get_leaverequest/${id}`),
     getIndividualLateEarly: (id) => apiService.get(`get_lateEarly/${id}`),
     getTimeSheetList: (id) => apiService.get(`list_time_sheet/${id}`),

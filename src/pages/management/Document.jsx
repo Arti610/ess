@@ -103,7 +103,7 @@ const Document = ({route}) => {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     fetchUser();
   }, [data]);
@@ -148,7 +148,6 @@ const Document = ({route}) => {
   };
 
   const handleDelete = async () => {
-    
     try {
       setIsLoading(true);
       const res = await deleteApi.deleteDocUpload(Id);
@@ -163,7 +162,7 @@ const Document = ({route}) => {
           autoHide: true,
         });
         fetchUser();
-      } 
+      }
     } catch (error) {
       console.log(error, 'error');
       Toast.show({
@@ -242,26 +241,28 @@ const Document = ({route}) => {
                     </Text>
                   </TouchableOpacity>
                   {currentUserData &&
-                    currentUserData.user_type === 'Staff' ? null : (
-                      <TouchableOpacity
-                        onPress={() => handleModalVisible(item.id)}
-                        style={styles.textInput}>
-                        <Text style={styles.lable}>
-                          <IconD name="delete" style={{fontSize: 20}} />
-                        </Text>
-                      </TouchableOpacity>
+                  currentUserData.user_type === 'Staff' ? null : (
+                    <TouchableOpacity
+                      onPress={() => handleModalVisible(item.id)}
+                      style={styles.textInput}>
+                      <Text style={styles.lable}>
+                        <IconD name="delete" style={{fontSize: 20}} />
+                      </Text>
+                    </TouchableOpacity>
                   )}
                 </View>
               </View>
             )}
             ListEmptyComponent={<NotFound />}
           />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('AddDocument', {id: id})}>
-              <IconAdd name="add" style={styles.addIcon} />
-            </TouchableOpacity>
-          </View>
+          {currentUserData && currentUserData.user_type === 'Staff' ? null : (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('AddDocument', {id: id})}>
+                <IconAdd name="add" style={styles.addIcon} />
+              </TouchableOpacity>
+            </View>
+          )}
         </>
       ) : (
         <Loader />
