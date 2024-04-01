@@ -2,187 +2,185 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+
+import {primaryColor, secondaryColor, styles} from '../../../../style';
+
+import API_CONFIG from '../../../config/apiConfig';
+import {useNavigation} from '@react-navigation/native';
 import {currentUser} from '../../../utils/currentUser';
 import getApi from '../../../redux/slices/utils/getApi';
 import Loader from '../../../utils/ActivityIndicator';
-import {primaryColor, secondaryColor, styles} from '../../../../style';
-import moment from 'moment';
-import API_CONFIG from '../../../config/apiConfig';
-import {useNavigation} from '@react-navigation/native';
 
 const Notification = () => {
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [id, setId] = useState(null);
+
   const [status, setStatus] = useState('All');
+  const [loading, setLoading] = useState(false);
+
+  const [currentUserData, setCurrentUserData] = useState(null);
+  const userID =
+    currentUserData && currentUserData.id ? currentUserData.id : null;
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCurrentUser = async () => {
       try {
         const res = await currentUser();
-
-        if (res && res.data && res.data.branch && res.data.branch.id) {
-          setId(res.data.branch.id);
-        }
-      } catch (error) {}
+        setCurrentUserData(res.data);
+      } catch (error) {
+        console.log('error', error);
+      }
     };
-    fetchData();
+    fetchCurrentUser();
   }, []);
 
   useEffect(() => {
-    if (id) {
-      const fetchNotification = async () => {
-        try {
-          setLoading(true);
-          const res = await getApi.getNotification(id);
+    const fetchUserNotification = async () => {
+      try {
+        setLoading(true);
+        const res = await getApi.getUserNotification(userID);
 
-          if (res.data) {
-            setLoading(false);
-            setData(res.data);
-          }
-        } catch (error) {
-          console.log(error);
-          //   setLoading(false);
+        if (res.data) {
+          setLoading(false);
+          setData(res.data);
         }
-      };
-      fetchNotification();
-    }
-  }, [id]);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    fetchUserNotification();
+  }, [userID]);
 
   const handleFilterData = status => {
     setStatus(status);
   };
 
   const filterData = (status, data) => {
-    const today = new Date();
     switch (status) {
-      case 'Today':
-        const todayStart = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate()
-        );
-        return data
-          ? data.filter(
-              item =>
-                new Date(item.created_date) >= todayStart &&
-                new Date(item.created_date) < today
-            )
-          : [];
-      case 'Weekly':
-        const weekStart = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate() - today.getDay(),
-        );
-        return data
-          ? data.filter(item => new Date(item.created_date) >= weekStart)
-          : [];
-      case 'Monthly':
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        return data
-          ? data.filter(item => new Date(item.created_date) >= monthStart)
-          : [];
-      case 'Yearly':
-        const yearStart = new Date(today.getFullYear(), 0, 1);
-        return data
-          ? data.filter(item => new Date(item.created_date) >= yearStart)
-          : [];
+      case 'Read':
+        return data.filter(item => item.is_seen === true);
+      case 'Unread':
+        return data.filter(item => item.is_seen === false);
+      case 'All':
+        return data;
       default:
-        return data ? data : [];
+        return [];
     }
   };
 
+  const handleSeen = async item => {
+console.log('item.user.branch',item.user.branch);
+console.log('item.staff.branch',item.staff);
+console.log('item.content_utl',item.content_utl);
+    const payload = {is_seen: true};
 
+    try {
+      const res = await getApi.getNotificationSeen(item.id, payload);
+      if (res) {
+        navigation.navigate(item.content_utl, {id: item.staff === null ? item.user.branch : item.staff.branch});
+      }
+    } catch (error) {
+      console.log(error, 'error during seen notifications');
+    }
+  };
+
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     handleSeen();
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
+  
   const renderData = ({item}) => {
+    console.log(item.is_seen);
     return (
-      
-        <TouchableOpacity
-          style={[styles.textInput, style.container]}
-          onPress={() => navigation.navigate('NotificationDetails', {item})}>
-          <View>
-            {item.user.profile_image ? (
-              <Image
-                source={{
-                  uri: `${API_CONFIG.imageUrl}${item.user.profile_image}`,
-                }}
-                style={style.image}
-              />
-            ) : (
-              <Image
-                source={require('../../../assests/userProfile.webp')}
-                style={style.image}
-              />
-            )}
-          </View>
-          <View>
-            <Text style={styles.lable}>{item.heading}</Text>
-            <Text>
-              {moment(item.created_date).format('DD MMM, YYYY hh : mm A')}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      
+      <TouchableOpacity
+        style={[
+          styles.textInput,
+          style.container,
+          {
+            backgroundColor: item.is_seen === false ? secondaryColor : '#fff',
+          },
+        ]}
+        onPress={() => handleSeen(item)}>
+       <View>
+          {item.staff && item.staff.profile_image ? (
+            <Image
+              source={{
+                uri: `${API_CONFIG.imageUrl}${item.staff.profile_image}`,
+              }}
+              style={style.image}
+            />
+          ) : (
+            <Image
+              source={require('../../../assests/userProfile.webp')}
+              style={style.image}
+            />
+          )}
+        </View>
+        <View>
+          <Text style={styles.lable}>{item.content}</Text>
+          <Text>{`${item.created_at_formatted} ago`}</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
   return loading ? (
     <Loader />
   ) : (
-   
     <>
       <View style={style.statusContainer}>
         <TouchableOpacity onPress={() => handleFilterData('All')}>
           <Text style={status === 'All' ? style.inactive : style.active}>
-            All ({data ? data.length : []})
+            All ({data ? data.length : 0})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Today')}>
-          <Text style={status === 'Today' ? style.inactive : style.active}>
-            Today ({data ? filterData('Today', data).length : []})
+        <TouchableOpacity onPress={() => handleFilterData('Read')}>
+          <Text style={status === 'Read' ? style.inactive : style.active}>
+            Read ({data ? filterData('Read', data).length : 0})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Weekly')}>
-          <Text style={status === 'Weekly' ? style.inactive : style.active}>
-            Weekly ({data ? filterData('Weekly', data).length : []})
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Monthly')}>
-          <Text style={status === 'Monthly' ? style.inactive : style.active}>
-            Monthly ({data ? filterData('Monthly', data).length : []})
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleFilterData('Yearly')}>
-          <Text style={status === 'Yearly' ? style.inactive : style.active}>
-            Yearly ({data ? filterData('Yearly', data).length : []})
+        <TouchableOpacity onPress={() => handleFilterData('Unread')}>
+          <Text style={status === 'Unread' ? style.inactive : style.active}>
+            Unread ({data ? filterData('Unread', data).length : 0})
           </Text>
         </TouchableOpacity>
       </View>
-      
-        <FlatList
-          data={filterData(status, data)}
-          style={{ paddingHorizontal: 10}}
-          renderItem={renderData}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={item => item.id.toString()}
-          ListEmptyComponent={<View style={{alignItems: 'center', paddingVertical: 100}}><Image height={20} width={20} source={require('../../../assests/no_notification.png')}/><Text style={styles.textHeading}>No Notification Yet</Text></View>}
-          />
-     
 
-</>
+      <FlatList
+        data={filterData(status, data)}
+        style={{paddingHorizontal: 10}}
+        renderItem={renderData}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View style={{alignItems: 'center', paddingVertical: 100}}>
+            <Image
+              height={20}
+              width={20}
+              source={require('../../../assests/no_notification.png')}
+            />
+            <Text style={styles.textHeading}>No Notification Yet</Text>
+          </View>
+        }
+      />
+    </>
   );
 };
 
 export default Notification;
 
 const style = StyleSheet.create({
+  icon: {
+    color: 'green',
+    fontSize: 50,
+  },
   statusContainer: {
     padding: 10,
     flexDirection: 'row',
@@ -192,12 +190,16 @@ const style = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginBottom: 10,
-    gap : 10,
-    padding : 10,
-    width : '100%'
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: 10,
+    padding: 10,
+    width: '100%',
   },
 
   active: {
+    width: '100%',
+    textAlign: 'center',
     backgroundColor: primaryColor,
     paddingHorizontal: 8,
     marginHorizontal: 4,
@@ -207,6 +209,8 @@ const style = StyleSheet.create({
     fontSize: 12,
   },
   inactive: {
+    width: '100%',
+    textAlign: 'center',
     backgroundColor: secondaryColor,
     paddingHorizontal: 12,
     marginHorizontal: 4,

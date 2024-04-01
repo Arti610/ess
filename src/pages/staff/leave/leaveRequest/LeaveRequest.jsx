@@ -27,7 +27,7 @@ const LeaveRequest = () => {
 
   const route = useRoute();
   const {id} = route.params;
-
+console.log('leave id', id);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [currentUserData, setcurrentUserData] = useState([]);
@@ -201,12 +201,15 @@ const LeaveRequest = () => {
                       alignItems: 'center',
                       marginBottom: 10,
                     }}>
-                  
-                    {item &&
-                    item.user &&
-                    item.user.profile_image ? (
+                    {item && item.user && item.user.profile_image ? (
                       <Image
-                        source={{uri: `${API_CONFIG.imageUrl}${item && item.user && item.user.profile_image ? item.user.profile_image : null}` }}
+                        source={{
+                          uri: `${API_CONFIG.imageUrl}${
+                            item && item.user && item.user.profile_image
+                              ? item.user.profile_image
+                              : null
+                          }`,
+                        }}
                         style={style.image}
                       />
                     ) : (
@@ -215,7 +218,11 @@ const LeaveRequest = () => {
                         style={style.image}
                       />
                     )}
-                    <Text style={styles.lable}>{item && item.user && `${item.user.first_name} ${item.user.last_name}`}</Text>
+                    <Text style={styles.lable}>
+                      {item &&
+                        item.user &&
+                        `${item.user.first_name} ${item.user.last_name}`}
+                    </Text>
                   </View>
                 )}
 

@@ -232,7 +232,7 @@ const Profile = () => {
                     name="user-check"
                     style={pStyles.logoutUserIcon}
                   />
-                  <Text style={pStyles.lable}>My Profile</Text>
+                  <Text style={pStyles.lable}>Profile Details</Text>
                 </View>
                 <IconEdit name="chevron-right" style={pStyles.iconStyles} />
               </View>
@@ -287,7 +287,7 @@ const Profile = () => {
                         name="th-list"
                         style={pStyles.logoutUserIcon}
                       />
-                      <Text style={pStyles.lable}>My Leaves</Text>
+                      <Text style={pStyles.lable}>Leaves</Text>
                     </View>
                     <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                   </View>
@@ -321,7 +321,7 @@ const Profile = () => {
                         name="user-edit"
                         style={pStyles.logoutUserIcon}
                       />
-                      <Text style={pStyles.lable}>My Attendance</Text>
+                      <Text style={pStyles.lable}>Attendance</Text>
                     </View>
                     <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                   </View>

@@ -12,19 +12,12 @@ import Vlog from './vlog/Vlog';
 import Clock from './clock/clock';
 import LeaveBase from './leave/LeaveBase';
 import Dashboard from './dashboard/Dashboard';
-import IconN from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
-import {currentUser} from '../../utils/currentUser';
-import getApi from '../../redux/slices/utils/getApi';
 import Document from '../management/Document';
+import NotificationCount from './Notification/NotificationCount';
 
 const Tab = createBottomTabNavigator();
 
-const Notification = () => {
-
-  const [branchId, setBranchId] = useState(null);
-  const [data, setData] = useState(0);
-
+const StaffDashboard = () => {
   const [backPressCount, setBackPressCount] = useState(0);
 
   useEffect(() => {
@@ -52,47 +45,6 @@ const Notification = () => {
       return false;
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await currentUser();
-        setBranchId(res.data.branch.id);
-      } catch (error) {}
-    };
-    fetchData();
-
-    if (branchId) {
-      const fetchNotification = async () => {
-        try {
-          const res = await getApi.getNotification(branchId);
-
-          setData(res.data.length);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchNotification();
-    }
-  }, []);
-
-  const navigation = useNavigation();
-
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Notification')}
-      style={style.container}>
-      <IconN name="notifications" style={style.icon} />
-      {data >= 0 ? (
-        <Text style={style.badge}>{data}</Text>
-      ) : (
-        <Text style={style.badge}>0</Text>
-      )}
-    </TouchableOpacity>
-  );
-};
-
-const StaffDashboard = () => {
   return (
     <>
       <Tab.Navigator
@@ -107,14 +59,16 @@ const StaffDashboard = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            headerRight: () => <Notification />,
+            headerRight: () => <NotificationCount />,
             tabBarIcon: () => (
               <Icon name="code-branch" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Home</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Home</Text>
+            ),
           })}
         />
-       
+
         <Tab.Screen
           name="Clock"
           component={Clock}
@@ -122,14 +76,16 @@ const StaffDashboard = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            headerRight: () => <Notification />,
+            headerRight: () => <NotificationCount />,
             tabBarIcon: () => (
               <IconFa name="clock-o" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Clock</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Clock</Text>
+            ),
           })}
         />
-         <Tab.Screen
+        <Tab.Screen
           name="Vlog"
           component={Vlog}
           options={() => ({
@@ -141,7 +97,9 @@ const StaffDashboard = () => {
                 size={20}
               />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Vlog</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Vlog</Text>
+            ),
           })}
         />
         <Tab.Screen
@@ -151,7 +109,7 @@ const StaffDashboard = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            headerRight: () => <Notification />,
+            headerRight: () => <NotificationCount />,
             tabBarIcon: () => (
               <BranchIcon
                 name="featured-play-list"
@@ -159,7 +117,9 @@ const StaffDashboard = () => {
                 size={20}
               />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Leave</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Leave</Text>
+            ),
           })}
         />
         <Tab.Screen
@@ -169,11 +129,13 @@ const StaffDashboard = () => {
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
-            headerRight: () => <Notification />,
+            headerRight: () => <NotificationCount />,
             tabBarIcon: () => (
               <DocIcon name="documents" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Documents</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Documents</Text>
+            ),
           })}
         />
       </Tab.Navigator>

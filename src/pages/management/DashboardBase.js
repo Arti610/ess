@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Users from './Users/Users';
 import Home from './Home/Home';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -16,18 +16,21 @@ import Document from './Document';
 const Tab = createBottomTabNavigator();
 
 const DashboardBase = () => {
+
   const navigation = useNavigation();
 
   const route = useRoute();
   const {id} = route.params;
 
+
+
   return (
     <>
       <Tab.Navigator
         screenOptions={{
-          tabBarStyle: { height: 60 },
-          tabBarActiveBackgroundColor: secondaryColor, 
-          tabBarInactiveTintColor: primaryColor, 
+          tabBarStyle: {height: 60},
+          tabBarActiveBackgroundColor: secondaryColor,
+          tabBarInactiveTintColor: primaryColor,
         }}>
         <Tab.Screen
           name="Home"
@@ -47,7 +50,9 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconFa name="home" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Home</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Home</Text>
+            ),
           }}
         />
         <Tab.Screen
@@ -68,7 +73,9 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconFa name="users" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Staffs</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Staffs</Text>
+            ),
           }}
         />
         <Tab.Screen
@@ -80,7 +87,9 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconMCI name="movie" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Vlogs</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Vlogs</Text>
+            ),
           }}
         />
         {/* <Tab.Screen
@@ -122,7 +131,9 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconMCI name="file-document" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Leaves</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Leaves</Text>
+            ),
           }}
         />
         <Tab.Screen
@@ -143,7 +154,9 @@ const DashboardBase = () => {
             tabBarIcon: () => (
               <IconI name="documents" style={styles.icons} size={20} />
             ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Documents</Text>,
+            tabBarLabel: () => (
+              <Text style={[styles.lable, {fontSize: 12}]}>Documents</Text>
+            ),
           }}
         />
       </Tab.Navigator>

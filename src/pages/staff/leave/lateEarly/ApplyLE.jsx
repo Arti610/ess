@@ -14,7 +14,7 @@ import moment from "moment";
 
 const ApplyLE = () => {
     const navigation = useNavigation()
-    const lateEarly = [{ key: 'Late', value: 'Late' }, { key: 'Early', value: 'Early' }]
+    const lateEarly = [{ key: 'Late Comming', value: 'Late Comming' }, { key: 'Early Going', value: 'Early Going' }]
     const [selectLateEarly, setSelectLateEarly] = useState(null);
     const [showFromDatePicker, setShowFromDatePicker] = useState(false);
     const [showTime, setShowTime] = useState(false);

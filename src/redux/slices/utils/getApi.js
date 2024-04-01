@@ -47,4 +47,9 @@ export default {
 
     getNotification: (id) => apiService.get(`list_notice/${id}`),
 
+
+    getUserNotification : (id) => apiService.get(`get_user_notification/${id}`),
+    getNotificationSeen : (id, payload) => apiService.get(`notification_seen/${id}`, payload)
+    // getNotificationSeen : (id, payload) => console.log('id',id, payload),
+    
 }

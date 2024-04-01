@@ -6,6 +6,7 @@ import { currentUser } from "../../../utils/currentUser";
 import moment from "moment";
 import Icon from 'react-native-vector-icons/AntDesign'
 import Loader from "../../../utils/ActivityIndicator";
+import NotFound from "../../../utils/NotFound";
 
 const Checkout = () => {
     const [status, setStatus] = useState('All');
@@ -23,17 +24,27 @@ const Checkout = () => {
         switch (status) {
             case 'Weekly':
                 const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
-                return data ?  data.filter(item => new Date(item.date_time) >= weekStart) : [];
+                return data ? data.filter(item => new Date(item.date_time) >= weekStart) : [];
             case 'Monthly':
                 const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-                return  data ? data.filter(item => new Date(item.date_time) >= monthStart) : [];
+                return data ? data.filter(item => new Date(item.date_time) >= monthStart) : [];
             case 'Yearly':
                 const yearStart = new Date(today.getFullYear(), 0, 1);
-                return data ?  data.filter(item => new Date(item.date_time) >= yearStart) : [];
+                return data ? data.filter(item => new Date(item.date_time) >= yearStart) : [];
+            case 'Today':
+                return data ? data.filter(item => {
+                    const itemDate = new Date(item.date_time);
+                    return (
+                        itemDate.getFullYear() === today.getFullYear() &&
+                        itemDate.getMonth() === today.getMonth() &&
+                        itemDate.getDate() === today.getDate()
+                    );
+                }) : [];
             default:
-                return data ?  data : [];
+                return data ? data : [];
         }
     };
+    
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -68,6 +79,9 @@ const Checkout = () => {
                 <TouchableOpacity onPress={() => handleFilterData('All')}>
                     <Text style={status === 'All' ? style.inactive : style.active}>All ({data ? data.length : []})</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleFilterData('Today')}>
+                    <Text style={status === 'Today' ? style.inactive : style.active}>Today ({data ? filterData('Today', data).length : []})</Text>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleFilterData('Weekly')}>
                     <Text style={status === 'Weekly' ? style.inactive : style.active}>Weekly ({data ? filterData('Weekly', data).length : []})</Text>
                 </TouchableOpacity>
@@ -99,7 +113,7 @@ const Checkout = () => {
                             </View>
                         )}
                         keyExtractor={(item, index) => index.toString()}
-                        ListEmptyComponent={<View style={{alignItems: 'center'}}><Image height={20} width={20} source={require('../../../assests/not_found.png')}/><Text style={styles.textHeading}>Data Not Found</Text></View>}
+                        ListEmptyComponent={<NotFound/>}
                     /> 
                 </View>
            

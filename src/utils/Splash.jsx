@@ -3,25 +3,13 @@ import {useNavigation} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import {useEffect} from 'react';
 import {
-  ImageBackground,
   StyleSheet,
-  Text,
   View,
   PermissionsAndroid,
   Platform,
 } from 'react-native';
 import {primaryColor, secondaryColor} from '../../style';
-import {
-  BallIndicator,
-  BarIndicator,
-  DotIndicator,
-  MaterialIndicator,
-  PacmanIndicator,
-  PulseIndicator,
-  SkypeIndicator,
-  UIActivityIndicator,
-  WaveIndicator,
-} from 'react-native-indicators';
+import {  BarIndicator} from 'react-native-indicators';
 
 import firebase from '@react-native-firebase/app';
 
@@ -30,7 +18,7 @@ const Splash = () => {
 
   useEffect(() => {
     const fireInitialize = async () => {
-      console.log('initializing firebaseInit---------------');
+     
 
       if (Platform.OS === 'android') {
         // Code specific to Android platform
@@ -75,6 +63,7 @@ const Splash = () => {
         console.error('Error requesting notification permission:', error);
       }
     };
+    
     const navigationAuth = async () => {
       try {
         setTimeout(async () => {
@@ -141,9 +130,7 @@ const Splash = () => {
                 .getAPNSToken()
                 .then(async apnsToken => {
                   const token = await messaging().getToken();
-                  // updating token to firestore or database    r
-                  // setPushToken(token);
-                  console.log('token -=------------', {token});
+               
                   let deviceToken = await AsyncStorage.getItem('deviceToken');
                   console.log('deviceToken-=-=-=---$', deviceToken);
                   if (deviceToken === null) {

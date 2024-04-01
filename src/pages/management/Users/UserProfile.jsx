@@ -45,7 +45,7 @@ const UserProfile = () => {
   };
 
   const fetchData = async () => {
-    console.log('userData.id', userData.id);
+  
     try {
       const res = await getApi.getAllUserList(userData.id);
       if (res.data) {
@@ -102,7 +102,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     fetchData();
-  }, [data]);
+  }, []);
 
   const handleDelete = async () => {
     try {
@@ -189,7 +189,7 @@ const UserProfile = () => {
                       name="user-check"
                       style={pStyles.logoutUserIcon}
                     />
-                    <Text style={pStyles.lable}>My Profile</Text>
+                    <Text style={pStyles.lable}>Profile Details</Text>
                   </View>
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
@@ -342,7 +342,7 @@ const UserProfile = () => {
     </>
   );
 };
-
+    
 export default UserProfile;
 
 const pStyles = StyleSheet.create({

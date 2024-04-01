@@ -78,10 +78,13 @@ const Dashboard = () => {
   }, []);
 
   const fetchData = async () => {
-   
     try {
       setLoading(true);
-      if (currentUserId && currentUserId.id && currentUserId.user_type === 'Manager') {
+      if (
+        currentUserId &&
+        currentUserId.id &&
+        currentUserId.user_type === 'Manager'
+      ) {
         const res = await getApi.getCheckinCheckoutManager(currentUserId.id);
         if (res.data) {
           setLoading(false);
@@ -141,7 +144,6 @@ const Dashboard = () => {
           setAttendence(res.data);
         }
       } catch (error) {
-        console.log(error);
         console.log(error);
       }
     };
@@ -205,6 +207,7 @@ const Dashboard = () => {
   const dateTime = new Date();
 
   function timeToMilliseconds(hours, minutes, seconds) {
+    console.log('hours, minutes, seconds', hours, minutes, seconds);
     const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
     return totalMilliseconds;
   }
@@ -233,10 +236,42 @@ const Dashboard = () => {
   }
   const localcurrentTime = new Date();
 
-  useEffect(() => {
-    if (inoutData) {
-      const formattedDate = dateTime.toLocaleDateString();
+  const [stop, setStop] = useState(false);
+  const [pause, setPause] = useState(new Date());
+  const [resume, setResume] = useState(new Date());
 
+  const pauseTime = pause.getTime();
+  const resumeTime = resume.getTime();
+  const difference = resumeTime - pauseTime;
+  const breakTime = millisecondsToTime(difference);
+
+  // console.log('breakTime====>', breakTime);
+  // console.log('totalWorkingHour====>', totalWorkingHours);
+
+  // timeToMilliseconds(breakTime.hours, breakTime.minutes, breakTime.seconds);
+
+  // const breaktimedifference =
+  //   timeToMilliseconds(
+  //     totalWorkingHours[0],
+  //     totalWorkingHours[1],
+  //     totalWorkingHours[2],
+  //   ) -
+  //   timeToMilliseconds(breakTime.hours, breakTime.minutes, breakTime.seconds);
+  // const finalTimeAfterBreakTime = millisecondsToTime(breaktimedifference);
+  // console.log('final', finalTimeAfterBreakTime);
+
+  const handleStop = () => {
+    setStop(!stop);
+    if (stop) {
+      setPause(new Date());
+    } else {
+      setResume(new Date());
+    }
+  };
+
+  useEffect(() => {
+    const formattedDate = dateTime.toLocaleDateString();
+    if (stop) {
       const intervalId = setInterval(() => {
         try {
           const filteredData =
@@ -296,13 +331,52 @@ const Dashboard = () => {
             const cuttentminut = localcurrentTime.getMinutes();
             const cuttentsecond = localcurrentTime.getSeconds();
 
-            const differenceInMiliSecond =
-              timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
-              timeToMilliseconds(checkinhour, checkinminut, checkinsecond);
+            const tt = timeToMilliseconds(
+              parseInt(totalWorkingHours[0]),
+              parseInt(totalWorkingHours[1]),
+              parseInt(totalWorkingHours[2]),
+            );
 
-            let hours = millisecondsToTime(differenceInMiliSecond);
+            const bb = timeToMilliseconds(
+              parseInt(breakTime.hours),
+              parseInt(breakTime.minutes),
+              parseInt(breakTime.seconds),
+            );
 
-            setTotalWorkingHours([hours.hours, hours.minutes, hours.seconds]);
+            // Subtract break time from total working hours
+            const remainingMilliseconds = tt - bb;
+
+            console.log('breakTime.minutes', breakTime.minutes);
+            console.log('breakTime.seconds', breakTime.seconds);
+            console.log(' breakTime.hours', breakTime.hours);
+            console.log('stop', stop);
+
+            // Calculate the difference from the check-in time
+
+            const differenceInMilliseconds =
+              breakTime.hours > 0 ||
+              breakTime.minutes > 0 ||
+              breakTime.seconds > 0
+                ? timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
+                  remainingMilliseconds
+                : timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
+                  timeToMilliseconds(checkinhour, checkinminut, checkinsecond);
+
+            // Convert the difference to hours, minutes, and seconds
+            console.log(
+              'differenceInMilliseconds====================>',
+              differenceInMilliseconds,
+            );
+            const remainingTime = millisecondsToTime(differenceInMilliseconds);
+
+            console.log('Remaining time:', remainingTime);
+
+            // Update total working hours state
+            setTotalWorkingHours([
+              remainingTime.hours,
+              remainingTime.minutes,
+              remainingTime.seconds,
+            ]);
           } else {
             setTotalWorkingHours(['00', '00', '00']);
           }
@@ -313,7 +387,7 @@ const Dashboard = () => {
 
       return () => clearInterval(intervalId);
     }
-  }, [inoutData, totalWorkingHours]);
+  }, [inoutData, totalWorkingHours, stop]);
 
   const date_time = new Date();
 
@@ -381,6 +455,7 @@ const Dashboard = () => {
             });
             setcheckinLoading(false);
             fetchData();
+            setStop(true);
           }
         } catch (error) {
           setcheckinLoading(false);
@@ -485,6 +560,7 @@ const Dashboard = () => {
     <ScrollView>
       <View style={style.container}>
         {/*Header @start */}
+
         <View style={style.header}>
           <TouchableOpacity style={style.card} onPress={hanldeCheckin}>
             {checkinLoading ? (
@@ -527,6 +603,14 @@ const Dashboard = () => {
             )}
           </TouchableOpacity>
         </View>
+        {/* <TouchableOpacity onPress={handleStop} style={styles.primaryButton}>
+          <Text style={styles.buttonText}>
+            start time
+            {`${breakTime.hours ? breakTime.hours : '00'}:${
+              breakTime.minutes ? breakTime.minutes : '00'
+            }:${breakTime.seconds ? breakTime.seconds : '00'}`}
+          </Text>
+        </TouchableOpacity> */}
         {/*Header @end */}
         <View>
           <Text style={styles.textSubHeading}>Total Working Hours</Text>

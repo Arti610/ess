@@ -177,7 +177,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Add User</Text>
+                <Text style={styles.textSubHeading}>Add Employee</Text>
               </View>
             ),
           }}
@@ -188,7 +188,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Edit User</Text>
+                <Text style={styles.textSubHeading}>Edit Employee</Text>
               </View>
             ),
           }}
@@ -199,7 +199,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>User Profile</Text>
+                <Text style={styles.textSubHeading}>Employee Profile</Text>
               </View>
             ),
           }}
@@ -221,7 +221,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Active Staff</Text>
+                <Text style={styles.textSubHeading}>Active Employee</Text>
               </View>
             ),
           }}
@@ -254,7 +254,7 @@ const Navigator = () => {
           options={{
             headerTitle: () => (
               <View>
-                <Text style={styles.textSubHeading}>Inactive Staff</Text>
+                <Text style={styles.textSubHeading}>Inactive Employee</Text>
               </View>
             ),
           }}
