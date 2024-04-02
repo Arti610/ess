@@ -4,12 +4,13 @@ import {styles, textColor} from '../../style';
 import API_CONFIG from '../config/apiConfig';
 import {useNavigation} from '@react-navigation/native';
 import NotFound from './NotFound';
+import Loader from './ActivityIndicator';
 
 const UserCard = ({item, id}) => {
   const navigation = useNavigation();
 
   const handleNavigate = user => {
-    navigation.navigate('UserProfile', {userData: user, id : id});
+    navigation.navigate('UserProfile', {userData: user, id: id});
   };
 
   return (
@@ -49,7 +50,7 @@ const UserCard = ({item, id}) => {
           </TouchableOpacity>
         ))
       ) : (
-       <NotFound title='No information found.'/>
+        <NotFound title="No information found." />
       )}
     </View>
   );

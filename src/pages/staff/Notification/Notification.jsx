@@ -23,9 +23,8 @@ const Notification = () => {
   const [loading, setLoading] = useState(false);
 
   const [currentUserData, setCurrentUserData] = useState(null);
-  const userID =
-    currentUserData && currentUserData.id ? currentUserData.id : null;
-  const [data, setData] = useState([]);
+  const userID = currentUserData && currentUserData.id ? currentUserData.id : null;
+    const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -75,9 +74,7 @@ const Notification = () => {
   };
 
   const handleSeen = async item => {
-console.log('item.user.branch',item.user.branch);
-console.log('item.staff.branch',item.staff);
-console.log('item.content_utl',item.content_utl);
+
     const payload = {is_seen: true};
 
     try {
@@ -90,15 +87,9 @@ console.log('item.content_utl',item.content_utl);
     }
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     handleSeen();
-  //   });
-  //   return unsubscribe;
-  // }, [navigation]);
-  
+ 
   const renderData = ({item}) => {
-    console.log(item.is_seen);
+
     return (
       <TouchableOpacity
         style={[
@@ -110,12 +101,12 @@ console.log('item.content_utl',item.content_utl);
         ]}
         onPress={() => handleSeen(item)}>
        <View>
-          {item.staff && item.staff.profile_image ? (
+          {item ? (
             <Image
               source={{
-                uri: `${API_CONFIG.imageUrl}${item.staff.profile_image}`,
+                uri: `${API_CONFIG.imageUrl}${item.staff != null ? item.staff.profile_image : currentUserData.profile_image}`, 
               }}
-              style={style.image}
+              style={style.image}             
             />
           ) : (
             <Image

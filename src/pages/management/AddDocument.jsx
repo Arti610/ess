@@ -1,6 +1,12 @@
 import {Formik, useField} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import {primaryColor, styles} from '../../../style';
 import ButtonLoader from '../../utils/BtnActivityIndicator';
 import {SelectList} from 'react-native-dropdown-select-list';
@@ -14,7 +20,6 @@ import Loader from '../../utils/ActivityIndicator';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const AddDocument = ({route}) => {
-  
   const navigation = useNavigation();
   const {id} = route.params;
 
@@ -45,17 +50,17 @@ const AddDocument = ({route}) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        setLoading(true)
-        if (currentUserData && currentUserData.user_type === 'Manager') {
-          const res = await getApi.getManagerStaffList(
-            currentUserData && currentUserData.id,
-          );
-    
+        setLoading(true);
+        if (currentUserData.user_type === 'Manager') {
+          console.log('currentUserData.id', currentUserData.user_type);
+          const res = await getApi.getManagerStaffList(currentUserData.id);
+
           if (res.data) {
             const transformUserData = res.data.map(item => ({
               key: item.id.toString(),
               value: `${item.first_name} ${item.last_name}`,
             }));
+            setLoading(true);
             setData(transformUserData);
           }
         } else {
@@ -66,16 +71,15 @@ const AddDocument = ({route}) => {
               value: `${item.first_name} ${item.last_name}`,
             }));
             setData(transformUserData);
+            setLoading(true);
           }
         }
       } catch (error) {
-        console.log(error);
-      }finally{
-        setLoading(false)
+        console.log('error fetching users for add documents', error);
       }
     };
     fetchUser();
-  }, []);
+  }, [currentUserData]);
 
   const handleDocumentPick = async () => {
     try {
@@ -105,7 +109,14 @@ const AddDocument = ({route}) => {
         values.document_name ? values.document_name : null,
       );
       fData.append('user', selectedUser ? selectedUser : null);
-      fData.append('branch', id ? id : (currentUserData && currentUserData.branch && currentUserData.branch.id ));
+      fData.append(
+        'branch',
+        id
+          ? id
+          : currentUserData &&
+              currentUserData.branch &&
+              currentUserData.branch.id,
+      );
       selectedDocument
         ? fData.append('document', selectedDocument ? selectedDocument : null)
         : null;
@@ -117,7 +128,13 @@ const AddDocument = ({route}) => {
       });
 
       if (response.status === 201 || response.status === 200) {
-        navigation.navigate('Document', {id: id ? id : (currentUserData && currentUserData.branch && currentUserData.branch.id )});
+        navigation.navigate('Document', {
+          id: id
+            ? id
+            : currentUserData &&
+              currentUserData.branch &&
+              currentUserData.branch.id,
+        });
         Toast.show({
           type: 'success',
           text1: 'Document uploded success',
@@ -127,8 +144,13 @@ const AddDocument = ({route}) => {
         setIsLoading(false);
       }
     } catch (error) {
-    
-      navigation.navigate('Document', {id: id ? id : (currentUserData && currentUserData.branch && currentUserData.branch.id )});
+      navigation.navigate('Document', {
+        id: id
+          ? id
+          : currentUserData &&
+            currentUserData.branch &&
+            currentUserData.branch.id,
+      });
       Toast.show({
         type: 'error',
         text1: 'Document uploded failed',
@@ -139,8 +161,10 @@ const AddDocument = ({route}) => {
     }
   };
 
-  return (
-    loading ? <Loader/> :  <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+  return loading ? (
+    <Loader />
+  ) : (
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({handleChange, handleBlur, handleSubmit, values}) => (
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
@@ -178,17 +202,19 @@ const AddDocument = ({route}) => {
               </Text>
             </TouchableOpacity>
           </View> */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.lable}>Attachment</Text>
-              <TouchableOpacity style={style.uploadUI}  onPress={handleDocumentPick}>
-                <Icon name="cloud-upload-alt" style={style.icon} />
-                {selectedDocument && selectedDocument.name ? (
-                  <Text>{selectedDocument.name}</Text>
-                ) : (
-                  <Text>Upload your files</Text>
-                )}
-              </TouchableOpacity>
-            </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.lable}>Attachment</Text>
+            <TouchableOpacity
+              style={style.uploadUI}
+              onPress={handleDocumentPick}>
+              <Icon name="cloud-upload-alt" style={style.icon} />
+              {selectedDocument && selectedDocument.name ? (
+                <Text>{selectedDocument.name}</Text>
+              ) : (
+                <Text>Upload your files</Text>
+              )}
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={handleSubmit}
@@ -225,4 +251,4 @@ const style = StyleSheet.create({
     fontSize: 50,
     color: primaryColor,
   },
-})
+});

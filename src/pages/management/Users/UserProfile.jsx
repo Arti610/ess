@@ -215,7 +215,7 @@ const UserProfile = () => {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('checkin/checkout', {
                     data: data,
@@ -232,7 +232,7 @@ const UserProfile = () => {
                   </View>
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               <TouchableOpacity
                 onPress={() => navigation.navigate('Leaves', {data: data})}

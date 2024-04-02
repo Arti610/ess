@@ -15,9 +15,12 @@ import Dashboard from '../staff/dashboard/Dashboard';
 import NotificationCount from '../staff/Notification/NotificationCount';
 import Toast from 'react-native-toast-message';
 
+
 const Tab = createBottomTabNavigator();
+
 const ManagerDashboard = () => {
   const [backPressCount, setBackPressCount] = useState(0);
+
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -44,6 +47,9 @@ const ManagerDashboard = () => {
       return false;
     }
   };
+
+
+
   return (
     <>
       <Tab.Navigator
@@ -69,7 +75,7 @@ const ManagerDashboard = () => {
               />
             ),
             tabBarLabel: ({color}) => (
-              <Text style={[styles.lable, {color}, {fontSize: 12}]}>Home</Text>
+              <Text style={[styles.lable, {color}, {fontSize: 11}]}>Home</Text>
             ),
           })}
         />
@@ -89,7 +95,7 @@ const ManagerDashboard = () => {
               />
             ),
             tabBarLabel: ({color}) => (
-              <Text style={[styles.lable, {color}, {fontSize: 12}]}>
+              <Text style={[styles.lable, {color}, {fontSize: 11}]}>
                 Dashboard
               </Text>
             ),
@@ -98,7 +104,7 @@ const ManagerDashboard = () => {
         <Tab.Screen
           name="Users"
           component={Users}
-          initialParams={{id: null}}
+          initialParams={{id: null }}
           options={() => ({
             headerTitle: () => null,
             headerLeft: () => <HeaderTitle />,
@@ -107,7 +113,7 @@ const ManagerDashboard = () => {
               <IconFa name="users" style={[styles.icons, {color}]} size={20} />
             ),
             tabBarLabel: ({color}) => (
-              <Text style={[styles.lable, {color}, {fontSize: 12}]}>Staff</Text>
+              <Text style={[styles.lable, {color}, {fontSize: 11}]}>Employees</Text>
             ),
           })}
         />
@@ -126,7 +132,7 @@ const ManagerDashboard = () => {
               />
             ),
             tabBarLabel: ({color}) => (
-              <Text style={[styles.lable, {color}, {fontSize: 12}]}>Vlog</Text>
+              <Text style={[styles.lable, {color}, {fontSize: 11}]}>Vlogs</Text>
             ),
           })}
         />
@@ -147,7 +153,7 @@ const ManagerDashboard = () => {
               />
             ),
             tabBarLabel: ({color}) => (
-              <Text style={[styles.lable, {color}, {fontSize: 12}]}>Leave</Text>
+              <Text style={[styles.lable, {color}, {fontSize: 11}]}>Leaves</Text>
             ),
           })}
         />
@@ -168,8 +174,8 @@ const ManagerDashboard = () => {
               />
             ),
             tabBarLabel: ({color}) => (
-              <Text style={[styles.lable, {color}, {fontSize: 12}]}>
-                Document
+              <Text style={[styles.lable, {color}, {fontSize: 11}]}>
+                Documents
               </Text>
             ),
           })}

@@ -26,7 +26,7 @@ const NotificationCount = () => {
   }, []);
 
   useEffect(() => {
-    if (userID) {
+   
       const fetchUserNotification = async () => {
         try {
           const res = await getApi.getUserNotification(userID);
@@ -39,9 +39,9 @@ const NotificationCount = () => {
         }
       };
       fetchUserNotification();
-    }
+    
   }, [userID]);
-  
+
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('Notification', {data: data})}

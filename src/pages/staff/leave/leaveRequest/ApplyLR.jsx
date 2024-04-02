@@ -32,11 +32,11 @@ const ApplyLR = () => {
   const [showToDatePicker, setShowToDatePicker] = useState(false);
   const [document, setDocument] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState(null);
   const [formValues, setFormValues] = useState({
     from_date: null,
     to_date: null,
   });
-
 
   useEffect(() => {
     // Fetch user data
@@ -44,7 +44,7 @@ const ApplyLR = () => {
       try {
         const userData = await currentUser();
         if (userData) {
-          setId(userData.data.branch.id);
+          setId(userData.data);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -54,12 +54,30 @@ const ApplyLR = () => {
   }, []);
 
   useEffect(() => {
+    if (id && id.id) {
+      const fetchData = async () => {
+        try {
+          
+          const res = await getApi.getAllUserList(id.id);
+
+          if (res.data) {
+            setUserDetails(res.data);
+            
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, [id]);
+  useEffect(() => {
     // Fetch leave types
     const fetchLeaveType = async () => {
       try {
         setLoading(true);
-        if (id) {
-          const res = await getApi.getLeaveTypeList(id);
+        if (id && id.branch && id.branch.id) {
+          const res = await getApi.getLeaveTypeList(id.branch.id);
           if (res.data) {
             const transformedData = res.data.map(item => ({
               key: item.id.toString(),
@@ -127,7 +145,6 @@ const ApplyLR = () => {
     fData.append('description', values.description ? values.description : null);
     document ? fData.append('attachment', document ? document : null) : null;
 
-
     try {
       setIsLoading(true);
       const res = await createApi.createLeaveRequest(fData, {
@@ -138,8 +155,10 @@ const ApplyLR = () => {
 
       if (res.status === 201 || res.status === 200) {
         setIsLoading(false);
-        navigation.navigate('Leave');
-        console.log('leave requested successfully');
+        userDetails && id && id.user_type === 'Staff'
+          ? navigation.navigate('Leave')
+          : navigation.navigate('Leaves', {data : userDetails});
+        
         Toast.show({
           type: 'success',
           text1: 'Leave request submitted successfully',

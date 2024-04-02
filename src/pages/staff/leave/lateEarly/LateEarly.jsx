@@ -27,7 +27,7 @@ const LateEarly = () => {
 
   const route = useRoute();
   const {id} = route.params;
-console.log('id',id);
+
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [status, setStatus] = useState('Pending');

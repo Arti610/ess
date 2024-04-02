@@ -702,11 +702,11 @@ const Dashboard = () => {
                 onPress={() =>
                   navigation.navigate('checkin/checkout', {data: attendence})
                 }>
-                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>   
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={() => navigation.navigate('Clock')}>
-                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>      
               </TouchableOpacity>
             )}
           </View>

@@ -118,7 +118,6 @@ const AddBranchInfo = () => {
     fData.append('place', formData.place ? formData.place : '');
     fData.append('branch', selectBranch.key ? selectBranch.key : selectBranch);
 
-    console.log('fData', fData);
 
     try {
       setLoading(true);
@@ -239,7 +238,7 @@ const AddBranchInfo = () => {
     }
   }, [receivedId]);
 
-  console.log('formdata==> ', formData);
+
 
   useEffect(() => {
     if (

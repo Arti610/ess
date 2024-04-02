@@ -1,16 +1,22 @@
-import React, {useRef, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Loader from '../../../utils/ActivityIndicator';
-import {primaryColor, styles} from '../../../../style';
+import {primaryColor, secondaryColor, styles} from '../../../../style';
 import NotFound from '../../../utils/NotFound';
 import moment from 'moment';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import getApi from '../../../redux/slices/utils/getApi';
+import IconAdd from 'react-native-vector-icons/MaterialIcons';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const Leaves = ({route}) => {
   const {data} = route.params;
   const rbSheet = useRef();
 
+  const navigation = useNavigation();
+
+  const [status, setStatus] = useState('Pending');
   const [uniqueData, setUniqueData] = useState(null);
 
   const handleOpenRBSheet = async id => {
@@ -21,10 +27,83 @@ const Leaves = ({route}) => {
     }
   };
 
-  return data ? (
+  const handleFilterData = status => {
+    setStatus(status);
+  };
+
+  const filterData = (status, data) => {
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const todayEnd = new Date(todayStart);
+    todayEnd.setDate(todayEnd.getDate() + 1);
+
+    switch (status) {
+      case 'Today':
+        return data && data.leave
+          ? data.leave.filter(item => {
+              const itemDate = new Date(item.from_date);
+              return itemDate >= todayStart && itemDate < todayEnd;
+            })
+          : [];
+
+      case 'All':
+        return data && data.leave ? data.leave : [];
+      default:
+        return data && data.leave
+          ? data.leave.filter(item => item.status === status)
+          : [];
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      try {
+        data;
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, data]);
+
+
+  return data && data.leave ? (
     <>
+      <View style={style.container}>
+        <TouchableOpacity onPress={() => handleFilterData('All')}>
+          <Text style={status === 'All' ? style.inactive : style.active}>
+            All ({data && data ? filterData('All', data).length : 0})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Today')}>
+          <Text style={status === 'Today' ? style.inactive : style.active}>
+            Today ({data && data ? filterData('Today', data).length : 0})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Approved')}>
+          <Text style={status === 'Approved' ? style.inactive : style.active}>
+            Approved ({data && data ? filterData('Approved', data).length : 0})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Pending')}>
+          <Text style={status === 'Pending' ? style.inactive : style.active}>
+            Pending ({data && data ? filterData('Pending', data).length : 0})
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleFilterData('Declined')}>
+          <Text style={status === 'Declined' ? style.inactive : style.active}>
+            Declined ({data && data ? filterData('Declined', data).length : 0})
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <FlatList
-        data={data && data.leave}
+        data={filterData(status, data)}
         ListEmptyComponent={<NotFound />}
         renderItem={({item}) => (
           <View
@@ -41,7 +120,6 @@ const Leaves = ({route}) => {
               <View>
                 <Text style={styles.lable}>{item.title}</Text>
                 <Text>
-                  {' '}
                   From {moment(item.from_date).format('DD MMM yyyy')} To{' '}
                   {moment(item.to_date).format('DD MMM YYYY')}{' '}
                 </Text>
@@ -53,8 +131,8 @@ const Leaves = ({route}) => {
                   width: '50%',
                   borderRadius: 25,
                   color: 'white',
-                  padding : 6,
-                  marginVertical : 6,
+                  padding: 6,
+                  marginVertical: 6,
                   fontSize: 10,
                   textAlign: 'center',
                 }}>
@@ -76,6 +154,7 @@ const Leaves = ({route}) => {
           </View>
         )}
       />
+
       {uniqueData ? (
         <RBSheet
           ref={rbSheet}
@@ -171,6 +250,12 @@ const Leaves = ({route}) => {
           </View>
         </RBSheet>
       ) : null}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('ApplyLR')}>
+          <IconAdd name="add" style={styles.addIcon} />
+        </TouchableOpacity>
+      </View>
+      <Toast />
     </>
   ) : (
     <Loader />
@@ -178,3 +263,32 @@ const Leaves = ({route}) => {
 };
 
 export default Leaves;
+
+const style = StyleSheet.create({
+  container: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    gap: 8,
+  },
+  active: {
+    backgroundColor: primaryColor,
+    paddingHorizontal: 6,
+    marginHorizontal: 4,
+    paddingVertical: 8,
+    borderRadius: 25,
+    color: 'white',
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  inactive: {
+    backgroundColor: secondaryColor,
+    paddingHorizontal: 6,
+    marginHorizontal: 4,
+    paddingVertical: 8,
+    borderRadius: 25,
+    color: 'black',
+    fontSize: 12,
+  },
+});

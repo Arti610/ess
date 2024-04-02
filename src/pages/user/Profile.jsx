@@ -40,7 +40,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [userDetails, setUserDetails] = useState(null);
-  
+
   const handleModalVisible = () => {
     setModalVisible(!modalVisible);
   };
@@ -156,14 +156,13 @@ const Profile = () => {
     return unsubscribe;
   }, [navigation]);
 
-  useEffect(() => {  
-
+  useEffect(() => {
     if (currentUser && currentUser.id) {
       const fetchData = async () => {
         try {
           setLoading(true);
           const res = await getApi.getAllUserList(currentUser.id);
-       
+
           if (res.data) {
             setUserDetails(res.data);
             setLoading(false);
@@ -212,6 +211,11 @@ const Profile = () => {
                     : 'Name'
                 }`}</Text>
               </View>
+              <Text style={styles.lable}>
+                {data && data.user_data && data.user_data.user_type
+                  ? data.user_data.user_type
+                  : null}
+              </Text>
             </View>
           ) : null}
 
@@ -232,11 +236,12 @@ const Profile = () => {
                     name="user-check"
                     style={pStyles.logoutUserIcon}
                   />
-                  <Text style={pStyles.lable}>Profile Details</Text>
+                  <Text style={pStyles.lable}>My Profile</Text>
                 </View>
                 <IconEdit name="chevron-right" style={pStyles.iconStyles} />
               </View>
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('EditProfile', {
@@ -274,11 +279,18 @@ const Profile = () => {
                 <IconEdit name="chevron-right" style={pStyles.iconStyles} />
               </View>
             </TouchableOpacity>
-            {userDetails && currentUser && currentUser.user_type == 'Management' ? null : (
+
+            {userDetails &&
+            currentUser &&
+            currentUser.user_type == 'Management' ? null : (
               <>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('Leaves', {data: userDetails})
+                    userDetails &&
+                    currentUser &&
+                    currentUser.user_type === 'Manager'
+                      ? navigation.navigate('Leaves', {data: userDetails})
+                      : navigation.navigate('LeaveRequest')
                   }
                   style={pStyles.footerText}>
                   <View style={pStyles.footerTextView}>
@@ -287,7 +299,7 @@ const Profile = () => {
                         name="th-list"
                         style={pStyles.logoutUserIcon}
                       />
-                      <Text style={pStyles.lable}>Leaves</Text>
+                      <Text style={pStyles.lable}>My Leaves</Text>
                     </View>
                     <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                   </View>
@@ -303,12 +315,12 @@ const Profile = () => {
                         name="th-list"
                         style={pStyles.logoutUserIcon}
                       />
-                      <Text style={pStyles.lable}>Late/Early</Text>
+                      <Text style={pStyles.lable}>My Late/Early</Text>
                     </View>
                     <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('checkin/checkout', {
                       data: userDetails,
@@ -321,11 +333,11 @@ const Profile = () => {
                         name="user-edit"
                         style={pStyles.logoutUserIcon}
                       />
-                      <Text style={pStyles.lable}>Attendance</Text>
+                      <Text style={pStyles.lable}>Attendance hhh</Text>
                     </View>
                     <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('Documents', {data: userDetails})
@@ -337,13 +349,14 @@ const Profile = () => {
                         name="file"
                         style={pStyles.logoutUserIcon}
                       />
-                      <Text style={pStyles.lable}>Document</Text>
+                      <Text style={pStyles.lable}>My Document</Text>
                     </View>
                     <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                   </View>
                 </TouchableOpacity>
               </>
             )}
+
             <TouchableOpacity
               style={pStyles.footerText}
               onPress={handleModalVisible}>
@@ -381,16 +394,14 @@ const pStyles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   userHeader: {
-    // flex: 1,
-    height: '20%',
-    gap: 10,
+    gap: 5,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 10,
+    marginTop: 20,
   },
+
   userFooter: {
-    // flex: 3,
     height: 'fit-content',
     width: '100%',
     justifyContent: 'start',
@@ -402,12 +413,14 @@ const pStyles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#FFF',
   },
+
   lable: {
     color: textColor,
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '600',
   },
+
   image: {
     borderRadius: 50,
     width: 100,

@@ -106,7 +106,8 @@ const Document = ({route}) => {
 
   useEffect(() => {
     fetchUser();
-  }, [data]);
+
+  }, []);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {

@@ -227,8 +227,8 @@ const UserForm = () => {
         Toast.show({
           type: 'success',
           position: 'top',
-          text1: 'User created successfully',
-          text2: 'User has been created successfully',
+          text1: 'Employee created successfully',
+          text2: 'Employee has been created successfully',
           visibilityTime: 4000,
           autoHide: true,
         });
@@ -238,8 +238,8 @@ const UserForm = () => {
       Toast.show({
         type: 'error',
         position: 'top',
-        text1: 'User not created',
-        text2: 'Error got during user creation, try again',
+        text1: 'Employee not created',
+        text2: 'Error got during employee creation, try again',
         visibilityTime: 4000,
         autoHide: true,
       });

@@ -27,7 +27,7 @@ const LeaveRequest = () => {
 
   const route = useRoute();
   const {id} = route.params;
-console.log('leave id', id);
+
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [currentUserData, setcurrentUserData] = useState([]);

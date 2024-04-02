@@ -101,7 +101,7 @@ const AddBranch = () => {
       form_data.append('address', values.address ? values.address : branchDataById.address);
 
       // const res =  recivedId ? await updateBrnach(recivedId, dispatch, form_data, navigation) : await createBranch(dispatch, form_data, navigation)
-      console.log('form_data', form_data);
+
 
       if (recivedId) {
         setIsLoading(true);

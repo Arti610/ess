@@ -236,9 +236,11 @@ const ShowingVlog = () => {
               <TouchableOpacity
                 style={styles.primaryButton}
                 onPress={handleSubmit}>
-                <Text style={styles.buttonText}>
-                  {loading ? <ButtonLoader /> : Submit}
-                </Text>
+                {loading ? (
+                  <ButtonLoader />
+                ) : (
+                  <Text style={styles.buttonText}>Submit</Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
