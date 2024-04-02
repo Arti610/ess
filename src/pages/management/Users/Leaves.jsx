@@ -11,11 +11,13 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
 const Leaves = ({route}) => {
+
   const {data} = route.params;
   const rbSheet = useRef();
 
   const navigation = useNavigation();
 
+  const [value, setValue] = useState(null)
   const [status, setStatus] = useState('Pending');
   const [uniqueData, setUniqueData] = useState(null);
 
@@ -62,48 +64,47 @@ const Leaves = ({route}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       try {
-        data;
+        setValue(data)
       } catch (error) {
         console.log(error);
       }
     });
 
     return unsubscribe;
-  }, [navigation, data]);
+  }, [navigation, value]);
 
-
-  return data && data.leave ? (
+  return value && value.leave ? (
     <>
       <View style={style.container}>
         <TouchableOpacity onPress={() => handleFilterData('All')}>
           <Text style={status === 'All' ? style.inactive : style.active}>
-            All ({data && data ? filterData('All', data).length : 0})
+            All ({value && value ? filterData('All', value).length : 0})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Today')}>
           <Text style={status === 'Today' ? style.inactive : style.active}>
-            Today ({data && data ? filterData('Today', data).length : 0})
+            Today ({value && value ? filterData('Today', value).length : 0})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Approved')}>
           <Text style={status === 'Approved' ? style.inactive : style.active}>
-            Approved ({data && data ? filterData('Approved', data).length : 0})
+            Approved ({value && value ? filterData('Approved', value).length : 0})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Pending')}>
           <Text style={status === 'Pending' ? style.inactive : style.active}>
-            Pending ({data && data ? filterData('Pending', data).length : 0})
+            Pending ({value && value ? filterData('Pending', value).length : 0})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleFilterData('Declined')}>
           <Text style={status === 'Declined' ? style.inactive : style.active}>
-            Declined ({data && data ? filterData('Declined', data).length : 0})
+            Declined ({value && value ? filterData('Declined', value).length : 0})
           </Text>
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={filterData(status, data)}
+        data={filterData(status, value)}
         ListEmptyComponent={<NotFound />}
         renderItem={({item}) => (
           <View
@@ -250,6 +251,7 @@ const Leaves = ({route}) => {
           </View>
         </RBSheet>
       ) : null}
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('ApplyLR')}>
           <IconAdd name="add" style={styles.addIcon} />

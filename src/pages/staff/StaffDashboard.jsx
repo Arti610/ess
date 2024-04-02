@@ -7,13 +7,14 @@ import DocIcon from 'react-native-vector-icons/Ionicons';
 import HeaderTitle from '../../utils/headerTitle';
 import Toast from 'react-native-toast-message';
 import {primaryColor, secondaryColor, styles} from '../../../style';
-import {BackHandler, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Alert, BackHandler, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Vlog from './vlog/Vlog';
 import Clock from './clock/clock';
 import LeaveBase from './leave/LeaveBase';
 import Dashboard from './dashboard/Dashboard';
 import Document from '../management/Document';
 import NotificationCount from './Notification/NotificationCount';
+import messaging from '@react-native-firebase/messaging';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,6 +46,9 @@ const StaffDashboard = () => {
       return false;
     }
   };
+
+
+
   return (
     <>
       <Tab.Navigator

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "374720264061",
-    "project_id": "essnative-d9772",
-    "storage_bucket": "essnative-d9772.appspot.com"
+    "project_number": "863078423183",
+    "project_id": "ess-fb",
+    "storage_bucket": "ess-fb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:374720264061:android:3fdb536512755a75597e14",
+        "mobilesdk_app_id": "1:863078423183:android:468d609b1147b604e3eefa",
         "android_client_info": {
           "package_name": "com.ess"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBJYm6AbCdNj_vlUT-iTahUZbRZd0zBSEE"
+          "current_key": "AIzaSyBX3S35ZjrBKhwV7_JJG9QIH56zlg3qGls"
         }
       ],
       "services": {

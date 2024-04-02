@@ -289,8 +289,8 @@ const Profile = () => {
                     userDetails &&
                     currentUser &&
                     currentUser.user_type === 'Manager'
-                      ? navigation.navigate('Leaves', {data: userDetails})
-                      : navigation.navigate('LeaveRequest')
+                       ? navigation.navigate('Leaves', {data: userDetails})
+                      : navigation.navigate('LeaveRequest', {id : null})
                   }
                   style={pStyles.footerText}>
                   <View style={pStyles.footerTextView}>
@@ -306,7 +306,11 @@ const Profile = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('LateEarlys', {data: userDetails})
+                    userDetails &&
+                    currentUser &&
+                    currentUser.user_type === 'Manager' ?
+                    navigation.navigate('LateEarlys', {data: userDetails}) 
+                    : navigation.navigate('LateEarly', {id : null})
                   }
                   style={pStyles.footerText}>
                   <View style={pStyles.footerTextView}>
