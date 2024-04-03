@@ -17,4 +17,8 @@ export default {
     createDocUpload: (payload, option) => apiService.post(`create_docsUpload`, payload, option),
     // createDocUpload: (payload) => console.log(payload, 'payloda')
     
+
+
+    createNotificationFCM : (payload) => apiService.post(`fcm_token`, payload)
+    // createNotificationFCM : (payload) =>console.log(payload, 'after api payload')
 }
