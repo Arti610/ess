@@ -56,16 +56,17 @@ const Users = ({route}) => {
     } catch (error) {}
   }, [currentUserData]);
 
+  const branchId = currentUserData && currentUserData.branch && currentUserData.branch.id
   return isLoading ? (
     <Loader />
   ) : (
     <>
       <ScrollView>
-        <UserCard item={data ? data : []} id={ currentUserData.branch.id} />
+        <UserCard item={data ? data : []} id={ branchId} />
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('UserForm', {id: currentUserData.branch.id})}>
+          onPress={() => navigation.navigate('UserForm', {id: branchId})}>
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
       </View>

@@ -101,12 +101,13 @@ const Login = () => {
         if (enabled) {
           const registered = messaging().isDeviceRegisteredForRemoteMessages;
 
-          if (registered === true && deviceInfo) {
+          if (registered === true) {
             await messaging()
               .getAPNSToken()
               .then(async apnsToken => {
                 const token = await messaging().getToken();
-                if (token) {
+                console.log(token, 'token');
+                if (token != null) {
                   setDeviceToken(token);
                 }
               });
@@ -130,7 +131,7 @@ const Login = () => {
   };
 
   const payload = {
-    token: deviceToken ? deviceToken : null,
+    token: deviceToken && deviceToken,
     deviceType:
       deviceInfo && deviceInfo.deviceType ? deviceInfo.deviceType : null,
     deviceid: deviceInfo && deviceInfo.deviceId ? deviceInfo.deviceId : null,
@@ -149,29 +150,66 @@ const Login = () => {
       dispatch(loginStart());
       const res = await authApi.Login(loginValues); // Use loginValues instead of values
 
-      if (res.status === 200) {
+      if (res.status === 200 || res.data) {
         await AsyncStorage.setItem('token', res.data.token);
         await AsyncStorage.setItem('currentUser', JSON.stringify(res.data));
-
+       
+        dispatch(loginSuccess(res.data));
+        navigateToDashboard(res.data.user_type);
+        showSuccessToast();
         if (
           payload.token &&
           payload.deviceType &&
           payload.deviceid &&
           payload.username
         ) {
-          dispatch(loginSuccess(res.data));
-          navigateToDashboard(res.data.user_type);
-          showSuccessToast();
-          await createApi.createNotificationFCM(payload);
+          const res = await createApi.createNotificationFCM(payload);
+   
+          if (res.status === 200) {
+            console.log('post FCM notification successfully');
+          }
         }
       }
-      return res;
+      
     } catch (error) {
-      console.log('error', error);
+      console.log('error====>', error);
       showErrorToast();
       dispatch(loginFailure());
     }
   };
+
+  // const handleLogin = async () => {
+  //   try {
+  //     console.log('payload', payload);
+  //     if (
+  //       payload.token &&
+  //       payload.deviceType &&
+  //       payload.deviceid &&
+  //       payload.username
+  //     ) {
+  //       const res = await createApi.createNotificationFCM(payload);
+
+  //       if (res.status === 200) {
+  //         console.log('post FCM notification successfully');
+  //         dispatch(loginStart());
+  //         const res = await authApi.Login(loginValues); // Use loginValues instead of values
+
+  //         if (res.status === 200) {
+  //           await AsyncStorage.setItem('token', res.data.token);
+  //           await AsyncStorage.setItem('currentUser', JSON.stringify(res.data));
+  //           dispatch(loginSuccess(res.data));
+  //           navigateToDashboard(res.data.user_type);
+  //           showSuccessToast();
+  //         }
+  //       }
+  //     }
+  //     return res;
+  //   } catch (error) {
+  //     console.log('error', error);
+  //     showErrorToast();
+  //     dispatch(loginFailure());
+  //   }
+  // };
 
   const handleChange = (name, value) => {
     setLoginValues(prevState => ({...prevState, [name]: value}));
