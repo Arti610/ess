@@ -96,7 +96,7 @@ const StaffDashboard = () => {
             headerShown: false,
             tabBarIcon: () => (
               <BranchIcon
-                name="featured-play-list"
+                name="movie"
                 style={styles.icons}
                 size={20}
               />

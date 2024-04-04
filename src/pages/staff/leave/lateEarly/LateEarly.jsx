@@ -30,7 +30,7 @@ const LateEarly = () => {
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [status, setStatus] = useState('Pending');
+  const [status, setStatus] = useState('All');
   const [uniqueData, setUniqueData] = useState(null);
   const [currentUserData, setcurrentUserData] = useState([]);
   const [leaveTypeStatus, setLeaveTypeStatus] = useState(null);

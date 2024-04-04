@@ -148,7 +148,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       dispatch(loginStart());
-      const res = await authApi.Login(loginValues); // Use loginValues instead of values
+      const res = await authApi.Login(loginValues); 
 
       if (res.status === 200 || res.data) {
         await AsyncStorage.setItem('token', res.data.token);

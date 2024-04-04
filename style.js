@@ -2,7 +2,8 @@
 import { StyleSheet } from 'react-native';
 
 // colors.js
-export const primaryColor = '#00073d';
+// export const primaryColor = '#00073d';
+export const primaryColor = '#2b323f';
 export const secondaryColor = '#e4eafb';
 export const textColor = '#102b4d';
 export const IconColor = '#3d6fe2'

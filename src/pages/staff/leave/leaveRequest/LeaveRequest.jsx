@@ -31,7 +31,7 @@ const LeaveRequest = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [currentUserData, setcurrentUserData] = useState([]);
-  const [status, setStatus] = useState('Pending');
+  const [status, setStatus] = useState('All');
   const [uniqueData, setUniqueData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [leaveTypeStatus, setLeaveTypeStatus] = useState(null);
