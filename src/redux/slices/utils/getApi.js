@@ -49,7 +49,8 @@ export default {
 
 
     getUserNotification : (id) => apiService.get(`get_user_notification/${id}`),
-    getNotificationSeen : (id, payload) => apiService.get(`notification_seen/${id}`, payload)
+    getNotificationSeen : (id, payload) => apiService.get(`notification_seen/${id}`, payload),
+    getHolidaysBranch : (id) => apiService.get(`all_branch_holiday/${id}`)
     // getNotificationSeen : (id, payload) => console.log('id',id, payload),
     
 }

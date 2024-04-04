@@ -23,8 +23,9 @@ const Notification = () => {
   const [loading, setLoading] = useState(false);
 
   const [currentUserData, setCurrentUserData] = useState(null);
-  const userID = currentUserData && currentUserData.id ? currentUserData.id : null;
-    const [data, setData] = useState([]);
+  const userID =
+    currentUserData && currentUserData.id ? currentUserData.id : null;
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -38,21 +39,21 @@ const Notification = () => {
     fetchCurrentUser();
   }, []);
 
-  useEffect(() => {
-    const fetchUserNotification = async () => {
-      try {
-        setLoading(true);
-        const res = await getApi.getUserNotification(userID);
+  const fetchUserNotification = async () => {
+    try {
+      setLoading(true);
+      const res = await getApi.getUserNotification(userID);
 
-        if (res.data) {
-          setLoading(false);
-          setData(res.data);
-        }
-      } catch (error) {
-        console.log(error);
+      if (res.data) {
         setLoading(false);
+        setData(res.data);
       }
-    };
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchUserNotification();
   }, [userID]);
 
@@ -74,22 +75,34 @@ const Notification = () => {
   };
 
   const handleSeen = async item => {
-
     const payload = {is_seen: true};
 
     try {
       const res = await getApi.getNotificationSeen(item.id, payload);
       if (res) {
-        navigation.navigate(item.content_utl, {id: item.staff === null ? item.user.branch : item.staff.branch});
+        navigation.navigate(item.content_utl, {
+          id: item.staff === null ? item.user.branch : item.staff.branch,
+        });
       }
     } catch (error) {
       console.log(error, 'error during seen notifications');
     }
   };
 
- 
-  const renderData = ({item}) => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      try {
+        fetchUserNotification();
+      } catch (error) {
+        console.log(error);
+      }
+    });
 
+    return unsubscribe;
+  }, [navigation, data]);
+
+
+  const renderData = ({item}) => {
     return (
       <TouchableOpacity
         style={[
@@ -100,13 +113,17 @@ const Notification = () => {
           },
         ]}
         onPress={() => handleSeen(item)}>
-       <View>
+        <View>
           {item ? (
             <Image
               source={{
-                uri: `${API_CONFIG.imageUrl}${item.staff != null ? item.staff.profile_image : currentUserData.profile_image}`, 
+                uri: `${API_CONFIG.imageUrl}${
+                  item.staff != null
+                    ? item.staff.profile_image
+                    : currentUserData.profile_image
+                }`,
               }}
-              style={style.image}             
+              style={style.image}
             />
           ) : (
             <Image
