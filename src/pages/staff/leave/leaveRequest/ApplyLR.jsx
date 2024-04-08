@@ -71,6 +71,7 @@ const ApplyLR = () => {
       fetchData();
     }
   }, [id]);
+  
   useEffect(() => {
     // Fetch leave types
     const fetchLeaveType = async () => {

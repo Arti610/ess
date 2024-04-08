@@ -219,163 +219,164 @@ const Profile = () => {
             </View>
           ) : null}
 
-          <View style={pStyles.userFooter}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('UserDetailScreen', {
-                  userId:
-                    data && data.user_data && data.user_data.id
-                      ? data.user_data.id
-                      : data.user_data.id,
-                })
-              }
-              style={pStyles.footerText}>
-              <View style={pStyles.footerTextView}>
-                <View style={pStyles.leftFooterText}>
-                  <IconEditProfile
-                    name="user-check"
-                    style={pStyles.logoutUserIcon}
-                  />
-                  <Text style={pStyles.lable}>My Profile</Text>
-                </View>
-                <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('EditProfile', {
-                  userId:
-                    data && data.user_data && data.user_data.id
-                      ? data.user_data.id
-                      : data.user_data.id,
-                })
-              }
-              style={pStyles.footerText}>
-              <View style={pStyles.footerTextView}>
-                <View style={pStyles.leftFooterText}>
-                  <IconEditProfile name="pen" style={pStyles.logoutUserIcon} />
-                  <Text style={pStyles.lable}>Edit Profile</Text>
-                </View>
-                <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('ChangePassword', {
-                  userId:
-                    data && data.user_data && data.user_data.id
-                      ? data.user_data.id
-                      : data.user_data.id,
-                })
-              }
-              style={pStyles.footerText}>
-              <View style={pStyles.footerTextView}>
-                <View style={pStyles.leftFooterText}>
-                  <IconEditProfile name="key" style={pStyles.logoutUserIcon} />
-                  <Text style={pStyles.lable}>Change Password</Text>
-                </View>
-                <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-              </View>
-            </TouchableOpacity>
-
-            {userDetails &&
-            currentUser &&
-            currentUser.user_type == 'Management' ? null : (
-              <>
-                <TouchableOpacity
-                  onPress={() =>
-                    userDetails &&
-                    currentUser &&
-                    currentUser.user_type === 'Manager'
-                       ? navigation.navigate('Leaves', {data: userDetails})
-                      : navigation.navigate('LeaveRequest', {id : null})
-                  }
-                  style={pStyles.footerText}>
-                  <View style={pStyles.footerTextView}>
-                    <View style={pStyles.leftFooterText}>
-                      <IconEditProfile
-                        name="th-list"
-                        style={pStyles.logoutUserIcon}
-                      />
-                      <Text style={pStyles.lable}>My Leaves</Text>
-                    </View>
-                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
+          {currentUser ? (
+            <View style={pStyles.userFooter}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('UserDetailScreen', {
+                    userId:
+                      data && data.user_data && data.user_data.id
+                        ? data.user_data.id
+                        : data.user_data.id,
+                  })
+                }
+                style={pStyles.footerText}>
+                <View style={pStyles.footerTextView}>
+                  <View style={pStyles.leftFooterText}>
+                    <IconEditProfile
+                      name="user-check"
+                      style={pStyles.logoutUserIcon}
+                    />
+                    <Text style={pStyles.lable}>My Profile</Text>
                   </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    userDetails &&
-                    currentUser &&
-                    currentUser.user_type === 'Manager' ?
-                    navigation.navigate('LateEarlys', {data: userDetails}) 
-                    : navigation.navigate('LateEarly', {id : null})
-                  }
-                  style={pStyles.footerText}>
-                  <View style={pStyles.footerTextView}>
-                    <View style={pStyles.leftFooterText}>
-                      <IconEditProfile
-                        name="th-list"
-                        style={pStyles.logoutUserIcon}
-                      />
-                      <Text style={pStyles.lable}>My Late/Early</Text>
-                    </View>
-                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-                  </View>
-                </TouchableOpacity>
-                {/* <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('checkin/checkout', {
-                      data: userDetails,
-                    })
-                  }
-                  style={pStyles.footerText}>
-                  <View style={pStyles.footerTextView}>
-                    <View style={pStyles.leftFooterText}>
-                      <IconEditProfile
-                        name="user-edit"
-                        style={pStyles.logoutUserIcon}
-                      />
-                      <Text style={pStyles.lable}>Attendance hhh</Text>
-                    </View>
-                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-                  </View>
-                </TouchableOpacity> */}
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Documents', {data: userDetails})
-                  }
-                  style={pStyles.footerText}>
-                  <View style={pStyles.footerTextView}>
-                    <View style={pStyles.leftFooterText}>
-                      <IconEditProfile
-                        name="file"
-                        style={pStyles.logoutUserIcon}
-                      />
-                      <Text style={pStyles.lable}>My Document</Text>
-                    </View>
-                    <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-                  </View>
-                </TouchableOpacity>
-              </>
-            )}
-
-            <TouchableOpacity
-              style={pStyles.footerText}
-              onPress={handleModalVisible}>
-              <View style={pStyles.footerTextView}>
-                <View style={pStyles.leftFooterText}>
-                  <IconLogoutUser
-                    name="arrow-left"
-                    style={pStyles.logoutUserIcon}
-                  />
-                  <Text style={pStyles.lable}>Logout</Text>
+                  <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
-                <IconLogout name="logout" style={pStyles.iconStyles} />
-              </View>
-            </TouchableOpacity>
-          </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('EditProfile', {
+                    userId:
+                      data && data.user_data && data.user_data.id
+                        ? data.user_data.id
+                        : data.user_data.id,
+                  })
+                }
+                style={pStyles.footerText}>
+                <View style={pStyles.footerTextView}>
+                  <View style={pStyles.leftFooterText}>
+                    <IconEditProfile
+                      name="pen"
+                      style={pStyles.logoutUserIcon}
+                    />
+                    <Text style={pStyles.lable}>Edit Profile</Text>
+                  </View>
+                  <IconEdit name="chevron-right" style={pStyles.iconStyles} />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('ChangePassword', {
+                    userId:
+                      data && data.user_data && data.user_data.id
+                        ? data.user_data.id
+                        : data.user_data.id,
+                  })
+                }
+                style={pStyles.footerText}>
+                <View style={pStyles.footerTextView}>
+                  <View style={pStyles.leftFooterText}>
+                    <IconEditProfile
+                      name="key"
+                      style={pStyles.logoutUserIcon}
+                    />
+                    <Text style={pStyles.lable}>Change Password</Text>
+                  </View>
+                  <IconEdit name="chevron-right" style={pStyles.iconStyles} />
+                </View>
+              </TouchableOpacity>
+
+              {userDetails &&
+              currentUser &&
+              currentUser.user_type == 'Management' ? null : (
+                <>
+                  <TouchableOpacity
+                    onPress={() =>
+                      userDetails &&
+                      currentUser &&
+                      currentUser.user_type === 'Manager'
+                        ? navigation.navigate('Leaves', {data: userDetails})
+                        : navigation.navigate('LeaveRequest', {id: null})
+                    }
+                    style={pStyles.footerText}>
+                    <View style={pStyles.footerTextView}>
+                      <View style={pStyles.leftFooterText}>
+                        <IconEditProfile
+                          name="th-list"
+                          style={pStyles.logoutUserIcon}
+                        />
+                        <Text style={pStyles.lable}>My Leaves</Text>
+                      </View>
+                      <IconEdit
+                        name="chevron-right"
+                        style={pStyles.iconStyles}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      userDetails &&
+                      currentUser &&
+                      currentUser.user_type === 'Manager'
+                        ? navigation.navigate('LateEarlys', {data: userDetails})
+                        : navigation.navigate('LateEarly', {id: null})
+                    }
+                    style={pStyles.footerText}>
+                    <View style={pStyles.footerTextView}>
+                      <View style={pStyles.leftFooterText}>
+                        <IconEditProfile
+                          name="th-list"
+                          style={pStyles.logoutUserIcon}
+                        />
+                        <Text style={pStyles.lable}>My Late/Early</Text>
+                      </View>
+                      <IconEdit
+                        name="chevron-right"
+                        style={pStyles.iconStyles}
+                      />
+                    </View>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('Documents', {data: userDetails})
+                    }
+                    style={pStyles.footerText}>
+                    <View style={pStyles.footerTextView}>
+                      <View style={pStyles.leftFooterText}>
+                        <IconEditProfile
+                          name="file"
+                          style={pStyles.logoutUserIcon}
+                        />
+                        <Text style={pStyles.lable}>My Document</Text>
+                      </View>
+                      <IconEdit
+                        name="chevron-right"
+                        style={pStyles.iconStyles}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </>
+              )}
+
+              <TouchableOpacity
+                style={pStyles.footerText}
+                onPress={handleModalVisible}>
+                <View style={pStyles.footerTextView}>
+                  <View style={pStyles.leftFooterText}>
+                    <IconLogoutUser
+                      name="arrow-left"
+                      style={pStyles.logoutUserIcon}
+                    />
+                    <Text style={pStyles.lable}>Logout</Text>
+                  </View>
+                  <IconLogout name="logout" style={pStyles.iconStyles} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+          
         </View>
       )}
       <LogoutModal
@@ -406,7 +407,6 @@ const pStyles = StyleSheet.create({
   },
 
   userFooter: {
-    height: 'fit-content',
     width: '100%',
     justifyContent: 'start',
     alignItems: 'center',

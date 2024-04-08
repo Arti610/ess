@@ -42,8 +42,8 @@ const UserForm = () => {
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isPasswordHidden, setIsPasswordHidden] = useState(true)
-  const [isConfirmPasswordHidden, setIsConfirmPasswordHidden] = useState(true)
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isConfirmPasswordHidden, setIsConfirmPasswordHidden] = useState(true);
 
   const [image, setImage] = useState(null);
   const [managerStaffData, setManagertaffData] = useState([]);
@@ -84,71 +84,76 @@ const UserForm = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const getManagerStaff = await getApi.getManagerStaff(id);
-        if (getManagerStaff.data) {
-          setLoading(false);
-          const transformManagerData = getManagerStaff.data.map(item => ({
-            key: item.id.toString(),
-            value: `${item.first_name} ${item.last_name}`,
-          }));
+    
+          const getManagerStaff = await getApi.getManagerStaff(id);
+          if (getManagerStaff.data) {
+            setLoading(false);
+            const transformManagerData = getManagerStaff.data.map(item => ({
+              key: item.id.toString(),
+              value: `${item.first_name} ${item.last_name}`,
+            }));
 
-          setManagertaffData(transformManagerData);
-        }
-        const getBranchDepartment = await getApi.getBranchDepartment(id);
-        if (getBranchDepartment.data) {
-          setLoading(false);
-          const transformDepartmentData = getBranchDepartment.data.map(
-            item => ({
+            setManagertaffData(transformManagerData);
+          }
+          const getBranchDepartment = await getApi.getBranchDepartment(id);
+          if (getBranchDepartment.data) {
+            setLoading(false);
+            const transformDepartmentData = getBranchDepartment.data.map(
+              item => ({
+                key: item.id.toString(),
+                value: item.name,
+              }),
+            );
+            setDepartmentData(transformDepartmentData);
+          }
+          const getDesignation = await getApi.getBranchDesignation(id);
+          if (getDesignation.data) {
+            setLoading(false);
+
+            const transformDesignationData = getDesignation.data.map(item => ({
               key: item.id.toString(),
               value: item.name,
-            }),
-          );
-          setDepartmentData(transformDepartmentData);
-        }
-        const getDesignation = await getApi.getBranchDesignation(id);
-        if (getDesignation.data) {
-          setLoading(false);
+            }));
+            setDesignationData(transformDesignationData);
+          }
+          const getWeekoff = await getApi.getWeekOff(id);
+          if (getWeekoff.data) {
+            const transformWeeloffData = getWeekoff.data.map(item => ({
+              key: item.week_off_id.toString(),
+              value: item.name,
+            }));
+            setWeekoffData(transformWeeloffData);
+          }
 
-          const transformDesignationData = getDesignation.data.map(item => ({
-            key: item.id.toString(),
-            value: item.name,
-          }));
-          setDesignationData(transformDesignationData);
-        }
-        const getWeekoff = await getApi.getWeekOff(id);
-        if (getWeekoff.data) {
-          const transformWeeloffData = getWeekoff.data.map(item => ({
-            key: item.week_off_id.toString(),
-            value: item.name,
-          }));
-          setWeekoffData(transformWeeloffData);
-        }
+          const getBranchInfo = await getApi.getBranchsBranchInfo(id);
 
-        const getBranchInfo = await getApi.getBranchsBranchInfo(id);
+          if (getBranchInfo.data) {
+            setLoading(false);
+            setBranchInfo(getBranchInfo.data[0]);
 
-        if (getBranchInfo.data) {
-          setLoading(false);
-          setBranchInfo(getBranchInfo.data[0]);
+            const checkInTime = moment(
+              getBranchInfo.data[0].check_in_time,
+              'HH:mm',
+            ).format('hh:mm A');
+            const checkOutTime = moment(
+              getBranchInfo.data[0].check_out_time,
+              'HH:mm',
+            ).format('hh:mm A');
 
-          const checkInTime = moment(
-            getBranchInfo.data[0].check_in_time,
-            'HH:mm',
-          ).format('hh:mm A');
-          const checkOutTime = moment(
-            getBranchInfo.data[0].check_out_time,
-            'HH:mm',
-          ).format('hh:mm A');
+            const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
 
-          const shiftTimeData = `${checkInTime} to ${checkOutTime}`;
-
-          const shiftTimeDatakey = [{key: shiftTimeData, value: shiftTimeData}];
-          setShiftTimeData(shiftTimeDatakey);
-        }
+            const shiftTimeDatakey = [
+              {key: shiftTimeData, value: shiftTimeData},
+            ];
+            setShiftTimeData(shiftTimeDatakey);
+          }
+        
       } catch (error) {
         setLoading(false);
         console.log('Error got during get apis', error);
       }
     };
+
     fetchData();
   }, []);
 
@@ -529,7 +534,9 @@ const UserForm = () => {
                 />
                 <TouchableOpacity
                   style={{position: 'absolute', top: 40, right: 8}}
-                  onPress={() => setIsConfirmPasswordHidden(!isConfirmPasswordHidden)}>
+                  onPress={() =>
+                    setIsConfirmPasswordHidden(!isConfirmPasswordHidden)
+                  }>
                   {isConfirmPasswordHidden ? (
                     <IconF5 name="eye-slash" style={styles.eyeIcon} />
                   ) : (

@@ -69,7 +69,7 @@ const Dashboard = () => {
     const fetchCurrentUser = async () => {
       const res = await currentUser();
 
-      if (res) {
+      if (res.data) {
         setToken(res.token);
         setCurrentUserId(res.data);
       }
@@ -207,7 +207,6 @@ const Dashboard = () => {
   const dateTime = new Date();
 
   function timeToMilliseconds(hours, minutes, seconds) {
-    console.log('hours, minutes, seconds', hours, minutes, seconds);
     const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
     return totalMilliseconds;
   }
@@ -346,11 +345,6 @@ const Dashboard = () => {
             // Subtract break time from total working hours
             const remainingMilliseconds = tt - bb;
 
-            console.log('breakTime.minutes', breakTime.minutes);
-            console.log('breakTime.seconds', breakTime.seconds);
-            console.log(' breakTime.hours', breakTime.hours);
-            console.log('stop', stop);
-
             // Calculate the difference from the check-in time
 
             const differenceInMilliseconds =
@@ -362,14 +356,7 @@ const Dashboard = () => {
                 : timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
                   timeToMilliseconds(checkinhour, checkinminut, checkinsecond);
 
-            // Convert the difference to hours, minutes, and seconds
-            console.log(
-              'differenceInMilliseconds====================>',
-              differenceInMilliseconds,
-            );
-            const remainingTime = millisecondsToTime(differenceInMilliseconds);
-
-            console.log('Remaining time:', remainingTime);
+            remainingTime = millisecondsToTime(differenceInMilliseconds);
 
             // Update total working hours state
             setTotalWorkingHours([
@@ -521,6 +508,23 @@ const Dashboard = () => {
     };
 
     try {
+      // Check if the user has already checked in today
+      const hasCheckedInToday = inoutData.check_in.some(item => {
+        return (
+          new Date(item.date_time).toDateString() === new Date().toDateString()
+        );
+      });
+
+      if (!hasCheckedInToday) {
+        Toast.show({
+          type: 'error',
+          text1: 'Please check in first',
+          text2: 'You must check in before checking out.',
+          autoHide: 3000,
+        });
+        return; // Exit the function if not checked in today
+      }
+
       setcheckoutLoading(true);
       const res = await createApi.createCheckout(payload);
 
@@ -702,11 +706,11 @@ const Dashboard = () => {
                 onPress={() =>
                   navigation.navigate('checkin/checkout', {data: attendence})
                 }>
-                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>   
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={() => navigation.navigate('Clock')}>
-                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>      
+                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
               </TouchableOpacity>
             )}
           </View>

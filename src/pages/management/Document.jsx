@@ -87,35 +87,67 @@ const Document = ({route}) => {
 
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(null);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [Id, setId] = useState(null);
   const [currentUserData, setCurrentUserData] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const fetchUser = async () => {
-    try {
-      const res = await getApi.getAllDocumentList();
+  const branchId =
+    currentUserData && currentUserData.branch && currentUserData.branch.id;
 
-      if (res) {
-        setData(res.data);
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await currentUser();
+
+      if (res.data) {
+        setCurrentUserData(res.data);
       }
     } catch (error) {
-      console.log(error);
+      console.log('error during fetching currentuser data in document page');
     }
   };
 
-  useEffect(() => {
-    fetchUser();
+  const fetchUser = async () => {
+    try {
+      setIsLoading(true);
 
-  }, []);
+      if (
+        currentUserData &&
+        currentUserData.user_type &&
+        currentUserData.user_type === 'Management'
+      ) {
+        const res = await getApi.getAllDocumentListForManagement(id);
 
+   
+
+        if (res.data) {
+          setData(res.data);
+          setIsLoading(false);
+        }
+      } else if (currentUserData && currentUserData.user_type !== null) {
+        const res = await getApi.getAllDocumentList();
+
+
+
+        if (res.data) {
+          setData(res.data);
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const res = await currentUser();
-      setCurrentUserData(res.data);
-    };
     fetchCurrentUser();
   }, []);
+
+  useEffect(() => {
+    fetchUser();
+  }, [currentUserData]);
 
   const handleDownload = async document => {
     const granted = await getDownloadPermissionAndroid();
@@ -180,7 +212,9 @@ const Document = ({route}) => {
 
   return (
     <>
-      {data ? (
+      {isLoading ? (
+        <Loader />
+      ) : (
         <>
           <FlatList
             data={data}
@@ -198,41 +232,42 @@ const Document = ({route}) => {
                 ]}>
                 <View>
                   {currentUserData &&
-                  currentUserData.user_type === 'Staff' ? null : item ? (
-                    <View style={pStyles.userHeader}>
-                      {item && item.user && item.user.profile_image ? (
-                        <Image
-                          source={{
-                            uri: `${API_CONFIG.imageUrl}${
-                              item && item.user && item.user.profile_image
-                                ? item.user.profile_image
-                                : null
-                            }`,
-                          }}
-                          style={pStyles.image}
-                        />
-                      ) : (
-                        <Image
-                          source={require('../../assests/userProfile.webp')}
-                          style={pStyles.image}
-                        />
-                      )}
+                    currentUserData.user_type === 'Staff' ? null : item ? (
+                      <View style={pStyles.userHeader}>
+                        {item && item.user && item.user.profile_image ? (
+                          <Image
+                            source={{
+                              uri: `${API_CONFIG.imageUrl}${
+                                item && item.user && item.user.profile_image
+                                  ? item.user.profile_image
+                                  : null
+                              }`,
+                            }}
+                            style={pStyles.image}
+                          />
+                        ) : (
+                          <Image
+                            source={require('../../assests/userProfile.webp')}
+                            style={pStyles.image}
+                          />
+                        )}
 
-                      <Text>{`${
-                        item && item.user && item.user.first_name
-                          ? item.user.first_name
-                          : 'User'
-                      } ${
-                        item && item.user && item.user.last_name
-                          ? item.user.last_name
-                          : 'Name'
-                      }`}</Text>
-                    </View>
+                        <Text>{`${
+                          item && item.user && item.user.first_name
+                            ? item.user.first_name
+                            : 'User'
+                        } ${
+                          item && item.user && item.user.last_name
+                            ? item.user.last_name
+                            : 'Name'
+                        }`}</Text>
+                      </View>
                   ) : null}
 
                   <Text style={styles.lable}>{item.document_name}</Text>
                   <Text>{moment(item.created_at).format('DD MMM YYYY')}</Text>
                 </View>
+
                 <View style={{flexDirection: 'row', gap: 5}}>
                   <TouchableOpacity
                     onPress={() => handleDownload(item.document)}
@@ -259,14 +294,14 @@ const Document = ({route}) => {
           {currentUserData && currentUserData.user_type === 'Staff' ? null : (
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('AddDocument', {id: id})}>
+                onPress={() =>
+                  navigation.navigate('AddDocument', {id: id ? id : branchId})
+                }>
                 <IconAdd name="add" style={styles.addIcon} />
               </TouchableOpacity>
             </View>
           )}
         </>
-      ) : (
-        <Loader />
       )}
       <Toast />
       <DeleteModal

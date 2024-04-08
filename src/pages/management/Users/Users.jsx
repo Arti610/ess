@@ -62,11 +62,11 @@ const Users = ({route}) => {
   ) : (
     <>
       <ScrollView>
-        <UserCard item={data ? data : []} id={ branchId} />
+        <UserCard item={data ? data : []} id = {  branchId ? branchId : id} />
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('UserForm', {id: branchId})}>
+          onPress={() => navigation.navigate('UserForm', {id: branchId ? branchId : id})}>
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
       </View>

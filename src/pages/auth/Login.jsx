@@ -14,11 +14,7 @@ import {loginStyles} from './Login.js';
 import {Formik} from 'formik';
 import {LoginSchema} from '../../utils/validationSchema.js';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  loginStart,
-  loginSuccess,
-  loginFailure,
-} from '../../redux/slices/auth/authSlice.js';
+import {loginStart,  loginSuccess,  loginFailure} from '../../redux/slices/auth/authSlice.js';
 import Toast from 'react-native-toast-message';
 import authApi from '../../redux/slices/auth/authApi.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -145,72 +141,6 @@ const Login = () => {
     getDeviceInfo();
   }, []);
 
-  const handleLogin = async () => {
-    try {
-      dispatch(loginStart());
-      const res = await authApi.Login(loginValues); 
-
-      if (res.status === 200 || res.data) {
-        await AsyncStorage.setItem('token', res.data.token);
-        await AsyncStorage.setItem('currentUser', JSON.stringify(res.data));
-       
-        dispatch(loginSuccess(res.data));
-        navigateToDashboard(res.data.user_type);
-        showSuccessToast();
-        if (
-          payload.token &&
-          payload.deviceType &&
-          payload.deviceid &&
-          payload.username
-        ) {
-          const res = await createApi.createNotificationFCM(payload);
-   
-          if (res.status === 200) {
-            console.log('post FCM notification successfully');
-          }
-        }
-      }
-      
-    } catch (error) {
-      console.log('error====>', error);
-      showErrorToast();
-      dispatch(loginFailure());
-    }
-  };
-
-  // const handleLogin = async () => {
-  //   try {
-  //     console.log('payload', payload);
-  //     if (
-  //       payload.token &&
-  //       payload.deviceType &&
-  //       payload.deviceid &&
-  //       payload.username
-  //     ) {
-  //       const res = await createApi.createNotificationFCM(payload);
-
-  //       if (res.status === 200) {
-  //         console.log('post FCM notification successfully');
-  //         dispatch(loginStart());
-  //         const res = await authApi.Login(loginValues); // Use loginValues instead of values
-
-  //         if (res.status === 200) {
-  //           await AsyncStorage.setItem('token', res.data.token);
-  //           await AsyncStorage.setItem('currentUser', JSON.stringify(res.data));
-  //           dispatch(loginSuccess(res.data));
-  //           navigateToDashboard(res.data.user_type);
-  //           showSuccessToast();
-  //         }
-  //       }
-  //     }
-  //     return res;
-  //   } catch (error) {
-  //     console.log('error', error);
-  //     showErrorToast();
-  //     dispatch(loginFailure());
-  //   }
-  // };
-
   const handleChange = (name, value) => {
     setLoginValues(prevState => ({...prevState, [name]: value}));
   };
@@ -225,26 +155,51 @@ const Login = () => {
     navigation.navigate(route, {id: null});
   };
 
-  const showSuccessToast = () => {
-    Toast.show({
-      type: 'success',
-      position: 'top',
-      text1: 'Login successful',
-      text2: 'Congratulations! You are logged in.',
-      visibilityTime: 4000,
-      autoHide: true,
-    });
-  };
+  const handleLogin = async () => {
+    try {
+      dispatch(loginStart());
+      const res = await authApi.Login(loginValues);
 
-  const showErrorToast = () => {
-    Toast.show({
-      type: 'error',
-      position: 'top',
-      text1: 'Invalid Credentials',
-      text2: 'Please check your email and password.',
-      visibilityTime: 4000,
-      autoHide: true,
-    });
+      if (res.status === 200 || res.data) {
+        await AsyncStorage.setItem('token', res.data.token);
+        await AsyncStorage.setItem('currentUser', JSON.stringify(res.data));
+
+        dispatch(loginSuccess(res.data));
+        navigateToDashboard(res.data.user_type);
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          text1: 'Login successful',
+          text2: 'Congratulations! You are logged in.',
+          visibilityTime: 4000,
+          autoHide: true,
+        });
+        if (
+          payload.token &&
+          payload.deviceType &&
+          payload.deviceid &&
+          payload.username
+        ) {
+          const res = await createApi.createNotificationFCM(payload);
+
+          if (res.status === 200) {
+            console.log('post FCM notification successfully');
+          }
+        }
+      } else {
+        Toast.show({
+          type: 'error',
+          position: 'top',
+          text1: 'Invalid Credentials',
+          text2: 'Please check your email and password.',
+          visibilityTime: 4000,
+          autoHide: true,
+        });
+        dispatch(loginFailure());
+      }
+    } catch (error) {
+      console.log('error====>', error);
+    }
   };
 
   return (

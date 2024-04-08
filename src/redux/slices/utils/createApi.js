@@ -15,9 +15,7 @@ export default {
     createCheckin: (payload) => apiService.post(`user/check_in`, payload),
     createCheckout: (payload) => apiService.post(`user/check_out`, payload),
     createDocUpload: (payload, option) => apiService.post(`create_docsUpload`, payload, option),
-    // createDocUpload: (payload) => console.log(payload, 'payloda')
-    
-
+ 
 
     createNotificationFCM : (payload) => apiService.post(`fcm_token`, payload)
     // createNotificationFCM : (payload) =>console.log(payload, 'after api payload')

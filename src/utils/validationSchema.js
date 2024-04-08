@@ -88,3 +88,12 @@ export const taskUpload = Yup.object({
   title: Yup.string().required('Please Enter Task Title'),
   description: Yup.string().required('Please Enter Task Description')
 })
+export const documentValidationSchema = Yup.object({
+  document_name: Yup.string().required('Please Enter Document Name'),
+  document_type: Yup.string().required('Please Enter Document Type'),
+  user: Yup.string().required('Please Select User'),
+  branch: Yup.string().required('Please Select Branch'),
+  document: Yup.string().required('Please Select Document')
+})
+
+

@@ -4,9 +4,10 @@ import {styles, textColor} from '../../style';
 import API_CONFIG from '../config/apiConfig';
 import {useNavigation} from '@react-navigation/native';
 import NotFound from './NotFound';
-import Loader from './ActivityIndicator';
+
 
 const UserCard = ({item, id}) => {
+
   const navigation = useNavigation();
 
   const handleNavigate = user => {
