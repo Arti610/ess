@@ -51,7 +51,10 @@ export default {
 
     getUserNotification : (id) => apiService.get(`get_user_notification/${id}`),
     getNotificationSeen : (id, payload) => apiService.get(`notification_seen/${id}`, payload),
-    getHolidaysBranch : (id) => apiService.get(`all_branch_holiday/${id}`)
-    // getNotificationSeen : (id, payload) => console.log('id',id, payload),
+    getHolidaysBranch : (id) => apiService.get(`all_branch_holiday/${id}`),
+    getBreakHours : (id, payload) => apiService.post(`get_break_hours/day/${id}`, payload),
+    getTotalWorkingHours : (id, year, month) => apiService.get(`get_total_working_hours/${id}/${year}/${month}`),
+    // getTotalWorkingHours : (id, year, month) => console.log('id, year, month', id, year, month),
+    // getBreakHours : (id, payload) => console.log('arti', id, payload),
     
 }

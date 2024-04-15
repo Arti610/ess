@@ -31,8 +31,9 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {isLoading} = useSelector(state => state.auth);
-  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
+
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [deviceInfo, setDeviceInfo] = useState(null);
   const [deviceToken, setDeviceToken] = useState(null);
   const [loginValues, setLoginValues] = useState({email: '', password: ''});
@@ -128,8 +129,7 @@ const Login = () => {
 
   const payload = {
     token: deviceToken && deviceToken,
-    deviceType:
-      deviceInfo && deviceInfo.deviceType ? deviceInfo.deviceType : null,
+    deviceType: deviceInfo && deviceInfo.deviceType ? deviceInfo.deviceType : null,
     deviceid: deviceInfo && deviceInfo.deviceId ? deviceInfo.deviceId : null,
     username: loginValues && loginValues.email ? loginValues.email : null,
   };
@@ -223,9 +223,9 @@ const Login = () => {
                   <Text style={styles.lable}>Email</Text>
                   <TextInput
                     style={styles.textInput}
-                    onChangeText={text => handleChange('email', text)} // Update email value
+                    onChangeText={text => handleChange('email', text)} 
                     onBlur={handleBlur('email')}
-                    value={loginValues.email} // Use loginValues.email instead of values.email
+                    value={loginValues.email} 
                     placeholder="example@gmail.com"
                   />
                   {errors.email && (
@@ -236,9 +236,9 @@ const Login = () => {
                   <Text style={styles.lable}>Password</Text>
                   <TextInput
                     style={styles.textInput}
-                    onChangeText={text => handleChange('password', text)} // Update password value
+                    onChangeText={text => handleChange('password', text)}
                     onBlur={handleBlur('password')}
-                    value={loginValues.password} // Use loginValues.password instead of values.password
+                    value={loginValues.password} 
                     placeholder="••••••••"
                     secureTextEntry={isPasswordHidden}
                   />

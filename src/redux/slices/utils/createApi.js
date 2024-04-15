@@ -17,6 +17,7 @@ export default {
     createDocUpload: (payload, option) => apiService.post(`create_docsUpload`, payload, option),
  
 
-    createNotificationFCM : (payload) => apiService.post(`fcm_token`, payload)
-    // createNotificationFCM : (payload) =>console.log(payload, 'after api payload')
+    createNotificationFCM : (payload) => apiService.post(`fcm_token`, payload),
+    createBreakHours : (payload) => apiService.post(`create_break_hours`, payload),
+    // createBreakHours : (payload) => console.log('payload for create break hours', payload),
 }

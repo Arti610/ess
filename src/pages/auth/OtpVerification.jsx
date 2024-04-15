@@ -14,11 +14,7 @@ import { OTPSchema } from '../../utils/validationSchema.js';
 import Toast from 'react-native-toast-message';
 import authApi from '../../redux/slices/auth/authApi.js';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  otpVerificationFailure,
-  otpVerificationStart,
-  otpVerificationSuccess,
-} from '../../redux/slices/auth/authSlice.js';
+import { otpVerificationFailure,  otpVerificationStart,  otpVerificationSuccess } from '../../redux/slices/auth/authSlice.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ButtonLoader from '../../utils/BtnActivityIndicator.jsx';
 

@@ -30,6 +30,7 @@ import {SkypeIndicator} from 'react-native-indicators';
 
 const Dashboard = () => {
   const navigation = useNavigation();
+
   const [currentTime, setCurrentTime] = useState('');
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
@@ -37,17 +38,22 @@ const Dashboard = () => {
   const [branchLongitude, setBranchLongitude] = useState(null);
   const [checkinLoading, setcheckinLoading] = useState(false);
   const [checkoutLoading, setcheckoutLoading] = useState(false);
+  const [startBreakLoading, setStartBreakLoading] = useState(false);
+  const [endBreakLoading, setEndBreakLoading] = useState(false);
+  const [breakTimeData, setBreakTimeData] = useState(null);
   const [attendence, setAttendence] = useState(null);
   const [inoutData, setInoutData] = useState(null);
   const [token, setToken] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [finalTWH, setFinalTWH] = useState(null);
 
   const [totalWorkingHours, setTotalWorkingHours] = useState([
     '00',
     '00',
     '00',
   ]);
+  console.log('totalWorkingHours', totalWorkingHours);
 
   const currentDate = new Date();
 
@@ -102,10 +108,37 @@ const Dashboard = () => {
     }
   };
 
+  const fetchBreakTime = async () => {
+    try {
+      const payload = {date: moment(currentDate).format('YYYY-MM-DD')};
+      const id = currentUserId && currentUserId.id;
+      const res = await getApi.getBreakHours(id, payload);
+      if (res.data) {
+        setBreakTimeData(res.data);
+      }
+    } catch (error) {
+      console.log('get error during getting the breaktime', error);
+    }
+  };
+
+  const fetchTotalWH = async () => {
+    try {
+      const id = currentUserId && currentUserId?.id;
+      const year = moment(currentDate).format('YYYY');
+      const month = moment(currentDate).format('MM');
+
+      const response = await getApi.getTotalWorkingHours(id, year, month);
+      setFinalTWH(response.data);
+    } catch (error) {
+      console.log('get error during getting the totalworking hours', error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchBreakTime();
+    fetchTotalWH();
   }, [currentUserId]);
-  // Get BranInformation\
 
   useEffect(() => {
     const branchId =
@@ -204,8 +237,6 @@ const Dashboard = () => {
     requestLocationPermission();
   }, []);
 
-  const dateTime = new Date();
-
   function timeToMilliseconds(hours, minutes, seconds) {
     const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
     return totalMilliseconds;
@@ -233,150 +264,276 @@ const Dashboard = () => {
       seconds: seconds,
     };
   }
-  const localcurrentTime = new Date();
 
-  const [stop, setStop] = useState(false);
-  const [pause, setPause] = useState(new Date());
-  const [resume, setResume] = useState(new Date());
+  // const localcurrentTime = new Date();
 
-  const pauseTime = pause.getTime();
-  const resumeTime = resume.getTime();
-  const difference = resumeTime - pauseTime;
-  const breakTime = millisecondsToTime(difference);
+  // const [stop, setStop] = useState(false);
+  // const [pause, setPause] = useState(new Date());
+  // const [resume, setResume] = useState(new Date());
 
-  // console.log('breakTime====>', breakTime);
-  // console.log('totalWorkingHour====>', totalWorkingHours);
+  // const pauseTime = pause.getTime();
+  // const resumeTime = resume.getTime();
+  // const difference = resumeTime - pauseTime;
+  // const breakTime = millisecondsToTime(difference);
 
-  // timeToMilliseconds(breakTime.hours, breakTime.minutes, breakTime.seconds);
+  // useEffect(() => {
+  //   const formattedDate = dateTime.toLocaleDateString();
+  //   // if (stop) {
+  //     const intervalId = setInterval(() => {
+  //       try {
+  //         const filteredData =
+  //           inoutData &&
+  //           inoutData.check_in &&
+  //           inoutData.check_in.filter(item => {
+  //             const itemDate = new Date(item.date_time);
+  //             const itemDateOnly = itemDate.toLocaleDateString();
+  //             const matchDate = itemDateOnly === formattedDate;
+  //             return matchDate;
+  //           });
 
-  // const breaktimedifference =
-  //   timeToMilliseconds(
-  //     totalWorkingHours[0],
-  //     totalWorkingHours[1],
-  //     totalWorkingHours[2],
-  //   ) -
-  //   timeToMilliseconds(breakTime.hours, breakTime.minutes, breakTime.seconds);
-  // const finalTimeAfterBreakTime = millisecondsToTime(breaktimedifference);
-  // console.log('final', finalTimeAfterBreakTime);
+  //         const filteredCheckoutData =
+  //           inoutData &&
+  //           inoutData.check_out &&
+  //           inoutData.check_out.filter(item => {
+  //             const itemDate = new Date(item.date_time);
+  //             const itemDateOnly = itemDate.toLocaleDateString();
+  //             const matchDate = itemDateOnly === formattedDate;
+  //             return matchDate;
+  //           });
+  //         const checkout_time = new Date(
+  //           filteredCheckoutData &&
+  //             filteredCheckoutData.length > 0 &&
+  //             filteredCheckoutData[0].date_time,
+  //         ).getTime();
 
-  const handleStop = () => {
-    setStop(!stop);
-    if (stop) {
-      setPause(new Date());
-    } else {
-      setResume(new Date());
-    }
-  };
+  //         const checkin_time = new Date(
+  //           filteredData &&
+  //             filteredData.length > 0 &&
+  //             filteredData[0].date_time,
+  //         ).getTime();
 
-  useEffect(() => {
-    const formattedDate = dateTime.toLocaleDateString();
-    if (stop) {
-      const intervalId = setInterval(() => {
-        try {
-          const filteredData =
-            inoutData &&
-            inoutData.check_in &&
-            inoutData.check_in.filter(item => {
-              const itemDate = new Date(item.date_time);
-              const itemDateOnly = itemDate.toLocaleDateString();
-              const matchDate = itemDateOnly === formattedDate;
-              return matchDate;
-            });
+  //         if (filteredCheckoutData.length > 0) {
+  //           const timeDifferenceCheckout = checkout_time - checkin_time;
 
-          const filteredCheckoutData =
-            inoutData &&
-            inoutData.check_out &&
-            inoutData.check_out.filter(item => {
-              const itemDate = new Date(item.date_time);
-              const itemDateOnly = itemDate.toLocaleDateString();
-              const matchDate = itemDateOnly === formattedDate;
-              return matchDate;
-            });
-          const checkout_time = new Date(
-            filteredCheckoutData &&
-              filteredCheckoutData.length > 0 &&
-              filteredCheckoutData[0].date_time,
-          ).getTime();
+  //           const differenceTimecheckout = new Date(timeDifferenceCheckout);
+  //           // Get the time components
+  //           const hours = differenceTimecheckout.getUTCHours();
+  //           const minutes = differenceTimecheckout.getUTCMinutes();
+  //           const seconds = differenceTimecheckout.getUTCSeconds();
 
-          const checkin_time = new Date(
-            filteredData &&
-              filteredData.length > 0 &&
-              filteredData[0].date_time,
-          ).getTime();
+  //           // Format the time
+  //           const time = `${hours.toString().padStart(2, '0')}:${minutes
+  //             .toString()
+  //             .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-          if (filteredCheckoutData.length > 0) {
-            const timeDifferenceCheckout = checkout_time - checkin_time;
+  //           setTotalWorkingHours(time.split(':'));
+  //         } else if (filteredData.length > 0) {
+  //           const checkintime = new Date(checkin_time);
 
-            const differenceTimecheckout = new Date(timeDifferenceCheckout);
-            // Get the time components
-            const hours = differenceTimecheckout.getUTCHours();
-            const minutes = differenceTimecheckout.getUTCMinutes();
-            const seconds = differenceTimecheckout.getUTCSeconds();
+  //           const checkinhour = checkintime.getUTCHours();
+  //           const checkinminut = checkintime.getUTCMinutes();
+  //           const checkinsecond = checkintime.getUTCSeconds();
 
-            // Format the time
-            const time = `${hours.toString().padStart(2, '0')}:${minutes
-              .toString()
-              .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  //           const cuttenthour = localcurrentTime.getHours();
+  //           const cuttentminut = localcurrentTime.getMinutes();
+  //           const cuttentsecond = localcurrentTime.getSeconds();
 
-            setTotalWorkingHours(time.split(':'));
-          } else if (filteredData.length > 0) {
-            const checkintime = new Date(checkin_time);
+  //           const tt = timeToMilliseconds(
+  //             parseInt(totalWorkingHours[0]),
+  //             parseInt(totalWorkingHours[1]),
+  //             parseInt(totalWorkingHours[2]),
+  //           );
 
-            const checkinhour = checkintime.getUTCHours();
-            const checkinminut = checkintime.getUTCMinutes();
-            const checkinsecond = checkintime.getUTCSeconds();
+  //           const bb = timeToMilliseconds(
+  //             parseInt(breakTime.hours),
+  //             parseInt(breakTime.minutes),
+  //             parseInt(breakTime.seconds),
+  //           );
 
-            const cuttenthour = localcurrentTime.getHours();
-            const cuttentminut = localcurrentTime.getMinutes();
-            const cuttentsecond = localcurrentTime.getSeconds();
+  //           // Subtract break time from total working hours
+  //           const remainingMilliseconds = tt - bb;
 
-            const tt = timeToMilliseconds(
-              parseInt(totalWorkingHours[0]),
-              parseInt(totalWorkingHours[1]),
-              parseInt(totalWorkingHours[2]),
-            );
+  //           // Calculate the difference from the check-in time
 
-            const bb = timeToMilliseconds(
-              parseInt(breakTime.hours),
-              parseInt(breakTime.minutes),
-              parseInt(breakTime.seconds),
-            );
+  //           const differenceInMilliseconds =
+  //             breakTime.hours > 0 ||
+  //             breakTime.minutes > 0 ||
+  //             breakTime.seconds > 0
+  //               ? timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
+  //                 remainingMilliseconds
+  //               : timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
+  //                 timeToMilliseconds(checkinhour, checkinminut, checkinsecond);
 
-            // Subtract break time from total working hours
-            const remainingMilliseconds = tt - bb;
+  //           remainingTime = millisecondsToTime(differenceInMilliseconds);
 
-            // Calculate the difference from the check-in time
+  //           // Update total working hours state
+  //           setTotalWorkingHours([
+  //             remainingTime.hours,
+  //             remainingTime.minutes,
+  //             remainingTime.seconds,
+  //           ]);
+  //         } else {
+  //           setTotalWorkingHours(['00', '00', '00']);
+  //         }
+  //       } catch (error) {
+  //         console.log('error', error);
+  //       }
+  //     }, 1000);
 
-            const differenceInMilliseconds =
-              breakTime.hours > 0 ||
-              breakTime.minutes > 0 ||
-              breakTime.seconds > 0
-                ? timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
-                  remainingMilliseconds
-                : timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
-                  timeToMilliseconds(checkinhour, checkinminut, checkinsecond);
-
-            remainingTime = millisecondsToTime(differenceInMilliseconds);
-
-            // Update total working hours state
-            setTotalWorkingHours([
-              remainingTime.hours,
-              remainingTime.minutes,
-              remainingTime.seconds,
-            ]);
-          } else {
-            setTotalWorkingHours(['00', '00', '00']);
-          }
-        } catch (error) {
-          console.log('error', error);
-        }
-      }, 1000);
-
-      return () => clearInterval(intervalId);
-    }
-  }, [inoutData, totalWorkingHours, stop]);
+  //     return () => clearInterval(intervalId);
+  //   // }
+  // }, [inoutData, totalWorkingHours, stop]);
 
   const date_time = new Date();
+
+  useEffect(() => {
+    try {
+      let intervalId;
+
+      const handleTimer = () => {
+        let checkinMilliseconds;
+        let checkoutMilliseconds;
+        let startBreakMiliseconds;
+        let endBreakMiliseconds;
+
+        if (inoutData && inoutData.check_in && inoutData.check_in.length > 0) {
+          const checkintime = inoutData.check_in[0].date_time
+            .split('T')[1]
+            .slice(0, -1);
+
+          const [checkinHour, checkinMinute, checkinSecond] = checkintime
+            .split(':')
+            .map(Number);
+          checkinMilliseconds = timeToMilliseconds(
+            checkinHour,
+            checkinMinute,
+            checkinSecond,
+          );
+        }
+        if (
+          inoutData &&
+          inoutData.check_out &&
+          inoutData.check_out.length > 0
+        ) {
+          const checkouttime = inoutData.check_out[0].date_time
+            .split('T')[1]
+            .slice(0, -1);
+
+          const [checkoutHour, checkoutMinute, checkoutSecond] = checkouttime
+            .split(':')
+            .map(Number);
+          checkoutMilliseconds = timeToMilliseconds(
+            checkoutHour,
+            checkoutMinute,
+            checkoutSecond,
+          );
+        }
+
+        if (breakTimeData && breakTimeData.length > 0) {
+          const breakStartTime =
+            breakTimeData &&
+            breakTimeData[0].break_out_time &&
+            breakTimeData[0].break_out_time.split(':');
+
+          const [hours, minutes, seconds] = breakStartTime.map(Number);
+
+          // Convert each unit to milliseconds
+          const hoursInMilliseconds = hours * 60 * 60 * 1000;
+          const minutesInMilliseconds = minutes * 60 * 1000;
+          const secondsInMilliseconds = seconds * 1000;
+
+          // Sum up the milliseconds
+          startBreakMiliseconds =
+            hoursInMilliseconds + minutesInMilliseconds + secondsInMilliseconds;
+        }
+
+        if (breakTimeData && breakTimeData.length > 0) {
+          const breakEndTime =
+            breakTimeData &&
+            breakTimeData[0].break_in_time &&
+            breakTimeData[0].break_in_time.split(':');
+
+          endBreakMiliseconds =
+            breakEndTime &&
+            timeToMilliseconds(
+              parseInt(breakEndTime[0], 10),
+              parseInt(breakEndTime[1], 10),
+              parseInt(breakEndTime[2], 10),
+            );
+        }
+
+        if (checkinMilliseconds && !startBreakMiliseconds) {
+          console.log('Timer started');
+
+          const currentTime = moment(date_time).format('HH:mm:ss');
+
+          const [currentHour, currentMinute, currentSecond] = currentTime
+            .split(':')
+            .map(Number);
+          const currentTimeMilliseconds = timeToMilliseconds(
+            currentHour,
+            currentMinute,
+            currentSecond,
+          );
+          const elapsedMilliseconds =
+            currentTimeMilliseconds - checkinMilliseconds;
+          const remainingTime = millisecondsToTime(elapsedMilliseconds);
+
+          setTotalWorkingHours([
+            remainingTime.hours,
+            remainingTime.minutes,
+            remainingTime.seconds,
+          ]);
+        } else if (startBreakMiliseconds && !endBreakMiliseconds) {
+          const difference = startBreakMiliseconds - checkinMilliseconds;
+
+          const remainingTime = millisecondsToTime(difference);
+
+          setTotalWorkingHours([
+            remainingTime.hours,
+            remainingTime.minutes,
+            remainingTime.seconds,
+          ]);
+
+          console.log('Timer paused');
+        } else if (endBreakMiliseconds && !checkoutMilliseconds) {
+          // Logic for when user has ended break and not yet checked out
+          const currentTime = moment(date_time).format('HH:mm:ss');
+          const [currentHour, currentMinute, currentSecond] = currentTime
+            .split(':')
+            .map(Number);
+          const currentTimeMilliseconds = timeToMilliseconds(
+            currentHour,
+            currentMinute,
+            currentSecond,
+          );
+
+          const remainingTimeAfterBreak =
+            currentTimeMilliseconds - endBreakMiliseconds;
+          // const remainingTimeAfterBreak =
+          //   checkoutMilliseconds - endBreakMiliseconds;
+
+          const remainingTime = millisecondsToTime(remainingTimeAfterBreak);
+          console.log('remainingTimeAfterBreakend==>', remainingTime);
+          setTotalWorkingHours([
+            remainingTime.hours,
+            remainingTime.minutes,
+            remainingTime.seconds,
+          ]);
+          console.log('Timer resumed');
+        } else if (checkoutMilliseconds) {
+          console.log('Timer stopped');
+          clearInterval(intervalId);
+        }
+      };
+
+      intervalId = setInterval(handleTimer, 1000);
+
+      return () => clearInterval(intervalId);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }, [inoutData, breakTimeData, totalWorkingHours]);
 
   // Extracting individual components of the date and time
   const year = date_time.getFullYear();
@@ -389,6 +546,26 @@ const Dashboard = () => {
   // Creating the desired string format
   const formatted_date_time = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
 
+  // Function to calculate distance between two coordinates using Haversine formula
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371000; // Radius of the earth in meters
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in meters
+    return d;
+  };
+
+  // Function to convert degrees to radians
+  const deg2rad = deg => {
+    return deg * (Math.PI / 180);
+  };
   // GeoLocation @end
   const hanldeCheckin = async () => {
     getCurrentLocation();
@@ -403,6 +580,7 @@ const Dashboard = () => {
           ? currentUserId.branch.id
           : null,
     };
+
     console.log([
       enableResult,
       latitude,
@@ -410,6 +588,7 @@ const Dashboard = () => {
       branchLongitude,
       branchLatitude,
     ]);
+
     if (
       enableResult &&
       latitude &&
@@ -417,7 +596,6 @@ const Dashboard = () => {
       branchLongitude &&
       branchLatitude
     ) {
-      // Calculate distance between user and branch
       const distance = calculateDistance(
         latitude,
         longitude,
@@ -425,8 +603,7 @@ const Dashboard = () => {
         branchLongitude,
       );
 
-      // Set a threshold distance for considering user at branch location
-      const thresholdDistance = 500; // in meters
+      const thresholdDistance = 500;
 
       if (distance <= thresholdDistance) {
         try {
@@ -442,7 +619,7 @@ const Dashboard = () => {
             });
             setcheckinLoading(false);
             fetchData();
-            setStop(true);
+            // handleTotalWH()
           }
         } catch (error) {
           setcheckinLoading(false);
@@ -473,27 +650,6 @@ const Dashboard = () => {
         autoHide: 3000,
       });
     }
-  };
-
-  // Function to calculate distance between two coordinates using Haversine formula
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371000; // Radius of the earth in meters
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) *
-        Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distance in meters
-    return d;
-  };
-
-  // Function to convert degrees to radians
-  const deg2rad = deg => {
-    return deg * (Math.PI / 180);
   };
 
   const handleCheckout = async () => {
@@ -558,6 +714,142 @@ const Dashboard = () => {
     }
   };
 
+  const handleStartBreak = async () => {
+    try {
+      setStartBreakLoading(true);
+
+      const dateTime = new Date();
+
+      const payload = {
+        time: moment(dateTime).format('HH:mm:ss'),
+        date: moment(dateTime).format('YYYY-MM-DD'),
+        type: 'break_out',
+      };
+
+      if (
+        inoutData.check_in &&
+        inoutData.check_in[0] &&
+        inoutData.check_in[0].date_time
+      ) {
+        const checkInDate = new Date(inoutData.check_in[0].date_time);
+        const currentDate = new Date();
+
+        // Comparing date parts
+        if (
+          checkInDate.getDate() === currentDate.getDate() &&
+          checkInDate.getMonth() === currentDate.getMonth() &&
+          checkInDate.getFullYear() === currentDate.getFullYear()
+        ) {
+          const res = await createApi.createBreakHours(payload);
+
+          if (res.status === 200 || res.data) {
+            Toast.show({
+              type: 'success',
+              text1: 'Break time started',
+              text2: 'Do not forget to end your break to continue your work',
+              autoHide: 3000,
+            });
+          }
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Please check in first',
+            text2: 'You must check in before start break.',
+            autoHide: 3000,
+          });
+        }
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Please check in first',
+          text2: 'You must check in before start break.',
+          autoHide: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error starting break:', error);
+      // Handle error - show error message to the user, etc.
+      Toast.show({
+        type: 'error',
+        text1: 'Error starting break',
+        text2: 'An error occurred while starting the break. Please try again.',
+        autoHide: 3000,
+      });
+    } finally {
+      // Clear loading state regardless of success or failure
+      setStartBreakLoading(false);
+    }
+  };
+
+  const handleEndBreak = async () => {
+    try {
+      setEndBreakLoading(true);
+      const dateTime = new Date();
+
+      const payload = {
+        time: moment(dateTime).format('HH:mm:ss'),
+        date: moment(dateTime).format('YYYY-MM-DD'),
+        type: 'break_in',
+      };
+
+      if (breakTimeData && breakTimeData[0].break_out_time != null) {
+         await createApi.createBreakHours(payload);
+
+        Toast.show({
+          type: 'success',
+          text1: 'Break ended',
+          text2: 'You can now resume your work',
+          autoHide: 3000,
+        });
+        
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'No active break',
+          text2: 'You must start a break before ending it.',
+          autoHide: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error ending break:', error);
+      // Handle error - show error message to the user, etc.
+      Toast.show({
+        type: 'error',
+        text1: 'Error ending break',
+        text2: 'An error occurred while ending the break. Please try again.',
+        autoHide: 3000,
+      });
+    } finally {
+      setEndBreakLoading(false);
+    }
+  };
+
+  const checkInDateTime = moment.utc(
+    inoutData && inoutData.check_in && inoutData.check_in[0].date_time,
+  );
+  const current = moment.utc();
+
+  const isCheckedInToday =
+    checkInDateTime.year() === current.year() &&
+    checkInDateTime.month() === current.month() &&
+    checkInDateTime.date() === current.date();
+
+  const checkOutDateTime = moment.utc(
+    inoutData && inoutData.check_out && inoutData.check_out[0].date_time,
+  );
+
+  const isCheckeoutToday =
+    checkOutDateTime.year() === current.year() &&
+    checkOutDateTime.month() === current.month() &&
+    checkOutDateTime.date() === current.date();
+
+  const checkinbuttonStyles = isCheckedInToday
+    ? {backgroundColor: secondaryColor, opacity: 0.5}
+    : {};
+  const checkoutbuttonStyles = isCheckeoutToday
+    ? {backgroundColor: secondaryColor, opacity: 0.5}
+    : {};
+
   return loading ? (
     <Loader />
   ) : (
@@ -566,7 +858,10 @@ const Dashboard = () => {
         {/*Header @start */}
 
         <View style={style.header}>
-          <TouchableOpacity style={style.card} onPress={hanldeCheckin}>
+          <TouchableOpacity
+            style={[style.card, checkinbuttonStyles]}
+            onPress={hanldeCheckin}
+            disabled={isCheckedInToday}>
             {checkinLoading ? (
               <SkypeIndicator color={primaryColor} size={35} />
             ) : (
@@ -586,7 +881,10 @@ const Dashboard = () => {
               </>
             )}
           </TouchableOpacity>
-          <TouchableOpacity style={style.card} onPress={handleCheckout}>
+          <TouchableOpacity
+            style={[style.card, checkoutbuttonStyles]}
+            onPress={handleCheckout}
+            disabled={isCheckeoutToday}>
             {checkoutLoading ? (
               <SkypeIndicator color={primaryColor} size={35} />
             ) : (
@@ -607,14 +905,49 @@ const Dashboard = () => {
             )}
           </TouchableOpacity>
         </View>
-        {/* <TouchableOpacity onPress={handleStop} style={styles.primaryButton}>
-          <Text style={styles.buttonText}>
-            start time
-            {`${breakTime.hours ? breakTime.hours : '00'}:${
-              breakTime.minutes ? breakTime.minutes : '00'
-            }:${breakTime.seconds ? breakTime.seconds : '00'}`}
-          </Text>
-        </TouchableOpacity> */}
+        <View style={style.header}>
+          <TouchableOpacity style={style.card} onPress={handleStartBreak}>
+            {startBreakLoading ? (
+              <SkypeIndicator color={primaryColor} size={35} />
+            ) : (
+              <>
+                <View style={{justifyContent: 'center'}}>
+                  <Text>Start Break</Text>
+                  <Text style={[styles.lable, {fontSize: 15}]}>
+                    {currentTime}
+                  </Text>
+                </View>
+                <View>
+                  <Icon
+                    name="export"
+                    style={[style.userIcon, {backgroundColor: secondaryColor}]}
+                  />
+                </View>
+              </>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity style={style.card} onPress={handleEndBreak}>
+            {endBreakLoading ? (
+              <SkypeIndicator color={primaryColor} size={35} />
+            ) : (
+              <>
+                <View style={{justifyContent: 'center'}}>
+                  <Text>End Break</Text>
+                  <Text style={[styles.lable, {fontSize: 15}]}>
+                    {currentTime}
+                  </Text>
+                </View>
+                <View>
+                  <Icon
+                    name="export2"
+                    style={[style.userIcon, {backgroundColor: 'pink'}]}
+                  />
+                </View>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+        <Text>{finalTWH}</Text>
         {/*Header @end */}
         <View>
           <Text style={styles.textSubHeading}>Total Working Hours</Text>
@@ -641,6 +974,7 @@ const Dashboard = () => {
         </View>
 
         {/*Body @start */}
+
         <View style={style.body}>
           <View
             style={{
@@ -690,7 +1024,9 @@ const Dashboard = () => {
             </View>
           </View>
         </View>
+
         {/*Body @end */}
+
         {/*Footer @start */}
         <View style={style.footer}>
           <View

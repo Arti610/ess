@@ -168,6 +168,7 @@ const UserProfile = () => {
                         : 'Name'
                     }`}</Text>
                   </View>
+                  <Text style={styles.lable}>{data && data.user && data.user.designation ? data.user.designation.name : null}</Text>
                 </View>
               </>
             ) : null}
@@ -213,26 +214,7 @@ const UserProfile = () => {
                   </View>
                   <IconEdit name="chevron-right" style={pStyles.iconStyles} />
                 </View>
-              </TouchableOpacity>
-
-              {/* <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('checkin/checkout', {
-                    data: data,
-                  })
-                }
-                style={pStyles.footerText}>
-                <View style={pStyles.footerTextView}>
-                  <View style={pStyles.leftFooterText}>
-                    <IconEditProfile
-                      name="history"
-                      style={pStyles.logoutUserIcon}
-                    />
-                    <Text style={pStyles.lable}>Checkin/Checkout</Text>
-                  </View>
-                  <IconEdit name="chevron-right" style={pStyles.iconStyles} />
-                </View>
-              </TouchableOpacity> */}
+              </TouchableOpacity>           
 
               <TouchableOpacity
                 onPress={() => navigation.navigate('Leaves', {data: data})}

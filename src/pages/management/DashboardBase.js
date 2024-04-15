@@ -22,8 +22,6 @@ const DashboardBase = () => {
   const route = useRoute();
   const {id} = route.params;
 
-console.log('id inbottom tab', id);
-
   return (
     <>
       <Tab.Navigator
