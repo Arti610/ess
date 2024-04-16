@@ -47,7 +47,6 @@ const Dashboard = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [finalTWH, setFinalTWH] = useState(null);
-
   const [totalWorkingHours, setTotalWorkingHours] = useState([
     '00',
     '00',
@@ -110,6 +109,7 @@ const Dashboard = () => {
 
   const fetchBreakTime = async () => {
     try {
+      setLoading(true);
       const payload = {date: moment(currentDate).format('YYYY-MM-DD')};
       const id = currentUserId && currentUserId.id;
       const res = await getApi.getBreakHours(id, payload);
@@ -118,9 +118,10 @@ const Dashboard = () => {
       }
     } catch (error) {
       console.log('get error during getting the breaktime', error);
+    } finally {
+      setLoading(false);
     }
   };
-
   const fetchTotalWH = async () => {
     try {
       const id = currentUserId && currentUserId?.id;
@@ -265,138 +266,35 @@ const Dashboard = () => {
     };
   }
 
-  // const localcurrentTime = new Date();
+  function isToday(dateString) {
+    const dateField = new Date(dateString);
+    const today = new Date();
 
-  // const [stop, setStop] = useState(false);
-  // const [pause, setPause] = useState(new Date());
-  // const [resume, setResume] = useState(new Date());
-
-  // const pauseTime = pause.getTime();
-  // const resumeTime = resume.getTime();
-  // const difference = resumeTime - pauseTime;
-  // const breakTime = millisecondsToTime(difference);
-
-  // useEffect(() => {
-  //   const formattedDate = dateTime.toLocaleDateString();
-  //   // if (stop) {
-  //     const intervalId = setInterval(() => {
-  //       try {
-  //         const filteredData =
-  //           inoutData &&
-  //           inoutData.check_in &&
-  //           inoutData.check_in.filter(item => {
-  //             const itemDate = new Date(item.date_time);
-  //             const itemDateOnly = itemDate.toLocaleDateString();
-  //             const matchDate = itemDateOnly === formattedDate;
-  //             return matchDate;
-  //           });
-
-  //         const filteredCheckoutData =
-  //           inoutData &&
-  //           inoutData.check_out &&
-  //           inoutData.check_out.filter(item => {
-  //             const itemDate = new Date(item.date_time);
-  //             const itemDateOnly = itemDate.toLocaleDateString();
-  //             const matchDate = itemDateOnly === formattedDate;
-  //             return matchDate;
-  //           });
-  //         const checkout_time = new Date(
-  //           filteredCheckoutData &&
-  //             filteredCheckoutData.length > 0 &&
-  //             filteredCheckoutData[0].date_time,
-  //         ).getTime();
-
-  //         const checkin_time = new Date(
-  //           filteredData &&
-  //             filteredData.length > 0 &&
-  //             filteredData[0].date_time,
-  //         ).getTime();
-
-  //         if (filteredCheckoutData.length > 0) {
-  //           const timeDifferenceCheckout = checkout_time - checkin_time;
-
-  //           const differenceTimecheckout = new Date(timeDifferenceCheckout);
-  //           // Get the time components
-  //           const hours = differenceTimecheckout.getUTCHours();
-  //           const minutes = differenceTimecheckout.getUTCMinutes();
-  //           const seconds = differenceTimecheckout.getUTCSeconds();
-
-  //           // Format the time
-  //           const time = `${hours.toString().padStart(2, '0')}:${minutes
-  //             .toString()
-  //             .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-  //           setTotalWorkingHours(time.split(':'));
-  //         } else if (filteredData.length > 0) {
-  //           const checkintime = new Date(checkin_time);
-
-  //           const checkinhour = checkintime.getUTCHours();
-  //           const checkinminut = checkintime.getUTCMinutes();
-  //           const checkinsecond = checkintime.getUTCSeconds();
-
-  //           const cuttenthour = localcurrentTime.getHours();
-  //           const cuttentminut = localcurrentTime.getMinutes();
-  //           const cuttentsecond = localcurrentTime.getSeconds();
-
-  //           const tt = timeToMilliseconds(
-  //             parseInt(totalWorkingHours[0]),
-  //             parseInt(totalWorkingHours[1]),
-  //             parseInt(totalWorkingHours[2]),
-  //           );
-
-  //           const bb = timeToMilliseconds(
-  //             parseInt(breakTime.hours),
-  //             parseInt(breakTime.minutes),
-  //             parseInt(breakTime.seconds),
-  //           );
-
-  //           // Subtract break time from total working hours
-  //           const remainingMilliseconds = tt - bb;
-
-  //           // Calculate the difference from the check-in time
-
-  //           const differenceInMilliseconds =
-  //             breakTime.hours > 0 ||
-  //             breakTime.minutes > 0 ||
-  //             breakTime.seconds > 0
-  //               ? timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
-  //                 remainingMilliseconds
-  //               : timeToMilliseconds(cuttenthour, cuttentminut, cuttentsecond) -
-  //                 timeToMilliseconds(checkinhour, checkinminut, checkinsecond);
-
-  //           remainingTime = millisecondsToTime(differenceInMilliseconds);
-
-  //           // Update total working hours state
-  //           setTotalWorkingHours([
-  //             remainingTime.hours,
-  //             remainingTime.minutes,
-  //             remainingTime.seconds,
-  //           ]);
-  //         } else {
-  //           setTotalWorkingHours(['00', '00', '00']);
-  //         }
-  //       } catch (error) {
-  //         console.log('error', error);
-  //       }
-  //     }, 1000);
-
-  //     return () => clearInterval(intervalId);
-  //   // }
-  // }, [inoutData, totalWorkingHours, stop]);
+    // Compare year, month, and day parts of the two dates
+    return (
+      dateField.getFullYear() === today.getFullYear() &&
+      dateField.getMonth() === today.getMonth() &&
+      dateField.getDate() === today.getDate()
+    );
+  }
 
   const date_time = new Date();
+  let checkinMilliseconds;
+  let checkoutMilliseconds;
+  let startBreakMiliseconds;
+  let endBreakMiliseconds;
 
   useEffect(() => {
     try {
       let intervalId;
 
       const handleTimer = () => {
-        let checkinMilliseconds;
-        let checkoutMilliseconds;
-        let startBreakMiliseconds;
-        let endBreakMiliseconds;
-
-        if (inoutData && inoutData.check_in && inoutData.check_in.length > 0) {
+        if (
+          inoutData &&
+          inoutData.check_in &&
+          inoutData.check_in.length > 0 &&
+          isToday(inoutData.check_in[0].date_time)
+        ) {
           const checkintime = inoutData.check_in[0].date_time
             .split('T')[1]
             .slice(0, -1);
@@ -413,7 +311,8 @@ const Dashboard = () => {
         if (
           inoutData &&
           inoutData.check_out &&
-          inoutData.check_out.length > 0
+          inoutData.check_out.length > 0 &&
+          isToday(inoutData.check_out[0].date_time)
         ) {
           const checkouttime = inoutData.check_out[0].date_time
             .split('T')[1]
@@ -497,7 +396,6 @@ const Dashboard = () => {
 
           console.log('Timer paused');
         } else if (endBreakMiliseconds && !checkoutMilliseconds) {
-          // Logic for when user has ended break and not yet checked out
           const currentTime = moment(date_time).format('HH:mm:ss');
           const [currentHour, currentMinute, currentSecond] = currentTime
             .split(':')
@@ -508,13 +406,19 @@ const Dashboard = () => {
             currentSecond,
           );
 
-          const remainingTimeAfterBreak =
-            currentTimeMilliseconds - endBreakMiliseconds;
-          // const remainingTimeAfterBreak =
-          //   checkoutMilliseconds - endBreakMiliseconds;
+          // Calculate time elapsed since check-in
+          const elapsedMilliseconds =
+            currentTimeMilliseconds - checkinMilliseconds;
 
+          // If there was a break, subtract break time from the total elapsed time
+          const breakTimeElapsed = endBreakMiliseconds - startBreakMiliseconds;
+          const remainingTimeAfterBreak =
+            elapsedMilliseconds - breakTimeElapsed;
+
+          // Convert remaining milliseconds to hours, minutes, and seconds
           const remainingTime = millisecondsToTime(remainingTimeAfterBreak);
-          console.log('remainingTimeAfterBreakend==>', remainingTime);
+
+          // Set total working hours
           setTotalWorkingHours([
             remainingTime.hours,
             remainingTime.minutes,
@@ -523,6 +427,18 @@ const Dashboard = () => {
           console.log('Timer resumed');
         } else if (checkoutMilliseconds) {
           console.log('Timer stopped');
+
+          const value = checkoutMilliseconds - checkinMilliseconds;
+          const breakvalue = startBreakMiliseconds - endBreakMiliseconds;
+          const remainingTimeAfterCheckout = value - breakvalue;
+
+          const remainingTime = millisecondsToTime(remainingTimeAfterCheckout);
+          setTotalWorkingHours([
+            remainingTime.hours,
+            remainingTime.minutes,
+            remainingTime.seconds,
+          ]);
+          // Stop the timer by clearing the interval
           clearInterval(intervalId);
         }
       };
@@ -619,7 +535,6 @@ const Dashboard = () => {
             });
             setcheckinLoading(false);
             fetchData();
-            // handleTotalWH()
           }
         } catch (error) {
           setcheckinLoading(false);
@@ -749,6 +664,8 @@ const Dashboard = () => {
               text2: 'Do not forget to end your break to continue your work',
               autoHide: 3000,
             });
+
+            fetchBreakTime();
           }
         } else {
           Toast.show({
@@ -793,15 +710,16 @@ const Dashboard = () => {
       };
 
       if (breakTimeData && breakTimeData[0].break_out_time != null) {
-         await createApi.createBreakHours(payload);
-
-        Toast.show({
-          type: 'success',
-          text1: 'Break ended',
-          text2: 'You can now resume your work',
-          autoHide: 3000,
-        });
-        
+        const res = await createApi.createBreakHours(payload);
+        if (res.status === 200 || res.data) {
+          Toast.show({
+            type: 'success',
+            text1: 'Break ended',
+            text2: 'You can now resume your work',
+            autoHide: 3000,
+          });
+          fetchBreakTime();
+        }
       } else {
         Toast.show({
           type: 'error',
@@ -811,12 +729,10 @@ const Dashboard = () => {
         });
       }
     } catch (error) {
-      console.error('Error ending break:', error);
-      // Handle error - show error message to the user, etc.
       Toast.show({
         type: 'error',
-        text1: 'Error ending break',
-        text2: 'An error occurred while ending the break. Please try again.',
+        text1: 'Please start break first',
+        text2: 'You must start a break before ending it.',
         autoHide: 3000,
       });
     } finally {
@@ -846,7 +762,15 @@ const Dashboard = () => {
   const checkinbuttonStyles = isCheckedInToday
     ? {backgroundColor: secondaryColor, opacity: 0.5}
     : {};
+
   const checkoutbuttonStyles = isCheckeoutToday
+    ? {backgroundColor: secondaryColor, opacity: 0.5}
+    : {};
+  console.log('startBreakMiliseconds', startBreakMiliseconds);
+  const startBreakstyles = startBreakMiliseconds
+    ? {backgroundColor: secondaryColor, opacity: 0.5}
+    : {};
+  const endBreakstyles = endBreakMiliseconds
     ? {backgroundColor: secondaryColor, opacity: 0.5}
     : {};
 
@@ -906,7 +830,10 @@ const Dashboard = () => {
           </TouchableOpacity>
         </View>
         <View style={style.header}>
-          <TouchableOpacity style={style.card} onPress={handleStartBreak}>
+          <TouchableOpacity
+            style={[style.card, startBreakstyles]}
+            onPress={handleStartBreak}
+            disabled={startBreakMiliseconds}>
             {startBreakLoading ? (
               <SkypeIndicator color={primaryColor} size={35} />
             ) : (
@@ -926,7 +853,10 @@ const Dashboard = () => {
               </>
             )}
           </TouchableOpacity>
-          <TouchableOpacity style={style.card} onPress={handleEndBreak}>
+          <TouchableOpacity
+            style={[style.card, endBreakstyles]}
+            onPress={handleEndBreak}
+            disabled={endBreakMiliseconds}>
             {endBreakLoading ? (
               <SkypeIndicator color={primaryColor} size={35} />
             ) : (
@@ -947,7 +877,7 @@ const Dashboard = () => {
             )}
           </TouchableOpacity>
         </View>
-        <Text>{finalTWH}</Text>
+        {/* <Text>{finalTWH}</Text> */}
         {/*Header @end */}
         <View>
           <Text style={styles.textSubHeading}>Total Working Hours</Text>
@@ -1050,73 +980,154 @@ const Dashboard = () => {
               </TouchableOpacity>
             )}
           </View>
-
-          {inoutData &&
-            inoutData.check_in &&
-            inoutData.check_in.slice(0, 1).map((item, i) => (
-              <View style={style.activityCard} key={i}>
-                <View>
-                  <Icon
-                    name="export"
-                    style={[style.userIcon, {backgroundColor: secondaryColor}]}
-                  />
+          {breakTimeData &&
+            // breakTimeData[0].break_in_time != null &&
+            breakTimeData
+              .filter(item => isToday(item.date))
+              .slice()
+              .reverse()
+              .map((item, i) => (
+                <View style={style.activityCard} key={i}>
+                  <View>
+                    <Icon
+                      name="export2"
+                      style={[style.userIcon, {backgroundColor: 'pink'}]}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>End Break</Text>
+                    <Text>
+                      {item.date
+                        ? moment(item.date).format('DD MMM YYYY')
+                        : null}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>
+                      {item.break_in_time
+                        ? moment(item.break_in_time, 'HH:mm:ss').format(
+                            'hh:mm A',
+                          )
+                        : 'Not ended'}
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.lable}>Checkin</Text>
-                  <Text>
-                    {item.date_time
-                      ? moment(item.date_time).format('DD MMM YYYY')
-                      : null}
-                  </Text>
+              ))}
+          {breakTimeData &&
+            // breakTimeData[0].break_out_time != null &&
+            breakTimeData
+              .filter(item => isToday(item.date))
+              .slice()
+              .reverse()
+              .map((item, i) => (
+                <View style={style.activityCard} key={i}>
+                  <View>
+                    <Icon
+                      name="export"
+                      style={[
+                        style.userIcon,
+                        {backgroundColor: secondaryColor},
+                      ]}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>Start Break</Text>
+                    <Text>
+                      {item.date
+                        ? moment(item.date).format('DD MMM YYYY')
+                        : null}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>
+                      {item.break_out_time
+                        ? moment(item.break_out_time, 'HH:mm:ss').format(
+                            'hh:mm A',
+                          )
+                        : null}
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.lable}>
-                    {item.date_time
-                      ? new Date(item.date_time).toLocaleTimeString('en-US', {
-                          hour: 'numeric',
-                          minute: '2-digit',
-                          hour12: true,
-                          timeZone: 'UTC',
-                        })
-                      : null}
-                  </Text>
-                  <Text>{item.punctuality}</Text>
+              ))}
+          {inoutData && inoutData.check_in ? (
+            inoutData.check_in
+              .filter(item => isToday(item.date_time))
+              .slice(0, 1)
+              .map((item, i) => (
+                <View style={style.activityCard} key={i}>
+                  <View>
+                    <Icon
+                      name="export"
+                      style={[
+                        style.userIcon,
+                        {backgroundColor: secondaryColor},
+                      ]}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>Checkin</Text>
+                    <Text>
+                      {item.date_time
+                        ? moment(item.date_time).format('DD MMM YYYY')
+                        : null}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>
+                      {item.date_time
+                        ? new Date(item.date_time).toLocaleTimeString('en-US', {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                            timeZone: 'UTC',
+                          })
+                        : null}
+                    </Text>
+                    <Text>{item.punctuality}</Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))
+          ) : (
+            <Text style={{textAlign: 'center', marginVertical: 20}}>
+              No Recent Activity !
+            </Text>
+          )}
           {inoutData &&
             inoutData.check_out &&
-            inoutData.check_out.slice(0, 1).map((item, i) => (
-              <View style={style.activityCard} key={i}>
-                <View>
-                  <Icon
-                    name="export2"
-                    style={[style.userIcon, {backgroundColor: 'pink'}]}
-                  />
+            inoutData.check_out
+              .filter(item => isToday(item.date_time))
+              .slice(0, 1)
+              .map((item, i) => (
+                <View style={style.activityCard} key={i}>
+                  <View>
+                    <Icon
+                      name="export2"
+                      style={[style.userIcon, {backgroundColor: 'pink'}]}
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>Checkout</Text>
+                    <Text>
+                      {item.date_time
+                        ? moment(item.date_time).format('DD MMM YYYY')
+                        : null}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.lable}>
+                      {item.date_time
+                        ? new Date(item.date_time).toLocaleTimeString('en-US', {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                            timeZone: 'UTC',
+                          })
+                        : null}
+                    </Text>
+                    <Text>{item.punctuality}</Text>
+                  </View>
                 </View>
-                <View>
-                  <Text style={styles.lable}>Checkout</Text>
-                  <Text>
-                    {item.date_time
-                      ? moment(item.date_time).format('DD MMM YYYY')
-                      : null}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.lable}>
-                    {item.date_time
-                      ? new Date(item.date_time).toLocaleTimeString('en-US', {
-                          hour: 'numeric',
-                          minute: '2-digit',
-                          hour12: true,
-                          timeZone: 'UTC',
-                        })
-                      : null}
-                  </Text>
-                  <Text>{item.punctuality}</Text>
-                </View>
-              </View>
-            ))}
+              ))}
         </View>
         {/*Footer @end */}
       </View>
