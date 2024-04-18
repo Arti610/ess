@@ -367,8 +367,6 @@ const Dashboard = () => {
         }
 
         if (checkinMilliseconds && !startBreakMiliseconds) {
-          console.log('Timer started');
-
           const currentTime = moment(date_time).format('HH:mm:ss');
 
           const [currentHour, currentMinute, currentSecond] = currentTime
@@ -398,8 +396,6 @@ const Dashboard = () => {
             remainingTime.minutes,
             remainingTime.seconds,
           ]);
-
-          console.log('Timer paused');
         } else if (endBreakMiliseconds && !checkoutMilliseconds) {
           const currentTime = moment(date_time).format('HH:mm:ss');
           const [currentHour, currentMinute, currentSecond] = currentTime
@@ -431,8 +427,6 @@ const Dashboard = () => {
           ]);
           console.log('Timer resumed');
         } else if (checkoutMilliseconds) {
-          console.log('Timer stopped');
-
           const value = checkoutMilliseconds - checkinMilliseconds;
           const breakvalue = startBreakMiliseconds - endBreakMiliseconds;
           const remainingTimeAfterCheckout = value - breakvalue;
@@ -598,7 +592,22 @@ const Dashboard = () => {
           text2: 'You must check in before checking out.',
           autoHide: 3000,
         });
-        return; // Exit the function if not checked in today
+        return;
+      }
+
+      if (
+        breakTimeData &&
+        breakTimeData.length > 0 &&
+        breakTimeData[0].break_in_time === null
+      ) {
+        Toast.show({
+          type: 'error',
+          text1: 'Please End break first',
+          text2: "You cann't be checkout without ending your break",
+          autoHide: 3000,
+        });
+        setModalVisible(false);
+        return;
       }
 
       setcheckoutLoading(true);
@@ -612,6 +621,7 @@ const Dashboard = () => {
           autoHide: 3000,
         });
         setcheckoutLoading(false);
+        setModalVisible(false);
         fetchData();
       } else {
         setcheckoutLoading(false);
@@ -624,7 +634,7 @@ const Dashboard = () => {
       }
     } catch (error) {
       setcheckoutLoading(false);
-      console.log('Error during check-in', error.response);
+
       Toast.show({
         type: 'error',
         text1: error.response.data,
@@ -785,9 +795,10 @@ const Dashboard = () => {
         moment.utc(breakData.date).isSame(currentDate, 'day'),
     );
 
-  const startBreakstyles = isBreakStartToday || isCheckeoutToday
-    ? {backgroundColor: secondaryColor, opacity: 0.5}
-    : {};
+  const startBreakstyles =
+    isBreakStartToday || isCheckeoutToday
+      ? {backgroundColor: secondaryColor, opacity: 0.5}
+      : {};
   const endBreakstyles = isCheckeoutToday
     ? {backgroundColor: secondaryColor, opacity: 0.5}
     : {};
@@ -796,250 +807,25 @@ const Dashboard = () => {
     <Loader />
   ) : (
     <>
-    <ScrollView>
-      <View style={style.container}>
-        {/*Header @start */}
+      <ScrollView>
+        <View style={style.container}>
+          {/*Header @start */}
 
-        <View style={style.header}>
-          <TouchableOpacity
-            style={[style.card, checkinbuttonStyles]}
-            onPress={hanldeCheckin}
-            disabled={isCheckedInToday}>
-            {checkinLoading ? (
-              <SkypeIndicator color={primaryColor} size={35} />
-            ) : (
-              <>
-                <View style={{justifyContent: 'center'}}>
-                  <Text>checkin</Text>
-                  <Text style={[styles.lable, {fontSize: 15}]}>
-                    {currentTime}
-                  </Text>
-                </View>
-                <View>
-                  <Icon
-                    name="export"
-                    style={[style.userIcon, {backgroundColor: secondaryColor}]}
-                  />
-                </View>
-              </>
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[style.card, checkoutbuttonStyles]}
-            onPress={()=>setModalVisible(true)}
-            disabled={isCheckeoutToday}>
-            {checkoutLoading ? (
-              <SkypeIndicator color={primaryColor} size={35} />
-            ) : (
-              <>
-                <View style={{justifyContent: 'center'}}>
-                  <Text>checkout</Text>
-                  <Text style={[styles.lable, {fontSize: 15}]}>
-                    {currentTime}
-                  </Text>
-                </View>
-                <View>
-                  <Icon
-                    name="export2"
-                    style={[style.userIcon, {backgroundColor: 'pink'}]}
-                  />
-                </View>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
-        <View style={style.header}>
-          <TouchableOpacity
-            style={[style.card, startBreakstyles]}
-            onPress={handleStartBreak}
-            disabled={isBreakStartToday}>
-            {startBreakLoading ? (
-              <SkypeIndicator color={primaryColor} size={35} />
-            ) : (
-              <>
-                <View style={{justifyContent: 'center'}}>
-                  <Text>Start Break</Text>
-                  <Text style={[styles.lable, {fontSize: 15}]}>
-                    {currentTime}
-                  </Text>
-                </View>
-                <View>
-                  <Icon
-                    name="export"
-                    style={[style.userIcon, {backgroundColor: secondaryColor}]}
-                  />
-                </View>
-              </>
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[style.card, endBreakstyles]}
-            onPress={handleEndBreak}
-            disabled={isCheckeoutToday}>
-            {endBreakLoading ? (
-              <SkypeIndicator color={primaryColor} size={35} />
-            ) : (
-              <>
-                <View style={{justifyContent: 'center'}}>
-                  <Text>End Break</Text>
-                  <Text style={[styles.lable, {fontSize: 15}]}>
-                    {currentTime}
-                  </Text>
-                </View>
-                <View>
-                  <Icon
-                    name="export2"
-                    style={[style.userIcon, {backgroundColor: 'pink'}]}
-                  />
-                </View>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
-        {/* <Text>{finalTWH}</Text> */}
-        {/*Header @end */}
-        <View>
-          <Text style={styles.textSubHeading}>Total Working Hours</Text>
-          <View style={style.progressTimer}>
-            <View style={style.timerBox}>
-              <Text style={styles.textHeading}>{totalWorkingHours[0]}</Text>
-              <Text style={style.text}>Hours</Text>
-            </View>
-            <View style={{alignItems: 'start', height: '70%'}}>
-              <Text style={styles.textHeading}>:</Text>
-            </View>
-            <View style={style.timerBox}>
-              <Text style={styles.textHeading}>{totalWorkingHours[1]}</Text>
-              <Text style={style.text}>Minuts</Text>
-            </View>
-            <View style={{alignItems: 'start', height: '70%'}}>
-              <Text style={styles.textHeading}>:</Text>
-            </View>
-            <View style={style.timerBox}>
-              <Text style={styles.textHeading}>{totalWorkingHours[2]}</Text>
-              <Text style={style.text}>Seconds</Text>
-            </View>
-          </View>
-        </View>
-
-        {/*Body @start */}
-
-        <View style={style.body}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={styles.textSubHeading}>Explore</Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: 10,
-              marginVertical: 10,
-            }}>
-            <View style={style.exploreCard}>
-              <IconE name="calendar" style={{color: 'red', fontSize: 30}} />
-              <Text style={styles.lable}>
-                {attendence && attendence.check_in ? attendence.check_in : 0}
-              </Text>
-              <Text>Attendence</Text>
-            </View>
-            <View style={style.exploreCard}>
-              <IconM
-                name="featured-play-list"
-                style={{color: 'pink', fontSize: 30}}
-              />
-              <Text style={styles.lable}>
-                {attendence && attendence.leaves ? attendence.leaves : 0}
-              </Text>
-              <Text>Leave</Text>
-            </View>
-            <View style={style.exploreCard}>
-              <IconF name="money" style={{color: 'green', fontSize: 30}} />
-              <Text style={styles.lable}>
-                {' '}
-                {attendence &&
-                attendence.monthly_salary &&
-                attendence.monthly_salary.length > 0
-                  ? attendence.monthly_salary[0].total_salary
-                  : 0}
-              </Text>
-              <Text>Salary</Text>
-            </View>
-          </View>
-        </View>
-
-        {/*Body @end */}
-
-        {/*Footer @start */}
-        <View style={style.footer}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <Text style={styles.textSubHeading}>Recent Activity</Text>
-            {currentUserId && currentUserId.user_type === 'Manager' ? (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('checkin/checkout', {data: attendence})
-                }>
-                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => navigation.navigate('Clock')}>
-                <Text style={{fontSize: 12, fontWeight: 'bold'}}>View All</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          {breakTimeData &&
-            // breakTimeData[0].break_in_time != null &&
-            breakTimeData
-              .filter(item => isToday(item.date))
-              .slice()
-              .reverse()
-              .map((item, i) => (
-                <View style={style.activityCard} key={i}>
-                  <View>
-                    <Icon
-                      name="export2"
-                      style={[style.userIcon, {backgroundColor: 'pink'}]}
-                    />
-                  </View>
-                  <View>
-                    <Text style={styles.lable}>End Break</Text>
-                    <Text>
-                      {item.date
-                        ? moment(item.date).format('DD MMM YYYY')
-                        : null}
+          <View style={style.header}>
+            <TouchableOpacity
+              style={[style.card, checkinbuttonStyles]}
+              onPress={hanldeCheckin}
+              disabled={isCheckedInToday}>
+              {checkinLoading ? (
+                <SkypeIndicator color={primaryColor} size={35} />
+              ) : (
+                <>
+                  <View style={{justifyContent: 'center'}}>
+                    <Text>checkin</Text>
+                    <Text style={[styles.lable, {fontSize: 15}]}>
+                      {currentTime}
                     </Text>
                   </View>
-                  <View>
-                    <Text style={styles.lable}>
-                      {item.break_in_time
-                        ? moment(item.break_in_time, 'HH:mm:ss').format(
-                            'hh:mm A',
-                          )
-                        : 'Not ended'}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-          {breakTimeData &&
-            // breakTimeData[0].break_out_time != null &&
-            breakTimeData
-              .filter(item => isToday(item.date))
-              .slice()
-              .reverse()
-              .map((item, i) => (
-                <View style={style.activityCard} key={i}>
                   <View>
                     <Icon
                       name="export"
@@ -1049,31 +835,42 @@ const Dashboard = () => {
                       ]}
                     />
                   </View>
-                  <View>
-                    <Text style={styles.lable}>Start Break</Text>
-                    <Text>
-                      {item.date
-                        ? moment(item.date).format('DD MMM YYYY')
-                        : null}
+                </>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[style.card, checkoutbuttonStyles]}
+              onPress={() => setModalVisible(true)}
+              disabled={isCheckeoutToday}>
+              <View style={{justifyContent: 'center'}}>
+                <Text>checkout</Text>
+                <Text style={[styles.lable, {fontSize: 15}]}>
+                  {currentTime}
+                </Text>
+              </View>
+              <View>
+                <Icon
+                  name="export2"
+                  style={[style.userIcon, {backgroundColor: 'pink'}]}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={style.header}>
+            <TouchableOpacity
+              style={[style.card, startBreakstyles]}
+              onPress={handleStartBreak}
+              disabled={isBreakStartToday}>
+              {startBreakLoading ? (
+                <SkypeIndicator color={primaryColor} size={35} />
+              ) : (
+                <>
+                  <View style={{justifyContent: 'center'}}>
+                    <Text>Start Break</Text>
+                    <Text style={[styles.lable, {fontSize: 15}]}>
+                      {currentTime}
                     </Text>
                   </View>
-                  <View>
-                    <Text style={styles.lable}>
-                      {item.break_out_time
-                        ? moment(item.break_out_time, 'HH:mm:ss').format(
-                            'hh:mm A',
-                          )
-                        : null}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-          {inoutData && inoutData.check_in ? (
-            inoutData.check_in
-              .filter(item => isToday(item.date_time))
-              .slice(0, 1)
-              .map((item, i) => (
-                <View style={style.activityCard} key={i}>
                   <View>
                     <Icon
                       name="export"
@@ -1083,81 +880,305 @@ const Dashboard = () => {
                       ]}
                     />
                   </View>
-                  <View>
-                    <Text style={styles.lable}>Checkin</Text>
-                    <Text>
-                      {item.date_time
-                        ? moment(item.date_time).format('DD MMM YYYY')
-                        : null}
+                </>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[style.card, endBreakstyles]}
+              onPress={handleEndBreak}
+              disabled={isCheckeoutToday}>
+              {endBreakLoading ? (
+                <SkypeIndicator color={primaryColor} size={35} />
+              ) : (
+                <>
+                  <View style={{justifyContent: 'center'}}>
+                    <Text>End Break</Text>
+                    <Text style={[styles.lable, {fontSize: 15}]}>
+                      {currentTime}
                     </Text>
                   </View>
-                  <View>
-                    <Text style={styles.lable}>
-                      {item.date_time
-                        ? new Date(item.date_time).toLocaleTimeString('en-US', {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true,
-                            timeZone: 'UTC',
-                          })
-                        : null}
-                    </Text>
-                    <Text>{item.punctuality}</Text>
-                  </View>
-                </View>
-              ))
-          ) : (
-            <Text style={{textAlign: 'center', marginVertical: 20}}>
-              No Recent Activity !
-            </Text>
-          )}
-          {inoutData &&
-            inoutData.check_out &&
-            inoutData.check_out
-              .filter(item => isToday(item.date_time))
-              .slice(0, 1)
-              .map((item, i) => (
-                <View style={style.activityCard} key={i}>
                   <View>
                     <Icon
                       name="export2"
                       style={[style.userIcon, {backgroundColor: 'pink'}]}
                     />
                   </View>
-                  <View>
-                    <Text style={styles.lable}>Checkout</Text>
-                    <Text>
-                      {item.date_time
-                        ? moment(item.date_time).format('DD MMM YYYY')
-                        : null}
-                    </Text>
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
+          {/* <Text>{finalTWH}</Text> */}
+          {/*Header @end */}
+          <View>
+            <Text style={styles.textSubHeading}>Total Working Hours</Text>
+            <View style={style.progressTimer}>
+              <View style={style.timerBox}>
+                <Text style={styles.textHeading}>{totalWorkingHours[0]}</Text>
+                <Text style={style.text}>Hours</Text>
+              </View>
+              <View style={{alignItems: 'start', height: '70%'}}>
+                <Text style={styles.textHeading}>:</Text>
+              </View>
+              <View style={style.timerBox}>
+                <Text style={styles.textHeading}>{totalWorkingHours[1]}</Text>
+                <Text style={style.text}>Minuts</Text>
+              </View>
+              <View style={{alignItems: 'start', height: '70%'}}>
+                <Text style={styles.textHeading}>:</Text>
+              </View>
+              <View style={style.timerBox}>
+                <Text style={styles.textHeading}>{totalWorkingHours[2]}</Text>
+                <Text style={style.text}>Seconds</Text>
+              </View>
+            </View>
+          </View>
+
+          {/*Body @start */}
+
+          <View style={style.body}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={styles.textSubHeading}>Explore</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: 10,
+                marginVertical: 10,
+              }}>
+              <View style={style.exploreCard}>
+                <IconE name="calendar" style={{color: 'red', fontSize: 30}} />
+                <Text style={styles.lable}>
+                  {attendence && attendence.check_in ? attendence.check_in : 0}
+                </Text>
+                <Text>Attendence</Text>
+              </View>
+              <View style={style.exploreCard}>
+                <IconM
+                  name="featured-play-list"
+                  style={{color: 'pink', fontSize: 30}}
+                />
+                <Text style={styles.lable}>
+                  {attendence && attendence.leaves ? attendence.leaves : 0}
+                </Text>
+                <Text>Leave</Text>
+              </View>
+              <View style={style.exploreCard}>
+                <IconF name="money" style={{color: 'green', fontSize: 30}} />
+                <Text style={styles.lable}>
+                  {' '}
+                  {attendence &&
+                  attendence.monthly_salary &&
+                  attendence.monthly_salary.length > 0
+                    ? attendence.monthly_salary[0].total_salary
+                    : 0}
+                </Text>
+                <Text>Salary</Text>
+              </View>
+            </View>
+          </View>
+
+          {/*Body @end */}
+
+          {/*Footer @start */}
+          <View style={style.footer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.textSubHeading}>Recent Activity</Text>
+              {currentUserId && currentUserId.user_type === 'Manager' ? (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('checkin/checkout', {data: attendence})
+                  }>
+                  <Text style={{fontSize: 12, fontWeight: 'bold'}}>
+                    View All
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => navigation.navigate('Clock')}>
+                  <Text style={{fontSize: 12, fontWeight: 'bold'}}>
+                    View All
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            {breakTimeData &&
+              // breakTimeData[0].break_in_time != null &&
+              breakTimeData
+                .filter(item => isToday(item.date))
+                .slice()
+                .reverse()
+                .map((item, i) => (
+                  <View style={style.activityCard} key={i}>
+                    <View>
+                      <Icon
+                        name="export2"
+                        style={[style.userIcon, {backgroundColor: 'pink'}]}
+                      />
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>End Break</Text>
+                      <Text>
+                        {item.date
+                          ? moment(item.date).format('DD MMM YYYY')
+                          : null}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>
+                        {item.break_in_time
+                          ? moment(item.break_in_time, 'HH:mm:ss').format(
+                              'hh:mm A',
+                            )
+                          : 'Not ended'}
+                      </Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.lable}>
-                      {item.date_time
-                        ? new Date(item.date_time).toLocaleTimeString('en-US', {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true,
-                            timeZone: 'UTC',
-                          })
-                        : null}
-                    </Text>
-                    <Text>{item.punctuality}</Text>
+                ))}
+            {breakTimeData &&
+              // breakTimeData[0].break_out_time != null &&
+              breakTimeData
+                .filter(item => isToday(item.date))
+                .slice()
+                .reverse()
+                .map((item, i) => (
+                  <View style={style.activityCard} key={i}>
+                    <View>
+                      <Icon
+                        name="export"
+                        style={[
+                          style.userIcon,
+                          {backgroundColor: secondaryColor},
+                        ]}
+                      />
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>Start Break</Text>
+                      <Text>
+                        {item.date
+                          ? moment(item.date).format('DD MMM YYYY')
+                          : null}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>
+                        {item.break_out_time
+                          ? moment(item.break_out_time, 'HH:mm:ss').format(
+                              'hh:mm A',
+                            )
+                          : null}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
+            {inoutData && inoutData.check_in ? (
+              inoutData.check_in
+                .filter(item => isToday(item.date_time))
+                .slice(0, 1)
+                .map((item, i) => (
+                  <View style={style.activityCard} key={i}>
+                    <View>
+                      <Icon
+                        name="export"
+                        style={[
+                          style.userIcon,
+                          {backgroundColor: secondaryColor},
+                        ]}
+                      />
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>Checkin</Text>
+                      <Text>
+                        {item.date_time
+                          ? moment(item.date_time).format('DD MMM YYYY')
+                          : null}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>
+                        {item.date_time
+                          ? new Date(item.date_time).toLocaleTimeString(
+                              'en-US',
+                              {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true,
+                                timeZone: 'UTC',
+                              },
+                            )
+                          : null}
+                      </Text>
+                      <Text>{item.punctuality}</Text>
+                    </View>
+                  </View>
+                ))
+            ) : (
+              <Text style={{textAlign: 'center', marginVertical: 20}}>
+                No Recent Activity !
+              </Text>
+            )}
+            {inoutData &&
+              inoutData.check_out &&
+              inoutData.check_out
+                .filter(item => isToday(item.date_time))
+                .slice(0, 1)
+                .map((item, i) => (
+                  <View style={style.activityCard} key={i}>
+                    <View>
+                      <Icon
+                        name="export2"
+                        style={[style.userIcon, {backgroundColor: 'pink'}]}
+                      />
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>Checkout</Text>
+                      <Text>
+                        {item.date_time
+                          ? moment(item.date_time).format('DD MMM YYYY')
+                          : null}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={styles.lable}>
+                        {item.date_time
+                          ? new Date(item.date_time).toLocaleTimeString(
+                              'en-US',
+                              {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true,
+                                timeZone: 'UTC',
+                              },
+                            )
+                          : null}
+                      </Text>
+                      <Text>{item.punctuality}</Text>
+                    </View>
+                  </View>
+                ))}
+          </View>
+          {/*Footer @end */}
         </View>
-        {/*Footer @end */}
-      </View>
-    </ScrollView>
-    
+      </ScrollView>
+
       <LogoutModal
         modalVisible={modalVisible}
         handleModalVisible={handleModalVisible}
         handleLogout={handleCheckout}
-        loading={loading}
-        text = 'Checkout'
+        loading={checkoutLoading}
+        text="Checkout"
       />
     </>
   );
