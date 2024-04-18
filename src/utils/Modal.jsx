@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import ButtonLoader from './BtnActivityIndicator';
 
 
-const CustomeModal = ({ modalVisible, handleModalVisible,  text, handlePress, loading }) => {
+const CustomeModal = ({ modalVisible, handleModalVisible,  text, handlePress, loading,  }) => {
  
     return(
         <View style={style.centeredView}>

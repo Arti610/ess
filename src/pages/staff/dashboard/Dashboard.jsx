@@ -27,6 +27,7 @@ import Toast from 'react-native-toast-message';
 import Geolocation from '@react-native-community/geolocation';
 import {promptForEnableLocationIfNeeded} from 'react-native-android-location-enabler';
 import {SkypeIndicator} from 'react-native-indicators';
+import LogoutModal from '../../../utils/LogoutModal';
 
 const Dashboard = () => {
   const navigation = useNavigation();
@@ -47,12 +48,15 @@ const Dashboard = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [finalTWH, setFinalTWH] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [totalWorkingHours, setTotalWorkingHours] = useState([
     '00',
     '00',
     '00',
   ]);
-  console.log('totalWorkingHours', totalWorkingHours);
+  const handleModalVisible = () => {
+    setModalVisible(!modalVisible);
+  };
 
   const currentDate = new Date();
 
@@ -122,6 +126,7 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
   const fetchTotalWH = async () => {
     try {
       const id = currentUserId && currentUserId?.id;
@@ -790,6 +795,7 @@ const Dashboard = () => {
   return loading ? (
     <Loader />
   ) : (
+    <>
     <ScrollView>
       <View style={style.container}>
         {/*Header @start */}
@@ -820,7 +826,7 @@ const Dashboard = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[style.card, checkoutbuttonStyles]}
-            onPress={handleCheckout}
+            onPress={()=>setModalVisible(true)}
             disabled={isCheckeoutToday}>
             {checkoutLoading ? (
               <SkypeIndicator color={primaryColor} size={35} />
@@ -1145,6 +1151,15 @@ const Dashboard = () => {
         {/*Footer @end */}
       </View>
     </ScrollView>
+    
+      <LogoutModal
+        modalVisible={modalVisible}
+        handleModalVisible={handleModalVisible}
+        handleLogout={handleCheckout}
+        loading={loading}
+        text = 'Checkout'
+      />
+    </>
   );
 };
 

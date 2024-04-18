@@ -4,11 +4,11 @@ import { secondaryColor, styles } from "../../style";
 import IconLogout from 'react-native-vector-icons/AntDesign';
 import ButtonLoader from "./BtnActivityIndicator";
 
-const LogoutModal = ({ modalVisible, handleModalVisible, handleLogout, loading }) => {
+const LogoutModal = ({ modalVisible, handleModalVisible, handleLogout, loading, text }) => {
 
     return (
 
-        <View style={style.centeredView}>
+        <View style={style.centeredView}> 
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -20,8 +20,8 @@ const LogoutModal = ({ modalVisible, handleModalVisible, handleLogout, loading }
                 <View style={style.centeredView}>
                     <View style={style.modalView}>
                         <IconLogout name='logout' style={[styles.icon, style.icon]} />
-                        <Text style={styles.textHeading}>{`Logout`}</Text>
-                        <Text style={styles.textDesc}>{`Are your sure want to logout ?`}</Text>
+                        <Text style={styles.textHeading}>{text ? text : 'Logout'}</Text>
+                        <Text style={styles.textDesc}>{`Are your sure want to ${text ? text : 'logout'} ?`}</Text>
                         <View style={style.buttonContainer}>
                             <Pressable
                                 style={styles.secondaryButton}
