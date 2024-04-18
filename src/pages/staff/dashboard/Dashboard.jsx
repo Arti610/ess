@@ -757,7 +757,10 @@ const Dashboard = () => {
   const isCheckeoutToday =
     checkOutDateTime.year() === current.year() &&
     checkOutDateTime.month() === current.month() &&
-    checkOutDateTime.date() === current.date();
+    checkOutDateTime.date() === current.date() &&
+    breakTimeData &&
+    breakTimeData.length > 0 &&
+    breakTimeData[0].break_in_time != null;
 
   const checkinbuttonStyles = isCheckedInToday
     ? {backgroundColor: secondaryColor, opacity: 0.5}
@@ -766,11 +769,21 @@ const Dashboard = () => {
   const checkoutbuttonStyles = isCheckeoutToday
     ? {backgroundColor: secondaryColor, opacity: 0.5}
     : {};
-  console.log('startBreakMiliseconds', startBreakMiliseconds);
-  const startBreakstyles = startBreakMiliseconds
+
+  const isBreakStartToday =
+    breakTimeData &&
+    breakTimeData.length > 0 &&
+    breakTimeData.some(
+      breakData =>
+        breakData.break_out_time &&
+        breakData.break_in_time === null &&
+        moment.utc(breakData.date).isSame(currentDate, 'day'),
+    );
+
+  const startBreakstyles = isBreakStartToday || isCheckeoutToday
     ? {backgroundColor: secondaryColor, opacity: 0.5}
     : {};
-  const endBreakstyles = endBreakMiliseconds
+  const endBreakstyles = isCheckeoutToday
     ? {backgroundColor: secondaryColor, opacity: 0.5}
     : {};
 
@@ -833,7 +846,7 @@ const Dashboard = () => {
           <TouchableOpacity
             style={[style.card, startBreakstyles]}
             onPress={handleStartBreak}
-            disabled={startBreakMiliseconds}>
+            disabled={isBreakStartToday}>
             {startBreakLoading ? (
               <SkypeIndicator color={primaryColor} size={35} />
             ) : (
@@ -856,7 +869,7 @@ const Dashboard = () => {
           <TouchableOpacity
             style={[style.card, endBreakstyles]}
             onPress={handleEndBreak}
-            disabled={endBreakMiliseconds}>
+            disabled={isCheckeoutToday}>
             {endBreakLoading ? (
               <SkypeIndicator color={primaryColor} size={35} />
             ) : (

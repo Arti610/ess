@@ -31,7 +31,7 @@ const CustomeModal = ({ modalVisible, handleModalVisible,  text, handlePress, lo
                             <Pressable
                                 style={styles.ModalPrimaryButton}
                                 onPress={handlePress}>
-                             {  loading ? <ButtonLoader/> : <Text style={styles.buttonText}>Yes</Text>}
+                             {loading ? <ButtonLoader/> : <Text style={styles.buttonText}>Yes</Text>}
                             </Pressable>
                         </View>
                     </View>
