@@ -1,5 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Users from './Users/Users';
 import Home from './Home/Home';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -15,8 +15,7 @@ import Document from './Document';
 
 const Tab = createBottomTabNavigator();
 
-const DashboardBase = () => {
-
+const DashboardBase = (headerShown = true) => {
   const navigation = useNavigation();
 
   const route = useRoute();
@@ -35,16 +34,7 @@ const DashboardBase = () => {
           component={Home}
           initialParams={{id: id}}
           options={{
-            headerTitle: () => (
-              <View style={tStyles.headerShown}>
-                <Text
-                  onPress={() => navigation.navigate('Base')}
-                  style={tStyles.icon}>
-                  <Icon name="arrowleft" style={styles.textSubHeading} />
-                </Text>
-                <Text style={styles.textSubHeading}>Home</Text>
-              </View>
-            ),
+            headerTitle: () => (headerShown ? <Header title = 'Home' /> : null),
             tabBarIcon: () => (
               <IconFa name="home" style={styles.icons} size={20} />
             ),
@@ -58,16 +48,8 @@ const DashboardBase = () => {
           component={Users}
           initialParams={{id: id}}
           options={{
-            headerTitle: () => (
-              <View style={tStyles.headerShown}>
-                <Text
-                  onPress={() => navigation.navigate('Base')}
-                  style={tStyles.icon}>
-                  <Icon name="arrowleft" style={styles.textSubHeading} />
-                </Text>
-                <Text style={styles.textSubHeading}>Staffs</Text>
-              </View>
-            ),
+        
+            headerTitle: () => (headerShown ? <Header title = 'Staffs' /> : null),
             tabBarIcon: () => (
               <IconFa name="users" style={styles.icons} size={20} />
             ),
@@ -90,42 +72,14 @@ const DashboardBase = () => {
             ),
           }}
         />
-        {/* <Tab.Screen
-          name="Clock"
-          component={Clock}
-          initialParams={{id: id}}
-          options={{
-            headerTitle: () => (
-              <View style={tStyles.headerShown}>
-                <Text
-                  onPress={() => navigation.navigate('Base')}
-                  style={tStyles.icon}>
-                  <Icon name="arrowleft" style={styles.textSubHeading} />
-                </Text>
-                <Text style={styles.textSubHeading}>Clock</Text>
-              </View>
-            ),
-            tabBarIcon: () => (
-              <IconFa name="clock-o" style={styles.icons} size={20} />
-            ),
-            tabBarLabel: () => <Text style={[styles.lable, {fontSize : 12}]}>Clock</Text>
-          }}
-        /> */}
+
         <Tab.Screen
           name="Leave"
           component={LeaveBase}
           initialParams={{id: id}}
           options={{
-            headerTitle: () => (
-              <View style={tStyles.headerShown}>
-                <Text
-                  onPress={() => navigation.navigate('Base')}
-                  style={tStyles.icon}>
-                  <Icon name="arrowleft" style={styles.textSubHeading} />
-                </Text>
-                <Text style={styles.textSubHeading}>Leave</Text>
-              </View>
-            ),
+          
+            headerTitle: () => (headerShown ? <Header title = 'Leave' /> : null),
             tabBarIcon: () => (
               <IconMCI name="file-document" style={styles.icons} size={20} />
             ),
@@ -139,16 +93,8 @@ const DashboardBase = () => {
           component={Document}
           initialParams={{id: id}}
           options={{
-            headerTitle: () => (
-              <View style={tStyles.headerShown}>
-                <Text
-                  onPress={() => navigation.navigate('Base')}
-                  style={tStyles.icon}>
-                  <Icon name="arrowleft" style={styles.textSubHeading} />
-                </Text>
-                <Text style={styles.textSubHeading}>Documents</Text>
-              </View>
-            ),
+           
+            headerTitle: () => (headerShown ? <Header title = 'Documents' /> : null),
             tabBarIcon: () => (
               <IconI name="documents" style={styles.icons} size={20} />
             ),
@@ -163,6 +109,20 @@ const DashboardBase = () => {
 };
 
 export default DashboardBase;
+
+// Header component (assuming it's in a separate file)
+const Header = ({title}) => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={tStyles.headerShown}>
+      <Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}>
+        <Icon name="arrowleft" style={styles.textSubHeading} />
+      </Text>
+      <Text style={styles.textSubHeading}>{title}</Text>
+    </View>
+  );
+};
 
 const tStyles = StyleSheet.create({
   headerShown: {
