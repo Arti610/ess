@@ -16,7 +16,6 @@ import Document from './Document';
 const Tab = createBottomTabNavigator();
 
 const DashboardBase = (headerShown = true) => {
-  const navigation = useNavigation();
 
   const route = useRoute();
   const {id} = route.params;
@@ -25,7 +24,7 @@ const DashboardBase = (headerShown = true) => {
     <>
       <Tab.Navigator
         screenOptions={{
-          tabBarStyle: {height: 60},
+          tabBarStyle: {height:60},
           tabBarActiveBackgroundColor: secondaryColor,
           tabBarInactiveTintColor: primaryColor,
         }}>
@@ -116,11 +115,12 @@ const Header = ({title}) => {
 
   return (
     <View style={tStyles.headerShown}>
-      <Text onPress={() => navigation.navigate('Base')} style={tStyles.icon}>
+      <Text onPress={() => navigation.navigate('Base')} >
         <Icon name="arrowleft" style={styles.textSubHeading} />
       </Text>
       <Text style={styles.textSubHeading}>{title}</Text>
     </View>
+
   );
 };
 
@@ -129,9 +129,7 @@ const tStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  icon: {
-    padding: 13.5,
-    paddingRight: 10,
-  },
+    justifyContent: 'flex-start',
+    gap: 10, 
+  }
 });
