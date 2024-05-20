@@ -37,6 +37,7 @@ const Dashboard = () => {
   const [longitude, setLongitude] = useState(null);
   const [branchLatitude, setBranchLatitude] = useState(null);
   const [branchLongitude, setBranchLongitude] = useState(null);
+  console.log('branchLatitude',branchLatitude, 'branchLongitude',branchLongitude);
   const [checkinLoading, setcheckinLoading] = useState(false);
   const [checkoutLoading, setcheckoutLoading] = useState(false);
   const [startBreakLoading, setStartBreakLoading] = useState(false);
@@ -165,10 +166,11 @@ const Dashboard = () => {
       try {
         const res = await getApi.getIndividualUser(currentUserId.id);
         if (res) {
-          console.log('res.data user', res.data);
+        
           setAttendence(res.data);
-          setBranchLatitude(res.data.latitude)
-          setBranchLongitude(res.data.longitude)
+          console.log(res.data);
+          setBranchLatitude(res.data.user_data.location_master.latitude)
+          setBranchLongitude(res.data.user_data.location_master.longitude)
         }
       } catch (error) {
         console.log(error);
@@ -283,7 +285,7 @@ const Dashboard = () => {
 
       const handleTimer = () => {
         if (
-          inoutData.length > 0 &&
+          inoutData &&
           inoutData.check_in &&
           inoutData.check_in.length > 0 &&
           isToday(inoutData.check_in[0].date_time)
@@ -302,7 +304,7 @@ const Dashboard = () => {
           );
         }
         if (
-          inoutData.length > 0 &&
+          inoutData &&
           inoutData.check_out &&
           inoutData.check_out.length > 0 &&
           isToday(inoutData.check_out[0].date_time)
@@ -744,7 +746,7 @@ const Dashboard = () => {
   };
 
   const checkInDateTime = moment.utc(
-    inoutData && inoutData.check_in && inoutData.check_in[0].date_time,
+    inoutData && inoutData.check_in.length >0 && inoutData.check_in[0].date_time,
   );
   const current = moment.utc();
 
@@ -754,7 +756,7 @@ const Dashboard = () => {
     checkInDateTime.date() === current.date();
 
   const checkOutDateTime = moment.utc(
-    inoutData && inoutData.check_out && inoutData.check_out[0].date_time,
+    inoutData && inoutData.check_out.length >0 && inoutData.check_out[0].date_time,
   );
 
   const isCheckeoutToday =
