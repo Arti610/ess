@@ -43,6 +43,8 @@ export default {
     getIndividualLeaveRequest: (id) => apiService.get(`get_leaverequest/${id}`),
     getIndividualLateEarly: (id) => apiService.get(`get_lateEarly/${id}`),
     getTimeSheetList: (id) => apiService.get(`list_time_sheet/${id}`),
+    getLocationList: (id) => apiService.get(`location_by_branch/${id}`),
+    //   getLocationList: (id) => console.log('id', id),
     // Single Get API @end
 
 

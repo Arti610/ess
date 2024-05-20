@@ -27,7 +27,7 @@ const AddBranchInfo = () => {
 
   const [checkinShow, setCheckinShow] = useState(false);
   const [checkoutShow, setCheckoutShow] = useState(false);
-  const [placesList, setPlacesList] = useState([]);
+  // const [placesList, setPlacesList] = useState([]);
   const [branchName, setBranchName] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,8 +38,8 @@ const AddBranchInfo = () => {
     check_out_time: null,
     break_time1: null,
     total_office_time1: null,
-    city: null,
-    place: null,
+    // city: null,
+    // place: null,
     latitude: null,
     longitude: null,
     branch: null,
@@ -80,21 +80,21 @@ const AddBranchInfo = () => {
     }));
   };
 
-  const handleCityChange = async place => {
-    try {
-      const res = await getApi.get_places(place);
+  // const handleCityChange = async place => {
+  //   try {
+  //     const res = await getApi.get_places(place);
 
-      if (res) {
-        setPlacesList(
-          res.data.map(item => {
-            return {label: item, value: item};
-          }),
-        );
-      }
-    } catch (error) {
-      console.log('Error during fetching API for places');
-    }
-  };
+  //     if (res) {
+  //       setPlacesList(
+  //         res.data.map(item => {
+  //           return {label: item, value: item};
+  //         }),
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.log('Error during fetching API for places');
+  //   }
+  // };
 
   const handleSubmit = async () => {
     const fData = new FormData();
@@ -115,7 +115,7 @@ const AddBranchInfo = () => {
       'total_office_time1',
       formData.total_office_time1 ? formData.total_office_time1 : null,
     );
-    fData.append('place', formData.place ? formData.place : '');
+    // fData.append('place', formData.place ? formData.place : '');
     fData.append('branch', selectBranch.key ? selectBranch.key : selectBranch);
 
 
@@ -217,8 +217,8 @@ const AddBranchInfo = () => {
               total_office_time1: res.data.total_office_time1
                 ? res.data.total_office_time1
                 : null,
-              city: res.data.place ? res.data?.place : null,
-              place: res.data.place ? res.data?.place : null,
+              // city: res.data.place ? res.data?.place : null,
+              // place: res.data.place ? res.data?.place : null,
               latitude: res.data.latitude || null,
               longitude: res.data.longitude || null,
             }));
@@ -344,7 +344,8 @@ const AddBranchInfo = () => {
                 }
               />
             </View>
-            <View style={styles.inputContainer}>
+            
+            {/* <View style={styles.inputContainer}>
               <Text style={styles.lable}>City</Text>
               <TextInput
                 style={styles.textInput}
@@ -365,7 +366,7 @@ const AddBranchInfo = () => {
                 notFoundText="Data not found"
                 value={formData.place}
               />
-            </View>
+            </View> */}
 
             <View style={styles.inputContainer}>
               <Text style={styles.lable}>Branch</Text>

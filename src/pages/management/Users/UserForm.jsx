@@ -51,6 +51,7 @@ const UserForm = () => {
   const [designationData, setDesignationData] = useState([]);
   const [weekoffData, setWeekoffData] = useState([]);
   const [shiftTimeData, setShiftTimeData] = useState([]);
+  const [locationData, setLocationData] = useState([])
 
   const initialState = {
     profile_image: null,
@@ -69,6 +70,7 @@ const UserForm = () => {
     shift_time: null,
     confirm_password: null,
     shift_time: null,
+    location_master : null
   };
 
   const [selectedGender, setSelectedGender] = useState(null);
@@ -78,6 +80,7 @@ const UserForm = () => {
   const [selectDesignation, setSelectDesignation] = useState(null);
   const [selectShiftTime, setSelectShiftTime] = useState(null);
   const [selectWeekoff, setSelectWeekoff] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const [branchInfo, setBranchInfo] = useState(null);
 
   useEffect(() => {
@@ -95,6 +98,7 @@ const UserForm = () => {
 
             setManagertaffData(transformManagerData);
           }
+
           const getBranchDepartment = await getApi.getBranchDepartment(id);
           if (getBranchDepartment.data) {
             setLoading(false);
@@ -106,6 +110,7 @@ const UserForm = () => {
             );
             setDepartmentData(transformDepartmentData);
           }
+
           const getDesignation = await getApi.getBranchDesignation(id);
           if (getDesignation.data) {
             setLoading(false);
@@ -116,6 +121,7 @@ const UserForm = () => {
             }));
             setDesignationData(transformDesignationData);
           }
+
           const getWeekoff = await getApi.getWeekOff(id);
           if (getWeekoff.data) {
             const transformWeeloffData = getWeekoff.data.map(item => ({
@@ -126,7 +132,6 @@ const UserForm = () => {
           }
 
           const getBranchInfo = await getApi.getBranchsBranchInfo(id);
-
           if (getBranchInfo.data) {
             setLoading(false);
             setBranchInfo(getBranchInfo.data[0]);
@@ -147,12 +152,24 @@ const UserForm = () => {
             ];
             setShiftTimeData(shiftTimeDatakey);
           }
+
+          const getLocation = await getApi.getLocationList(id);
+          if (getLocation.data) {
+            setLoading(false);
+
+            const transformLocationData = getLocation.data.map(item => ({
+              key: item.id.toString(),
+              value: item.selectd_place,
+            }));
+            setLocationData(transformLocationData);
+          }
         
       } catch (error) {
         setLoading(false);
         console.log('Error got during get apis', error);
       }
     };
+  
 
     fetchData();
   }, []);
@@ -211,6 +228,7 @@ const UserForm = () => {
       fData.append('manager', selectManager);
     }
     fData.append('department', selectDepartment);
+    fData.append('location_master', selectedLocation);
     fData.append('designation', selectDesignation);
     fData.append('user_type', selectedUsertype);
     fData.append('week_off', selectWeekoff);
@@ -248,6 +266,7 @@ const UserForm = () => {
         visibilityTime: 4000,
         autoHide: true,
       });
+      console.log('error user creation', error);
     }
   };
 
@@ -549,6 +568,27 @@ const UserForm = () => {
                   </Text>
                 ) : null}
               </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.lable}>Checkin Location</Text>
+                <SelectList
+                  boxStyles={styles.textInput}
+                  dropdownStyles={styles.textInput}
+                  setSelected={val => setSelectedLocation(val)}
+                  data={locationData}
+                  save="key"
+                  placeholder={'Select Location e.g. (Bilaspur)'}
+                  notFoundText="Data not found"
+                  value={selectedLocation}
+                  onBlur={handleBlur('location_master')}
+                  onChangText={handleChange('location_master')}
+                />
+                {selectedLocation === null &&
+                touched.location_master &&
+                errors.location_master ? (
+                  <Text style={styles.errorText}>{errors.location_master}</Text>
+                ) : null}
+              </View>
+
               <View style={styles.inputContainer}>
                 <Text style={styles.lable}>Address</Text>
                 <TextInput

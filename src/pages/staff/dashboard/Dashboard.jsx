@@ -147,26 +147,11 @@ const Dashboard = () => {
   }, [currentUserId]);
 
   useEffect(() => {
-    const branchId =
-      currentUserId && currentUserId.branch && currentUserId.branch.id
-        ? currentUserId.branch.id
-        : null;
+  
     const fetchData = async () => {
       try {
-        if (branchId) {
-          const res = await getApi.getBranchsBranchInfo(branchId);
-
-          if (res.data) {
-            setBranchLatitude(
-              res.data[0] && res.data[0].latitude ? res.data[0].latitude : null,
-            );
-            setBranchLongitude(
-              res.data[0] && res.data[0].longitude
-                ? res.data[0].longitude
-                : null,
-            );
-          }
-        }
+      
+        
       } catch (error) {
         console.log(
           'error during getting branchinfo in staff dashboard',
@@ -180,7 +165,10 @@ const Dashboard = () => {
       try {
         const res = await getApi.getIndividualUser(currentUserId.id);
         if (res) {
+          console.log('res.data user', res.data);
           setAttendence(res.data);
+          setBranchLatitude(res.data.latitude)
+          setBranchLongitude(res.data.longitude)
         }
       } catch (error) {
         console.log(error);

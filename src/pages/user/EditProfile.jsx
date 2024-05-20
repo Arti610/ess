@@ -14,7 +14,6 @@ import {Formik} from 'formik';
 import {Picker} from '@react-native-picker/picker';
 import Loader from '../../utils/ActivityIndicator';
 import Toast from 'react-native-toast-message';
-import {updateBranchStart} from '../../redux/slices/branch/branchSlice';
 import {useNavigation} from '@react-navigation/native';
 import ButtonLoader from '../../utils/BtnActivityIndicator';
 import Icons from 'react-native-vector-icons/MaterialIcons';

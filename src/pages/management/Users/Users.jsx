@@ -57,6 +57,8 @@ const Users = ({route}) => {
   }, [currentUserData]);
 
   const branchId = currentUserData && currentUserData.branch && currentUserData.branch.id
+
+
   return isLoading ? (
     <Loader />
   ) : (

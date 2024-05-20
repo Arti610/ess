@@ -67,6 +67,7 @@ export const addUserSchema = Yup.object({
   address: validator.address,
   password: validator.password,
   confirm_password: validator.confirm_password,
+
 });
 
 export const addBranch = Yup.object({
