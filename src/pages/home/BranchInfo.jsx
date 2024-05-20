@@ -9,30 +9,33 @@ import BranchInfoCard from '../../utils/BranchInfoCard';
 import Loader from '../../utils/ActivityIndicator';
 
 const BranchInfo = () => {
-
   const navigation = useNavigation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const fetchBranchInfo = async () => {
     try {
-      const fetchBranchInfo = async () => {
-        try {
-          setLoading(true);
-          const res = await branchApi.getAllBranchInfo();
+      setLoading(true);
+      const res = await branchApi.getAllBranchInfo();
 
-          if (res) {
-            setData(res.data);
-            setLoading(false);
-          }
-        } catch (error) {}
-      };
-      fetchBranchInfo();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+      if (res) {
+        setData(res.data);
+        setLoading(false);
+      }
+    } catch (error) {}
+  };
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      try {
+        fetchBranchInfo();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, data]);
   return loading ? (
     <Loader />
   ) : (

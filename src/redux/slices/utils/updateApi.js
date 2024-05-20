@@ -2,7 +2,7 @@ import apiService from "../../../config/apiService";
 
 export default {
     updateBranchInfo : (id, payload, option) => apiService.post(`update_branch_info/${id}`, payload, option),
-
+    // updateBranchInfo : (id, payload, option) => console.log('payl',payload),
     
     updateBranch : async (id, payload, option) => {return await apiService.put(`update_branch/${id}`, payload, option)},
 

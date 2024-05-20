@@ -5,6 +5,7 @@ export default {
     createBranch : (payload, option) => apiService.post(`create_branch`, payload, option),
     createBranchInfo:(payload, option)=>apiService.post('create_branch_info', payload, option),
     createUser: (payload, option) => apiService.post(`createuser`, payload, option),
+    // createUser: (payload, option) => console.log('pysu', payload),
     uploadTask: (payload, option) => apiService.post(`create_taskupload`, payload, option),
     createLeaveRequest: (payload, option) => apiService.post(`create_leaverequest`, payload, option),
     createLateEarly: (payload, option) => apiService.post(`create_lateEarly`, payload, option),

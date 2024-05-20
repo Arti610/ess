@@ -11,7 +11,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import Loader from '../../../utils/ActivityIndicator';
-import {useDispatch} from 'react-redux';
 import {SelectList} from 'react-native-dropdown-select-list';
 import updateApi from '../../../redux/slices/utils/updateApi';
 import createApi from '../../../redux/slices/utils/createApi';
@@ -21,7 +20,7 @@ import moment from 'moment';
 
 const AddBranchInfo = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+
   const route = useRoute();
   const receivedId = route.params?.data || null;
 
@@ -164,13 +163,13 @@ const AddBranchInfo = () => {
       Toast.show({
         type: 'error',
         position: 'top',
-        text1: 'Something went wrong during branchInfo creation or update',
+        text1: `${error.response.data}`,
         visibilityTime: 4000,
         autoHide: true,
       });
       console.log(
         'Error during branch info creation or update',
-        error.response,
+        error.response.data,
       );
     }
   };

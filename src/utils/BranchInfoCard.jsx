@@ -41,31 +41,11 @@ const BranchInfoCard = ({item}) => {
               <Text style={styles.textSubDesc}><Text style={styles.lable}>CheckOut Time : </Text>{item?.check_out_time ? item?.check_out_time : null}</Text>
               <Text style={styles.textSubDesc}><Text style={styles.lable}>Break Time : </Text>{item?.break_time1 ? item?.break_time1 : null}</Text>
               <Text style={styles.textSubDesc}><Text style={styles.lable}>Total Office Time : </Text>{item?.total_office_time1 ? item?.total_office_time1 : null}</Text>
-              <Text style={styles.textSubDesc}><Text style={styles.lable}>Place : </Text>{item?.place ? item?.place : null}</Text>
             </View>
 
             <View style={cardStyles.burger} >
               <TouchableOpacity onPress={() => handleBranchId(item.id)}  >
                 <Icon name="edit" style={styles.icons} size={15}/>
-             
-                {/* <RBSheet
-                        ref={refRBSheet}
-                        closeOnDragDown={true}
-                        closeOnPressMask={false}
-                        customStyles={{
-                          wrapper: {
-                            backgroundColor: "transparent",
-                          },
-                          container: {
-                            height: 150
-                          },
-                          draggableIcon: {
-                            backgroundColor: "#000",
-                          }
-                        }}
-                      >
-                        {branchModalOpen[item.id] ? <Menus id={branchId} getEdit={getBranchById} getDelete={deleteBranch} path='AddBranch' name = 'Branch' /> : null}                      
-                      </RBSheet> */}
               </TouchableOpacity>
             </View>
 
