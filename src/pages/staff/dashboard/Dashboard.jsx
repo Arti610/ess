@@ -283,7 +283,7 @@ const Dashboard = () => {
 
       const handleTimer = () => {
         if (
-          inoutData &&
+          inoutData.length > 0 &&
           inoutData.check_in &&
           inoutData.check_in.length > 0 &&
           isToday(inoutData.check_in[0].date_time)
@@ -302,7 +302,7 @@ const Dashboard = () => {
           );
         }
         if (
-          inoutData &&
+          inoutData.length > 0 &&
           inoutData.check_out &&
           inoutData.check_out.length > 0 &&
           isToday(inoutData.check_out[0].date_time)

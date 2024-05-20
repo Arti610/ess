@@ -266,7 +266,7 @@ const UserForm = () => {
         visibilityTime: 4000,
         autoHide: true,
       });
-      console.log('error user creation', error.response);
+      console.log('error user creation', error.response.data);
     }
   };
 
