@@ -32,43 +32,54 @@ const Users = ({route}) => {
     }
   }, []);
 
-  useEffect(() => {
+  const fetchusers = async () => {
     try {
       setIsLoading(true);
-      const fetchusers = async () => {
-        if (currentUserData && currentUserData.user_type === 'Manager') {
-          const res = await getApi.getManagerStaffList(
-            currentUserData.id ? currentUserData.id : null,
-          );
-          if (res.data) {
-            setData(res.data);
-            setIsLoading(false);
-          }
-        } else {
-          const res = await getApi.getStaffList(id);
-          if (res.data) {
-            setData(res.data);
-            setIsLoading(false);
-          }
+      if (currentUserData && currentUserData.user_type === 'Manager') {
+        const res = await getApi.getManagerStaffList(
+          currentUserData.id ? currentUserData.id : null,
+        );
+        if (res.data) {
+          setData(res.data);
+          setIsLoading(false);
         }
-      };
-      fetchusers();
+      } else {
+        const res = await getApi.getStaffList(id);
+        if (res.data) {
+          setData(res.data);
+          setIsLoading(false);
+        }
+      }
     } catch (error) {}
-  }, [currentUserData]);
+  };
 
-  const branchId = currentUserData && currentUserData.branch && currentUserData.branch.id
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      try {
+        fetchusers();
+      } catch (error) {
+        console.log(error);
+      }
+    });
 
+    return unsubscribe;
+  }, [navigation, currentUserData]);
+
+  const branchId =
+    currentUserData && currentUserData.branch && currentUserData.branch.id;
 
   return isLoading ? (
     <Loader />
   ) : (
     <>
       <ScrollView>
-        <UserCard item={data ? data : []} id = {  branchId ? branchId : id} />
+        <UserCard item={data ? data : []} id={branchId ? branchId : id} />
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('UserForm', {id: branchId ? branchId : id})}>
+          onPress={() =>
+            navigation.navigate('UserForm', {id: branchId ? branchId : id})
+          }>
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
       </View>
