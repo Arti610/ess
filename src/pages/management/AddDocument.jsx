@@ -144,73 +144,73 @@ const AddDocument = ({route}) => {
   const handleSubmit = async values => {
     setIsLoading(true);
     console.log('values', values);
-    // try {
-    //   const fData = new FormData();
-    //   fData.append(
-    //     'document_name',
-    //     values.document_name ? values.document_name : null,
-    //   );
-    //   fData.append(
-    //     'issue_date',
-    //     formValues.issue_date ? values.issue_date : null,
-    //   );
-    //   fData.append(
-    //     'expiry_date',
-    //     formValues.expiry_date ? values.expiry_date : null,
-    //   );
+    try {
+      const fData = new FormData();
+      fData.append(
+        'document_name',
+        values.document_name ? values.document_name : null,
+      );
+      fData.append(
+        'issue_date',
+        formValues.issue_date ? values.issue_date : null,
+      );
+      fData.append(
+        'expiry_date',
+        formValues.expiry_date ? values.expiry_date : null,
+      );
 
-    //   fData.append('user', selectedUser ? selectedUser : null);
-    //   fData.append('document_type', selectedDocType ? selectedDocType : null);
-    //   fData.append(
-    //     'branch',
-    //     id
-    //       ? id
-    //       : currentUserData &&
-    //           currentUserData.branch &&
-    //           currentUserData.branch.id,
-    //   );
-    //   selectedDocument
-    //     ? fData.append('document', selectedDocument ? selectedDocument : null)
-    //     : null;
+      fData.append('user', selectedUser ? selectedUser : null);
+      fData.append('document_type', selectedDocType ? selectedDocType : null);
+      fData.append(
+        'branch',
+        id
+          ? id
+          : currentUserData &&
+              currentUserData.branch &&
+              currentUserData.branch.id,
+      );
+      selectedDocument
+        ? fData.append('document', selectedDocument ? selectedDocument : null)
+        : null;
 
-    //   const response = await createApi.createDocUpload(fData, {
-    //     headers: {
-    //       'content-type': 'multipart/form-data',
-    //     },
-    //   });
+      const response = await createApi.createDocUpload(fData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      });
 
-    //   if (response.status === 201 || response.status === 200) {
-    //     navigation.navigate('Document', {
-    //       id: id
-    //         ? id
-    //         : currentUserData &&
-    //           currentUserData.branch &&
-    //           currentUserData.branch.id,
-    //     });
-    //     Toast.show({
-    //       type: 'success',
-    //       text1: 'Document uploded success',
-    //       text2: 'your document uploded successfully',
-    //       autoHide: true,
-    //     });
-    //     setIsLoading(false);
-    //   }
-    // } catch (error) {
-    //   navigation.navigate('Document', {
-    //     id: id
-    //       ? id
-    //       : currentUserData &&
-    //         currentUserData.branch &&
-    //         currentUserData.branch.id,
-    //   });
-    //   Toast.show({
-    //     type: 'error',
-    //     text1: 'Document uploded failed',
-    //     text2: 'you are failed to upload document',
-    //     autoHide: true,
-    //   });
-    //   setIsLoading(false);
-    // }
+      if (response.status === 201 || response.status === 200) {
+        navigation.navigate('Document', {
+          id: id
+            ? id
+            : currentUserData &&
+              currentUserData.branch &&
+              currentUserData.branch.id,
+        });
+        Toast.show({
+          type: 'success',
+          text1: 'Document uploded success',
+          text2: 'your document uploded successfully',
+          autoHide: true,
+        });
+        setIsLoading(false);
+      }
+    } catch (error) {
+      navigation.navigate('Document', {
+        id: id
+          ? id
+          : currentUserData &&
+            currentUserData.branch &&
+            currentUserData.branch.id,
+      });
+      Toast.show({
+        type: 'error',
+        text1: 'Document uploded failed',
+        text2: 'you are failed to upload document',
+        autoHide: true,
+      });
+      setIsLoading(false);
+    }
   };
 
   return loading ? (

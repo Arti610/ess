@@ -66,10 +66,9 @@ const UserForm = () => {
     user_type: null,
     week_off: null,
     address: null,
+    shift_time: null,
     password: null,
-    shift_time: null,
     confirm_password: null,
-    shift_time: null,
     location_master : null
   };
 

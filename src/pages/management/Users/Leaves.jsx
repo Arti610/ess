@@ -7,8 +7,9 @@ import moment from 'moment';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import getApi from '../../../redux/slices/utils/getApi';
 import IconAdd from 'react-native-vector-icons/MaterialIcons';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { currentUser } from '../../../utils/currentUser';
 
 const Leaves = ({route}) => {
 
@@ -20,6 +21,7 @@ const Leaves = ({route}) => {
   const [value, setValue] = useState(null)
   const [status, setStatus] = useState('Pending');
   const [uniqueData, setUniqueData] = useState(null);
+  const [currentUserData, setCurrentUserData] = useState(null)
 
   const handleOpenRBSheet = async id => {
     const res = await getApi.getIndividualLeaveRequest(id);
@@ -73,6 +75,17 @@ const Leaves = ({route}) => {
     return unsubscribe;
   }, [navigation, value]);
 
+  const fetchCurrentUser = async()=>{
+    try {
+      const res = await currentUser()
+      setCurrentUserData(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+useEffect(()=>{
+  fetchCurrentUser()
+},[])
   return value && value.leave ? (
     <>
       <View style={style.container}>
@@ -252,11 +265,11 @@ const Leaves = ({route}) => {
         </RBSheet>
       ) : null}
 
-      <View style={styles.buttonContainer}>
+     {currentUserData && currentUserData.user_type === 'Staff' ? <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('ApplyLR')}>
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
-      </View>
+      </View> : null}
       <Toast />
     </>
   ) : (

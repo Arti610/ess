@@ -17,8 +17,8 @@ const UserProfile = () => {
 
   const route = useRoute();
 
-  const {userData} = route.params;
-  const {id} = route.params;
+  const {userData, id} = route.params;
+
 
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,12 +36,12 @@ const UserProfile = () => {
 
   const deactivateStaff = {
     status: 'Deactivated',
-    is_active: false,
+    is_active: false
   };
 
   const activateStaff = {
     status: 'Not In Office',
-    is_active: true,
+    is_active: true
   };
 
   const fetchData = async () => {
@@ -200,7 +200,7 @@ const UserProfile = () => {
                 onPress={() =>
                   navigation.navigate('EditUserForm', {
                     id: id,
-                    userId: userData.id,
+                    userData: userData,
                   })
                 }
                 style={pStyles.footerText}>

@@ -37,7 +37,6 @@ const Dashboard = () => {
   const [longitude, setLongitude] = useState(null);
   const [branchLatitude, setBranchLatitude] = useState(null);
   const [branchLongitude, setBranchLongitude] = useState(null);
-  console.log('branchLatitude',branchLatitude, 'branchLongitude',branchLongitude);
   const [checkinLoading, setcheckinLoading] = useState(false);
   const [checkoutLoading, setcheckoutLoading] = useState(false);
   const [startBreakLoading, setStartBreakLoading] = useState(false);
@@ -582,6 +581,7 @@ const Dashboard = () => {
           text2: 'You must check in before checking out.',
           autoHide: 3000,
         });
+        setModalVisible(false)
         return;
       }
 

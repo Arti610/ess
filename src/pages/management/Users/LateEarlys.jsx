@@ -9,6 +9,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import getApi from '../../../redux/slices/utils/getApi';
 import Toast from 'react-native-toast-message';
 import {useNavigation} from '@react-navigation/native';
+import {currentUser} from '../../../utils/currentUser';
 
 const LateEarlys = ({route}) => {
   const {data} = route.params;
@@ -18,6 +19,7 @@ const LateEarlys = ({route}) => {
 
   const [status, setStatus] = useState('Pending');
   const [uniqueData, setUniqueData] = useState(null);
+  const [currentUserData, setCurrentUserData] = useState(null);
 
   const handleOpenRBSheet = async id => {
     const res = await getApi.getIndividualLateEarly(id);
@@ -70,6 +72,17 @@ const LateEarlys = ({route}) => {
 
     return unsubscribe;
   }, [navigation, data, route]);
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await currentUser();
+      setCurrentUserData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
   return data ? (
     <>
       <View style={style.container}>
@@ -232,11 +245,13 @@ const LateEarlys = ({route}) => {
         </RBSheet>
       ) : null}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('ApplyLE')}>
-          <IconAdd name="add" style={styles.addIcon} />
-        </TouchableOpacity>
-      </View>
+      {currentUserData && currentUserData.user_type === 'Staff' ? (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('ApplyLE')}>
+            <IconAdd name="add" style={styles.addIcon} />
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <Toast />
     </>
   ) : (
