@@ -47,7 +47,7 @@ const Home = () => {
         </TouchableOpacity>
       </View>
 
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

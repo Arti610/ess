@@ -79,7 +79,7 @@ const NotCheckInUser = () => {
           <UserCard item={userData} id={id} />
         </ScrollView>
       )}
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

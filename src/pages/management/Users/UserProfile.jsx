@@ -320,7 +320,7 @@ const UserProfile = () => {
         handleModalVisible={handleModalActiveVisible}
         handleDelete={handleSubmit}
       />
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

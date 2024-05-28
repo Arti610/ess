@@ -30,15 +30,6 @@ const authSlice = createSlice({
     logoutSuccess: async state => {
       state.isLoading = false;
       state.error = false;
-      // try {
-      //   await AsyncStorage.removeItem('currentUser');
-      //   await AsyncStorage.removeItem('userEmail');
-      //   await AsyncStorage.removeItem('token');
-      //   await AsyncStorage.clear();
-      //   console.log('AsyncStorage data cleared successfully');
-      // } catch (error) {
-      //   console.log('Error clearing AsyncStorage data:', error);
-      // }
     },
     logoutFailure: state => {
       state.isLoading = false;

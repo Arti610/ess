@@ -9,10 +9,10 @@ import {primaryColor} from '../../../../style';
 const NotificationCount = () => {
   const navigation = useNavigation();
   const [currentUserData, setCurrentUserData] = useState(null);
-  const userID =
-    currentUserData && currentUserData.id ? currentUserData.id : null;
+  const userID = currentUserData && currentUserData.id ? currentUserData.id : null;
   const [data, setData] = useState([]);
-
+  console.log('data notification ======> ',data);
+  
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {

@@ -181,7 +181,7 @@ const ManagerDashboard = () => {
           })}
         />
       </Tab.Navigator>
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

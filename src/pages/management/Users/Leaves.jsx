@@ -270,7 +270,7 @@ useEffect(()=>{
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
       </View> : null}
-      <Toast />
+       {/* <Toast /> */}
     </>
   ) : (
     <Loader />

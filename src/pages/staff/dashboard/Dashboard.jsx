@@ -397,8 +397,7 @@ const Dashboard = () => {
           );
 
           // Calculate time elapsed since check-in
-          const elapsedMilliseconds =
-            currentTimeMilliseconds - checkinMilliseconds;
+          const elapsedMilliseconds = currentTimeMilliseconds - checkinMilliseconds;
 
           // If there was a break, subtract break time from the total elapsed time
           const breakTimeElapsed = endBreakMiliseconds - startBreakMiliseconds;
@@ -421,6 +420,7 @@ const Dashboard = () => {
           const remainingTimeAfterCheckout = value - breakvalue;
 
           const remainingTime = millisecondsToTime(remainingTimeAfterCheckout);
+          
           setTotalWorkingHours([
             remainingTime.hours,
             remainingTime.minutes,

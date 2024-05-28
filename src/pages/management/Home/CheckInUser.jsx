@@ -77,7 +77,7 @@ const CheckInUser = () => {
           <UserCard item={userData} id={id} />
         </ScrollView>
       )}
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

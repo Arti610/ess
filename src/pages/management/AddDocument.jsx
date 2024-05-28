@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import {primaryColor, styles} from '../../../style';
 import ButtonLoader from '../../utils/BtnActivityIndicator';
@@ -216,130 +217,132 @@ const AddDocument = ({route}) => {
   return loading ? (
     <Loader />
   ) : (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      validationSchema={documentValidationSchema}>
-      {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
-        <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.lable}>User</Text>
-            <SelectList
-              boxStyles={styles.textInput}
-              dropdownStyles={styles.textInput}
-              setSelected={val => setSelectedUser(val)}
-              data={data}
-              save="key"
-              placeholder={'Select User'}
-              notFoundText="Data not found"
-              value={selectedUser}
-              onBlur={handleBlur('user')}
-              onChangeText={handleChange('user')}
-            />
+    <ScrollView>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={documentValidationSchema}>
+        {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.lable}>User</Text>
+              <SelectList
+                boxStyles={styles.textInput}
+                dropdownStyles={styles.textInput}
+                setSelected={val => setSelectedUser(val)}
+                data={data}
+                save="key"
+                placeholder={'Select User'}
+                notFoundText="Data not found"
+                value={selectedUser}
+                onBlur={handleBlur('user')}
+                onChangeText={handleChange('user')}
+              />
+            
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.lable}>Document Type</Text>
+              <SelectList
+                boxStyles={styles.textInput}
+                dropdownStyles={styles.textInput}
+                setSelected={val => setSelectedDocType(val)}
+                data={docType}
+                save="key"
+                placeholder={'Select Document Type'}
+                notFoundText="Data not found"
+                value={selectedDocType}
+                onBlur={handleBlur('document_type')}
+                onChangeText={handleChange('document_type')}
+              />
           
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.lable}>Document Type</Text>
-            <SelectList
-              boxStyles={styles.textInput}
-              dropdownStyles={styles.textInput}
-              setSelected={val => setSelectedDocType(val)}
-              data={docType}
-              save="key"
-              placeholder={'Select Document Type'}
-              notFoundText="Data not found"
-              value={selectedDocType}
-              onBlur={handleBlur('document_type')}
-              onChangeText={handleChange('document_type')}
-            />
-         
-          </View>
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.lable}>Issue Date</Text>
-            <TouchableOpacity
-              onPress={() => handleToShowIssueDatePicker(true)}
-              style={styles.textInput}>
-              <Text>{formValues.issue_date || 'Select Date'}</Text>
-            </TouchableOpacity>
-            {showIssueDatePicker && (
-              <DateTimePicker
-                value={
-                  formValues.issue_date
-                    ? new Date(formValues.issue_date)
-                    : new Date()
-                }
-                mode="date"
-                onChange={(event, selectedDate) =>
-                  handleDateChange(selectedDate)
-                }
+            <View style={styles.inputContainer}>
+              <Text style={styles.lable}>Issue Date</Text>
+              <TouchableOpacity
+                onPress={() => handleToShowIssueDatePicker(true)}
+                style={styles.textInput}>
+                <Text>{formValues.issue_date || 'Select Date'}</Text>
+              </TouchableOpacity>
+              {showIssueDatePicker && (
+                <DateTimePicker
+                  value={
+                    formValues.issue_date
+                      ? new Date(formValues.issue_date)
+                      : new Date()
+                  }
+                  mode="date"
+                  onChange={(event, selectedDate) =>
+                    handleDateChange(selectedDate)
+                  }
+                />
+              )}
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.lable}>Expiry Date</Text>
+              <TouchableOpacity
+                onPress={() => handleToShowIssueDatePicker(false)}
+                style={styles.textInput}>
+                <Text>{formValues.expiry_date || 'Select Date'}</Text>
+              </TouchableOpacity>
+              {showExpityDatePicker && (
+                <DateTimePicker
+                  value={
+                    formValues.expiry_date
+                      ? new Date(formValues.expiry_date)
+                      : new Date()
+                  }
+                  mode="date"
+                  onChange={(event, selectedDate) =>
+                    handleDateChange(selectedDate)
+                  }
+                />
+              )}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.lable}>Document Name</Text>
+              <TextInput
+                placeholder="Document Name (e.g. National Id Card)"
+                style={styles.textInput}
+                onChangeText={handleChange('document_name')}
+                onBlur={handleBlur('document_name')}
+                value={values.document_name}
+                required
               />
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.lable}>Expiry Date</Text>
-            <TouchableOpacity
-              onPress={() => handleToShowIssueDatePicker(false)}
-              style={styles.textInput}>
-              <Text>{formValues.expiry_date || 'Select Date'}</Text>
-            </TouchableOpacity>
-            {showExpityDatePicker && (
-              <DateTimePicker
-                value={
-                  formValues.expiry_date
-                    ? new Date(formValues.expiry_date)
-                    : new Date()
-                }
-                mode="date"
-                onChange={(event, selectedDate) =>
-                  handleDateChange(selectedDate)
-                }
-              />
-            )}
-          </View>
+              {touched.document_name && errors.document_name ? (
+                <Text style={styles.errorText}>{errors.document_name}</Text>
+              ) : null}
+            </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.lable}>Document Name</Text>
-            <TextInput
-              placeholder="Document Name (e.g. National Id Card)"
-              style={styles.textInput}
-              onChangeText={handleChange('document_name')}
-              onBlur={handleBlur('document_name')}
-              value={values.document_name}
-              required
-            />
-            {touched.document_name && errors.document_name ? (
-              <Text style={styles.errorText}>{errors.document_name}</Text>
-            ) : null}
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.lable}>Attachment</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.lable}>Attachment</Text>
+              <TouchableOpacity
+                style={style.uploadUI}
+                onPress={handleDocumentPick}>
+                <Icon name="cloud-upload-alt" style={style.icon} />
+                {selectedDocument && selectedDocument.name ? (
+                  <Text>{selectedDocument.name}</Text>
+                ) : (
+                  <Text>Upload your files</Text>
+                )}
+              </TouchableOpacity>
+            
+            </View>
             <TouchableOpacity
-              style={style.uploadUI}
-              onPress={handleDocumentPick}>
-              <Icon name="cloud-upload-alt" style={style.icon} />
-              {selectedDocument && selectedDocument.name ? (
-                <Text>{selectedDocument.name}</Text>
+              style={styles.primaryButton}
+              onPress={handleSubmit}
+              disabled={isLoading}>
+              {isLoading ? (
+                <ButtonLoader />
               ) : (
-                <Text>Upload your files</Text>
+                <Text style={styles.buttonText}>Submit</Text>
               )}
             </TouchableOpacity>
-           
           </View>
-          <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={handleSubmit}
-            disabled={isLoading}>
-            {isLoading ? (
-              <ButtonLoader />
-            ) : (
-              <Text style={styles.buttonText}>Submit</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </ScrollView>
   );
 };
 

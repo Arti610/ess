@@ -109,7 +109,7 @@ const ForgetPassword = props => {
           )}
         </Formik>
       </View>
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

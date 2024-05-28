@@ -64,7 +64,7 @@ const Base = () => {
           })}
         />
       </Tab.Navigator>
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

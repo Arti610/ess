@@ -124,7 +124,7 @@ const ResetPassword = props => {
           )}
         </Formik>
       </View>
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

@@ -27,7 +27,7 @@ const Confirmation = props => {
           </View>
         </View>
       </View>
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

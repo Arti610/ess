@@ -110,7 +110,7 @@ const OtpVerification = props => {
           )}
         </Formik>
       </View>
-      <Toast />
+       {/* <Toast /> */}
     </ScrollView>
   );
 };

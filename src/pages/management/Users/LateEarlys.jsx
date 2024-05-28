@@ -252,7 +252,7 @@ const LateEarlys = ({route}) => {
           </TouchableOpacity>
         </View>
       ) : null}
-      <Toast />
+       {/* <Toast /> */}
     </>
   ) : (
     <Loader />

@@ -426,7 +426,7 @@ const AddBranch = () => {
           </View>
         </ScrollView>
       )}
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

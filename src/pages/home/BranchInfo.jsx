@@ -51,7 +51,7 @@ const BranchInfo = () => {
           <IconAdd name="add" style={styles.addIcon} />
         </TouchableOpacity>
       </View>
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };

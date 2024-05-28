@@ -385,7 +385,7 @@ const Profile = () => {
         handleLogout={handleLogout}
         loading={loading}
       />
-      <Toast />
+       {/* <Toast /> */}
     </>
   );
 };
