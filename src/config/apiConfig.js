@@ -6,6 +6,7 @@ const API_CONFIG = {
   // imageUrl: 'https://ess.absons.ae',
   //   Url: "https://ess.absons.ae",
   //   domainBaseUrl: "https://ess.absons.ae",
+  
 };
 
 export default API_CONFIG;

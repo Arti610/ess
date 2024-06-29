@@ -6,6 +6,7 @@ import {
   View,
   PermissionsAndroid,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
   primaryColor,
@@ -28,6 +29,7 @@ import Geolocation from '@react-native-community/geolocation';
 import {promptForEnableLocationIfNeeded} from 'react-native-android-location-enabler';
 import {SkypeIndicator} from 'react-native-indicators';
 import LogoutModal from '../../../utils/LogoutModal';
+
 
 const Dashboard = () => {
   const navigation = useNavigation();
@@ -189,7 +191,7 @@ const Dashboard = () => {
       error => {
         console.log(error);
       },
-      // {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000},
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
     );
   };
 
@@ -197,16 +199,16 @@ const Dashboard = () => {
     try {
       // Check if permission is already granted
       const granted = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
       console.log('granted', granted);
       // If permission is already granted, proceed
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        getCurrentLocation();
+        showAlertAndGetLocation();
       } else {
         // If permission is not granted, request it
         const permissionRequest = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
             title: 'Location Permission',
             message: 'App needs access to your location',
@@ -218,7 +220,7 @@ const Dashboard = () => {
 
         // Check if the permission request is granted
         if (permissionRequest === PermissionsAndroid.RESULTS.GRANTED) {
-          getCurrentLocation();
+          showAlertAndGetLocation();
         } else {
           console.log('Location permission denied');
         }
@@ -228,9 +230,76 @@ const Dashboard = () => {
     }
   };
 
+  const showAlertAndGetLocation = () => {
+    Alert.alert(
+      "Location Usage",
+      "Your location is used for check-in.",
+      [
+        {
+          text: "OK",
+          onPress: () => getCurrentLocation()
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
   useEffect(() => {
     requestLocationPermission();
   }, []);
+
+  // const getCurrentLocation = () => {
+  //   Geolocation.getCurrentPosition(
+  //     position => {
+  //       const {latitude, longitude} = position.coords;
+  //       setLatitude(latitude);
+  //       setLongitude(longitude);
+  //     },
+  //     error => {
+  //       console.log(error);
+  //     },
+  //     // {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000},
+  //   );
+  // };
+
+  // const requestLocationPermission = async () => {
+  //   try {
+  //     // Check if permission is already granted
+  //     const granted = await PermissionsAndroid.check(
+  //       PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+  //     );
+  //     console.log('granted', granted);
+  //     // If permission is already granted, proceed
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       getCurrentLocation();
+  //     } else {
+  //       // If permission is not granted, request it
+  //       const permissionRequest = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+  //         {
+  //           title: 'Location Permission',
+  //           message: 'App needs access to your location',
+  //           buttonNeutral: 'Ask Me Later',
+  //           buttonNegative: 'Cancel',
+  //           buttonPositive: 'OK',
+  //         },
+  //       );
+
+  //       // Check if the permission request is granted
+  //       if (permissionRequest === PermissionsAndroid.RESULTS.GRANTED) {
+  //         getCurrentLocation();
+  //       } else {
+  //         console.log('Location permission denied');
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   requestLocationPermission();
+  // }, []);
 
   function timeToMilliseconds(hours, minutes, seconds) {
     const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
